@@ -8,6 +8,7 @@ MYGITEMAIL=oleg@work
 ADDITIONAL_SSH_KEY_NAME=bondit
 
 # 2. Set what you want to install 1 for yes, 0 for no
+INSTALL_CURL=0
 INSTALL_VIM=0
 INSTALL_MAKE=0
 INSTALL_SSH_SERVER=0
@@ -22,11 +23,17 @@ INSTALL_CHROMIUM=0
 INSTALL_SUBLIME=0
 INSTALL_KRITA=0
 INSTALL_POSTMAN=0
-INSTALL_FORTICLIENT_VPN=1
+INSTALL_FORTICLIENT_VPN=0
+INSTALL_DOCKER=0
+INSTALL_MYSQL_DOCKER=0
 INSTALL_MYSQLWORKBENCH=0
 SET_FAVORITES_BAR=0
 SET_DOCK_POSITION_BOTTOM=0
 
+# dependencies
+if [ $INSTALL_DOCKER -eq 1 ]; then
+  INSTALL_CURL=1
+fi
 
 # FUNCTIONS
 get_os_version_id(){
@@ -48,10 +55,15 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
-cd Downloads
+cd /home/$MYUSER/Downloads
+
+if [ "$INSTALL_CURL" -eq 1 ]; then
+  echo ---------- Installing curl
+  apt -y install curl
+fi
 
 if [ "$INSTALL_VIM" -eq 1 ]; then
-  echo ---------- Installing vim 
+  echo ---------- Installing vim
   apt -y install vim
 fi
 
@@ -115,16 +127,16 @@ fi
 
 if [ "$CREATE_ALIASES" -eq 1 ]; then
   echo ---------- Creating aliases
-  sudo -u $MYUSER echo 'alias ymp3="youtube-dl --extract-audio --audio-format mp3 --audio-quality 0 --add-metadata" 
-  alias tabs-prj="gnome-terminal 
+  su - $MYUSER -c "echo 'alias ymp3=\"youtube-dl --extract-audio --audio-format mp3 --audio-quality 0 --add-metadata\"
+  alias tabs-prj=\"gnome-terminal
   --tab --working-directory=/home/oleg/projects 
-  --tab --working-directory=/home/oleg/scripts" 
-  ' > /home/$MYUSER/.bash_aliases
+  --tab --working-directory=/home/oleg/scripts\"
+  ' > /home/$MYUSER/.bash_aliases"
 fi
 
 if [ "$CREATE_SSH_CONFIG_FILE" -eq 1 ]; then
   echo ---------- Creating ssh .config example
-  sudo -u $MYUSER echo 'Host userver
+  su - $MYUSER -c "echo 'Host userver
       HostName 10.0.0.7
       User oleg
   Host raspiw
@@ -137,7 +149,7 @@ if [ "$CREATE_SSH_CONFIG_FILE" -eq 1 ]; then
       HostName 10.1.1.2
       User pi
       IdentityFile ~/.ssh/someserver.pem
-  ' > /home/$MYUSER/.ssh/config
+  ' > /home/$MYUSER/.ssh/config"
 fi
 
 if [ "$INSTALL_CHROME" -eq 1 ]; then
@@ -180,9 +192,33 @@ if [ "$INSTALL_FORTICLIENT_VPN" -eq 1 ]; then
   rm forticlient-sslvpn_4.4.2333-1_amd64.deb
 fi
 
+
+if [ "$INSTALL_DOCKER" -eq 1 ]; then
+  echo ---------- Installing Docker
+  curl -fsSL https://get.docker.com -o get-docker.sh
+  sh get-docker.sh
+  rm get-docker.sh
+  usermod -aG docker $MYUSER
+fi
+
+if [ "$INSTALL_MYSQL_DOCKER" -eq 1 ]; then
+  echo ---------- Installing MySQL Docker
+#  docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_ROOT_HOST=172.17.0.1 \
+#  -p 3306:3306 -v /home/$MYUSER/mysql:/var/lib/mysql -d mysql/mysql-server:5.7 \
+#  --character-set-server=utf8 --collation-server=utf8_general_ci
+#  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
+  su - $MYUSER -c "echo '[Desktop Entry]
+Name=MySQL
+Exec=docker start mysql-container
+Type=Application
+X-GNOME-Autostart-enabled=true
+' > /home/$MYUSER/.config/autostart/mysql-docker.desktop"
+fi
+
 # VERSION 18 / 19 SPECIFIC
 if [ $(get_os_version_id) = "19.04" ]; then
-  # version 19
+  # version 19docker
+  echo ---------- Ubuntu 19 detected, installing specifically for 19
   if [ "$SET_DOCK_POSITION_BOTTOM" -eq 1 ]; then
     echo ---------- Moving dock to bottom
     #su - $MYUSER -c "gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM"
@@ -190,6 +226,7 @@ if [ $(get_os_version_id) = "19.04" ]; then
     sudo -u "oleg" dbus-launch --exit-with-session gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM 
   fi  
 else # version 18
+  echo ---------- Ubuntu 18 or elier detected, installing specifically for 18
   if [ "$INSTALL_MYSQLWORKBENCH" -eq 1 ]; then
     echo ---------- Installing MySQL Workbench 
     apt -y install mysql-workbench
@@ -205,3 +242,4 @@ else # version 18
     su - $MYUSER -c "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Terminal.desktop', 'google-chrome.desktop', 'sublime-text_subl.desktop', 'pycharm-community_pycharm-community.desktop', 'postman_postman.desktop', 'chromium_chromium.desktop', 'mysql-workbench.desktop', 'firefox.desktop', 'krita_krita.desktop', 'org.gnome.Nautilus.desktop']\""
   fi
 fi
+echo done running Ubuntu checklist!
