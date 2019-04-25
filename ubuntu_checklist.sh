@@ -28,13 +28,24 @@ INSTALL_DOCKER=0
 INSTALL_MYSQL_DOCKER=0
 INSTALL_MYSQLWORKBENCH=0
 INSTALL_DROPBOX=0
+INSTALL_PIP3=0
+INSTALL_VENV=1
+INSTALL_YOUTUBE_DL=0
+
 SET_FAVORITES_BAR=0
 SET_DOCK_POSITION_BOTTOM=0
 
 # dependencies
-if [ $INSTALL_DOCKER -eq 1 ]; then
-  INSTALL_CURL=1
-fi
+# todo: implement smart dependency will check if dependency exists before installing it
+#if [ $INSTALL_DOCKER -eq 1 ]; then
+#  INSTALL_CURL=1
+#fi
+
+#if [ $INSTALL_VENV -eq 1 ]; then
+#  INSTALL_PIP3=1
+#fi
+
+
 
 # FUNCTIONS
 get_os_version_id(){
@@ -222,6 +233,21 @@ if [ "$INSTALL_DROPBOX" -eq 1 ]; then
   dpkg -i dropbox_2019.02.14_amd64.deb
   apt install -f
   rm dropbox_2019.02.14_amd64.deb
+fi
+
+if [ "$INSTALL_PIP3" -eq 1 ]; then
+  echo ---------- Installing pip3
+  apt -y install python3-pip
+fi
+
+if [ "$INSTALL_VENV" -eq 1 ]; then
+  echo ---------- Installing VENV
+  apt -y install python3-venv
+fi
+
+if [ "$INSTALL_YOUTUBE_DL" -eq 1 ]; then
+  echo ---------- Installing youtube-dl
+  sudo -u $MYUSER pip3 install youtube-dl
 fi
 
 # VERSION 18 / 19 SPECIFIC
