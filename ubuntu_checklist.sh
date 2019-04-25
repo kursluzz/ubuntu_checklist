@@ -27,6 +27,7 @@ INSTALL_FORTICLIENT_VPN=0
 INSTALL_DOCKER=0
 INSTALL_MYSQL_DOCKER=0
 INSTALL_MYSQLWORKBENCH=0
+INSTALL_DROPBOX=0
 SET_FAVORITES_BAR=0
 SET_DOCK_POSITION_BOTTOM=0
 
@@ -213,6 +214,14 @@ Exec=docker start mysql-container
 Type=Application
 X-GNOME-Autostart-enabled=true
 ' > /home/$MYUSER/.config/autostart/mysql-docker.desktop"
+fi
+
+if [ "$INSTALL_DROPBOX" -eq 1 ]; then
+  echo ---------- Installing Dropbox
+  wget https://linux.dropbox.com/packages/ubuntu/dropbox_2019.02.14_amd64.deb
+  dpkg -i dropbox_2019.02.14_amd64.deb
+  apt install -f
+  rm dropbox_2019.02.14_amd64.deb
 fi
 
 # VERSION 18 / 19 SPECIFIC
