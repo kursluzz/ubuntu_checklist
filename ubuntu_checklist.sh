@@ -203,10 +203,10 @@ fi
 
 if [ "$INSTALL_MYSQL_DOCKER" -eq 1 ]; then
   echo ---------- Installing MySQL Docker
-#  docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_ROOT_HOST=172.17.0.1 \
-#  -p 3306:3306 -v /home/$MYUSER/mysql:/var/lib/mysql -d mysql/mysql-server:5.7 \
-#  --character-set-server=utf8 --collation-server=utf8_general_ci
-#  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
+  docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_ROOT_HOST=172.17.0.1 \
+  -p 3306:3306 -v /home/$MYUSER/mysql:/var/lib/mysql -d mysql/mysql-server:5.7 \
+  --character-set-server=utf8 --collation-server=utf8_general_ci
+  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
   su - $MYUSER -c "echo '[Desktop Entry]
 Name=MySQL
 Exec=docker start mysql-container
