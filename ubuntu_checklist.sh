@@ -13,8 +13,9 @@ INSTALL_VIM=0
 INSTALL_MAKE=0
 INSTALL_SSH_SERVER=0
 INSTALL_GIT=0
+INSTALL_MYSQL_PYTHON_DEPENDENCIES=0
 ADD_SSH_KEY_FOR_GIT=0
-ADD_ADDITIONAL_SSH_KEY_FOR_GIT=1
+ADD_ADDITIONAL_SSH_KEY_FOR_GIT=0
 CREATE_ALIASES=0
 CREATE_SSH_CONFIG_FILE=0
 INSTALL_CHROME=0
@@ -29,7 +30,7 @@ INSTALL_MYSQL_DOCKER=0
 INSTALL_MYSQLWORKBENCH=0
 INSTALL_DROPBOX=0
 INSTALL_PIP3=0
-INSTALL_VENV=0
+INSTALL_VENV=1
 INSTALL_YOUTUBE_DL=0
 
 SET_FAVORITES_BAR=0
@@ -96,7 +97,11 @@ if [ "$INSTALL_GIT" -eq 1 ]; then
     echo ---------- Setting git global user and password
     sudo -u $MYUSER git config --global user.email "$MYGITEMAIL"
     sudo -u $MYUSER git config --global user.name "$MYGITNAME"
+fi
 
+if [ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]; then
+    echo ---------- Installing mysql dev dependencies
+    apt install libmysqlclient-dev
 fi
 
 if [ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]; then
