@@ -15,6 +15,7 @@ INSTALL_SSH_SERVER=0
 INSTALL_GIT=0
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=0
 INSTALL_NODEJS_NPM=0
+INSTALL_SERVERLESS=0
 ADD_SSH_KEY_FOR_GIT=0
 ADD_ADDITIONAL_SSH_KEY_FOR_GIT=0
 CREATE_ALIASES=0
@@ -47,7 +48,9 @@ SET_DOCK_POSITION_BOTTOM=0
 #    INSTALL_PIP3=1
 #fi
 
-
+#if [ $INSTALL_SERVERLESS -eq 1 ]; then
+#    INSTALL_NODEJS_NPM=1
+#fi
 
 # FUNCTIONS
 get_os_version_id(){
@@ -108,6 +111,11 @@ fi
 if [ "$INSTALL_NODEJS_NPM" -eq 1 ]; then
     echo ---------- Installing nodejs npm
     apt install nodejs npm
+fi
+
+if [ "$INSTALL_SERVERLESS" -eq 1 ]; then
+    echo ---------- Installing serverless
+    npm install -g serverless
 fi
 
 if [ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]; then
