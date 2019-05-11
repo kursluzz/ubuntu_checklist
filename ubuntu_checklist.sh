@@ -14,6 +14,7 @@ INSTALL_MAKE=0
 INSTALL_SSH_SERVER=0
 INSTALL_GIT=0
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=0
+INSTALL_AWS_CLI=1
 INSTALL_NODEJS_NPM=0
 INSTALL_ANGULAR_CLI=0
 INSTALL_SERVERLESS=0
@@ -33,7 +34,7 @@ INSTALL_MYSQL_DOCKER=0
 INSTALL_MYSQLWORKBENCH=0
 INSTALL_DROPBOX=0
 INSTALL_PIP3=0
-INSTALL_VENV=1
+INSTALL_VENV=0
 INSTALL_YOUTUBE_DL=0
 
 SET_FAVORITES_BAR=0
@@ -113,6 +114,11 @@ fi
 if [ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]; then
     echo ---------- Installing mysql dev dependencies
     apt install libmysqlclient-dev
+fi
+
+if [ "$INSTALL_AWS_CLI" -eq 1 ]; then
+    echo ---------- Installing AWS CLI
+    snap install aws-cli --classic
 fi
 
 if [ "$INSTALL_NODEJS_NPM" -eq 1 ]; then
