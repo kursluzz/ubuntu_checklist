@@ -39,6 +39,7 @@ INSTALL_YOUTUBE_DL=0
 
 SET_FAVORITES_BAR=0
 SET_DOCK_POSITION_BOTTOM=0
+ADD_NEW_TEXT_FILE_TEMPLATE=0
 
 # dependencies
 # todo: implement smart dependency will check if dependency exists before installing it
@@ -314,4 +315,9 @@ else # version 18
         su - $MYUSER -c "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Terminal.desktop', 'google-chrome.desktop', 'sublime-text_subl.desktop', 'pycharm-community_pycharm-community.desktop', 'postman_postman.desktop', 'chromium_chromium.desktop', 'mysql-workbench.desktop', 'firefox.desktop', 'krita_krita.desktop', 'org.gnome.Nautilus.desktop']\""
     fi
 fi
+
+if [[ ${ADD_NEW_TEXT_FILE_TEMPLATE} -eq 1 ]]; then
+    sudo -u ${MYUSER} touch /home/${MYUSER}/Templates/New\ File.txt
+fi
+
 echo done running Ubuntu checklist!
