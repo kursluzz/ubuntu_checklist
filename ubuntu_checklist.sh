@@ -10,6 +10,7 @@ ADDITIONAL_SSH_KEY_NAME=bondit
 # 2. Set what you want to install 1 for yes, 0 for no
 INSTALL_CURL=0
 INSTALL_VIM=0
+INSTALL_BYOBU=0
 INSTALL_MAKE=0
 INSTALL_SSH_SERVER=0
 INSTALL_GIT=0
@@ -92,6 +93,11 @@ fi
 if [ "$INSTALL_VIM" -eq 1 ]; then
     echo ---------- Installing vim
     apt -y install vim
+fi
+
+if [ "$INSTALL_BYOBU" -eq 1 ]; then
+    echo ---------- Installing vim
+    apt -y install byobu
 fi
 
 if [ "$INSTALL_MAKE" -eq 1 ]; then
