@@ -32,12 +32,14 @@ INSTALL_POSTMAN=0
 INSTALL_FORTICLIENT_VPN=0
 INSTALL_DOCKER=0
 INSTALL_MYSQL_DOCKER=0
+INSTALL_DYNAMO_DB=0
 INSTALL_MYSQLWORKBENCH=0
 INSTALL_DROPBOX=0
 INSTALL_PIP3=0
 INSTALL_VENV=0
 INSTALL_PYTHON_3_7=0
 INSTALL_YOUTUBE_DL=0
+INSTALL_ACTIVE_MQ=0
 
 SET_FAVORITES_BAR=0
 SET_DOCK_POSITION_BOTTOM=0
@@ -96,7 +98,7 @@ if [ "$INSTALL_VIM" -eq 1 ]; then
 fi
 
 if [ "$INSTALL_BYOBU" -eq 1 ]; then
-    echo ---------- Installing vim
+    echo ---------- Installing byobu
     apt -y install byobu
 fi
 
@@ -272,6 +274,11 @@ X-GNOME-Autostart-enabled=true
 ' > /home/$MYUSER/.config/autostart/mysql-docker.desktop"
 fi
 
+if [ "$INSTALL_DYNAMO_DB" -eq 1 ]; then
+    echo ---------- Installing DynamoDB Docker
+    docker run -p 9000:8000 amazon/dynamodb-local
+fi
+
 if [ "$INSTALL_DROPBOX" -eq 1 ]; then
     echo ---------- Installing Dropbox
     wget https://linux.dropbox.com/packages/ubuntu/dropbox_2019.02.14_amd64.deb
@@ -300,6 +307,15 @@ fi
 if [ "$INSTALL_YOUTUBE_DL" -eq 1 ]; then
     echo ---------- Installing youtube-dl
     sudo -u $MYUSER pip3 install youtube-dl
+fi
+
+if [ "$INSTALL_ACTIVE_MQ" -eq 1 ]; then
+    echo ---------- Installing ActiveMQ
+    mkdir -p /home/${MYUSER}/Soft
+    wget http://www.apache.org/dyn/closer.cgi?filename=/activemq/5.15.9/apache-activemq-5.15.9-bin.tar.gz&action=download
+    tar -xzf apache-activemq-5.15.9-bin.tar.gz
+    rm apache-activemq-5.15.9-bin.tar.gz
+    cd /home/${MYUSER}/Downloads
 fi
 
 # VERSION 18 / 19 SPECIFIC
