@@ -1,11 +1,15 @@
 #!/bin/bash
 
 # USER SETTINGS
-# 1. Set your information
+# 1. Set your configuration
 MYUSER=oleg
 MYGITNAME=Oleg
 MYGITEMAIL=oleg@work
 ADDITIONAL_SSH_KEY_NAME=bondit
+SAMBA_SHARE_DIR=/media/oleg/491673cd-d949-4ff8-9c71-4ffb482d5ba4/oleg/torrent/complete
+SAMBA_SHARE_NAME=myshare
+SAMBA_SHARE_READONLY=yes
+SAMBA_SHARE_PASSWORD=s111000000
 
 # 2. Set what you want to install 1 for yes, 0 for no
 INSTALL_CURL=0
@@ -18,7 +22,7 @@ INSTALL_MYSQL_PYTHON_DEPENDENCIES=0
 INSTALL_AWS_CLI=0
 INSTALL_NODEJS_NPM=0
 INSTALL_ANGULAR_CLI=0
-INSTALL_SERVERLESS=1
+INSTALL_SERVERLESS=0
 ADD_SSH_KEY_FOR_GIT=0
 ADD_ADDITIONAL_SSH_KEY_FOR_GIT=0
 CREATE_ALIASES=0
@@ -40,6 +44,7 @@ INSTALL_VENV=0
 INSTALL_PYTHON_3_7=0
 INSTALL_YOUTUBE_DL=0
 INSTALL_ACTIVE_MQ=0
+INSTALL_SAMBA=1
 
 SET_FAVORITES_BAR=0
 SET_DOCK_POSITION_BOTTOM=0
@@ -316,6 +321,23 @@ if [ "$INSTALL_ACTIVE_MQ" -eq 1 ]; then
     tar -xzf apache-activemq-5.15.9-bin.tar.gz
     rm apache-activemq-5.15.9-bin.tar.gz
     cd /home/${MYUSER}/Downloads
+fi
+
+if [ "$INSTALL_SAMBA" -eq 1 ]; then
+    echo ---------- Installing Samba
+    apt install samba
+    echo --- creating backup for samba config
+    cp /etc/samba/smb.conf /etc/samba/smb-bk.conf
+    echo "
+[${SAMBA_SHARE_NAME}]
+    comment = ubuntu share
+    path = ${SAMBA_SHARE_DIR}
+    read only = ${SAMBA_SHARE_READONLY}
+    browsable = yes
+" >> /etc/samba/smb.conf
+    service smbd restart
+    (echo "${SAMBA_SHARE_PASSWORD}"; echo "${SAMBA_SHARE_PASSWORD}") | smbpasswd -s -a ${MYUSER}
+
 fi
 
 # VERSION 18 / 19 SPECIFIC
