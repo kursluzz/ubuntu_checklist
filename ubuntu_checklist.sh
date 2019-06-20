@@ -20,6 +20,7 @@ INSTALL_SSH_SERVER=0
 INSTALL_GIT=0
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=0
 INSTALL_AWS_CLI=0
+INSTALL_AWS_EB=0
 INSTALL_NODEJS_NPM=0
 INSTALL_ANGULAR_CLI=0
 INSTALL_SERVERLESS=0
@@ -135,6 +136,12 @@ if [ "$INSTALL_AWS_CLI" -eq 1 ]; then
     echo ---------- Installing AWS CLI
     snap install aws-cli --classic
 fi
+
+if [ "$INSTALL_AWS_EB" -eq 1 ]; then
+    echo ---------- Installing AWS EB
+    pip3 install --upgrade awsebcli
+fi
+
 
 if [ "$INSTALL_NODEJS_NPM" -eq 1 ]; then
     echo ---------- Installing nodejs npm
