@@ -19,6 +19,9 @@ INSTALL_MAKE=0
 INSTALL_SSH_SERVER=0
 INSTALL_GIT=0
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=0
+INSTALL_PIP3=0
+INSTALL_VENV=0
+INSTALL_PYTHON_3_7=0
 INSTALL_AWS_CLI=0
 INSTALL_AWS_EB=0
 INSTALL_NODEJS_NPM=0
@@ -40,13 +43,9 @@ INSTALL_MYSQL_DOCKER=0
 INSTALL_DYNAMO_DB=0
 INSTALL_MYSQLWORKBENCH=0
 INSTALL_DROPBOX=0
-INSTALL_PIP3=0
-INSTALL_VENV=0
-INSTALL_PYTHON_3_7=0
 INSTALL_YOUTUBE_DL=0
 INSTALL_ACTIVE_MQ=0
 INSTALL_SAMBA=1
-
 SET_FAVORITES_BAR=0
 SET_DOCK_POSITION_BOTTOM=0
 ADD_NEW_TEXT_FILE_TEMPLATE=0
@@ -130,6 +129,23 @@ fi
 if [ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]; then
     echo ---------- Installing mysql dev dependencies
     apt install libmysqlclient-dev
+fi
+
+if [ "$INSTALL_PIP3" -eq 1 ]; then
+    echo ---------- Installing pip3
+    apt -y install python3-pip
+fi
+
+if [ "$INSTALL_PYTHON_3_7" -eq 1 ]; then
+    echo ---------- Installing Puthon 3.7
+    apt install software-properties-common
+    add-apt-repository ppa:deadsnakes/ppa
+    apt install python3.7
+fi
+
+if [ "$INSTALL_VENV" -eq 1 ]; then
+    echo ---------- Installing VENV
+    apt -y install python3-venv
 fi
 
 if [ "$INSTALL_AWS_CLI" -eq 1 ]; then
@@ -297,23 +313,6 @@ if [ "$INSTALL_DROPBOX" -eq 1 ]; then
     dpkg -i dropbox_2019.02.14_amd64.deb
     apt -y install -f
     rm dropbox_2019.02.14_amd64.deb
-fi
-
-if [ "$INSTALL_PIP3" -eq 1 ]; then
-    echo ---------- Installing pip3
-    apt -y install python3-pip
-fi
-
-if [ "$INSTALL_PYTHON_3_7" -eq 1 ]; then
-    echo ---------- Installing Puthon 3.7
-    apt install software-properties-common
-    add-apt-repository ppa:deadsnakes/ppa
-    apt install python3.7
-fi
-
-if [ "$INSTALL_VENV" -eq 1 ]; then
-    echo ---------- Installing VENV
-    apt -y install python3-venv
 fi
 
 if [ "$INSTALL_YOUTUBE_DL" -eq 1 ]; then
