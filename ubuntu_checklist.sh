@@ -45,7 +45,8 @@ INSTALL_MYSQLWORKBENCH=0
 INSTALL_DROPBOX=0
 INSTALL_YOUTUBE_DL=0
 INSTALL_ACTIVE_MQ=0
-INSTALL_SAMBA=1
+INSTALL_SAMBA=0
+INSTALL_FREECAD=0
 SET_FAVORITES_BAR=0
 SET_DOCK_POSITION_BOTTOM=0
 ADD_NEW_TEXT_FILE_TEMPLATE=0
@@ -345,6 +346,16 @@ if [ "$INSTALL_SAMBA" -eq 1 ]; then
     (echo "${SAMBA_SHARE_PASSWORD}"; echo "${SAMBA_SHARE_PASSWORD}") | smbpasswd -s -a ${MYUSER}
 
 fi
+
+if [ "$INSTALL_FREECAD" -eq 1 ]; then
+    echo ---------- Installing FreeCAD
+    sudo -u $MYUSER mkdir -p /home/${MYUSER}/Soft
+    cd /home/${MYUSER}/Soft
+    sudo -u $MYUSER wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.2/FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage -P /home/${MYUSER}/Soft
+    chmod +x FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
+fi
+
+
 
 # VERSION 18 / 19 SPECIFIC
 if [ $(get_os_version_id) = "19.04" ]; then
