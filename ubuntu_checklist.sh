@@ -27,7 +27,7 @@ INSTALL_AWS_EB=0
 INSTALL_NODEJS_NPM=0
 INSTALL_ANGULAR_CLI=0
 INSTALL_SERVERLESS=0
-ADD_SSH_KEY_FOR_GIT=0
+INSTALL_JDK11=0
 ADD_ADDITIONAL_SSH_KEY_FOR_GIT=0
 CREATE_ALIASES=0
 CREATE_SSH_CONFIG_FILE=0
@@ -174,6 +174,11 @@ fi
 if [ "$INSTALL_SERVERLESS" -eq 1 ]; then
     echo ---------- Installing serverless
     npm install -g serverless
+fi
+
+if [ "$INSTALL_JDK11" -eq 1 ]; then
+    echo ---------- Installing JDK11
+    sudo apt install openjdk-11-jdk-headless
 fi
 
 if [ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]; then
@@ -335,6 +340,7 @@ fi
 
 if [ "$INSTALL_YOUTUBE_DL" -eq 1 ]; then
     echo ---------- Installing youtube-dl
+    apt get ffmpeg
     sudo -u $MYUSER pip3 install youtube-dl
 fi
 
