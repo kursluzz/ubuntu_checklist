@@ -22,6 +22,7 @@ INSTALL_MYSQL_PYTHON_DEPENDENCIES=0
 INSTALL_PIP3=0
 INSTALL_VENV=0
 INSTALL_PYTHON_3_7=0
+INSTALL_NGINX=0
 INSTALL_AWS_CLI=0
 INSTALL_AWS_EB=0
 INSTALL_NODEJS_NPM=0
@@ -141,6 +142,14 @@ if [ "$INSTALL_PYTHON_3_7" -eq 1 ]; then
     apt install software-properties-common
     add-apt-repository ppa:deadsnakes/ppa
     apt install python3.7
+fi
+
+if [ "$INSTALL_NGINX" -eq 1 ]; then
+    echo ---------- Installing nginx
+    apt update
+    apt upgrade
+    apt install nginx
+
 fi
 
 if [ "$INSTALL_VENV" -eq 1 ]; then
