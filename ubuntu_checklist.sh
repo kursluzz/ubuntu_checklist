@@ -28,7 +28,7 @@ INSTALL_AWS_EB=0
 INSTALL_NODEJS_NPM=0
 INSTALL_ANGULAR_CLI=0
 INSTALL_SERVERLESS=0
-ADD_SSH_KEY_FOR_GIT=0
+INSTALL_JDK11=0
 ADD_ADDITIONAL_SSH_KEY_FOR_GIT=0
 CREATE_ALIASES=0
 CREATE_SSH_CONFIG_FILE=0
@@ -38,6 +38,7 @@ INSTALL_CHROMIUM=0
 INSTALL_SUBLIME=0
 INSTALL_KRITA=0
 INSTALL_POSTMAN=0
+INSTALL_SHUTTER=0
 INSTALL_FORTICLIENT_VPN=0
 INSTALL_DOCKER=0
 INSTALL_MYSQL_DOCKER=0
@@ -46,7 +47,8 @@ INSTALL_MYSQLWORKBENCH=0
 INSTALL_DROPBOX=0
 INSTALL_YOUTUBE_DL=0
 INSTALL_ACTIVE_MQ=0
-INSTALL_SAMBA=1
+INSTALL_SAMBA=0
+INSTALL_FREECAD=0
 SET_FAVORITES_BAR=0
 SET_DOCK_POSITION_BOTTOM=0
 ADD_NEW_TEXT_FILE_TEMPLATE=0
@@ -183,6 +185,11 @@ if [ "$INSTALL_SERVERLESS" -eq 1 ]; then
     npm install -g serverless
 fi
 
+if [ "$INSTALL_JDK11" -eq 1 ]; then
+    echo ---------- Installing JDK11
+    sudo apt install openjdk-11-jdk-headless
+fi
+
 if [ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]; then
     echo ---------- Adding SSH key for git
     DO_SSH=0
@@ -281,6 +288,22 @@ if [ "$INSTALL_POSTMAN" -eq 1 ]; then
     snap install postman
 fi
 
+if [ "$INSTALL_SHUTTER" -eq 1 ]; then
+    echo ---------- Installing Shutter
+    snap install shutter
+    wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas-common_1.0.0-1_all.deb
+    sudo dpkg -i libgoocanvas-common_1.0.0-1_all.deb
+    rm libgoocanvas-common_1.0.0-1_all.deb
+    wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_amd64.deb
+    sudo dpkg -i libgoocanvas3_1.0.0-1_amd64.deb
+    rm libgoocanvas3_1.0.0-1_amd64.deb
+    wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
+    sudo dpkg -i libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
+    rm libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
+    sudo apt install -f
+    sudo killall shutter
+fi
+
 if [ "$INSTALL_FORTICLIENT_VPN" -eq 1 ]; then
     echo ---------- Installing Forticlient VPN
     wget https://hadler.me/files/forticlient-sslvpn_4.4.2333-1_amd64.deb
@@ -326,6 +349,7 @@ fi
 
 if [ "$INSTALL_YOUTUBE_DL" -eq 1 ]; then
     echo ---------- Installing youtube-dl
+    apt get ffmpeg
     sudo -u $MYUSER pip3 install youtube-dl
 fi
 
@@ -354,6 +378,16 @@ if [ "$INSTALL_SAMBA" -eq 1 ]; then
     (echo "${SAMBA_SHARE_PASSWORD}"; echo "${SAMBA_SHARE_PASSWORD}") | smbpasswd -s -a ${MYUSER}
 
 fi
+
+if [ "$INSTALL_FREECAD" -eq 1 ]; then
+    echo ---------- Installing FreeCAD
+    sudo -u $MYUSER mkdir -p /home/${MYUSER}/Soft
+    cd /home/${MYUSER}/Soft
+    sudo -u $MYUSER wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.2/FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage -P /home/${MYUSER}/Soft
+    chmod +x FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
+fi
+
+
 
 # VERSION 18 / 19 SPECIFIC
 if [ $(get_os_version_id) = "19.04" ]; then
