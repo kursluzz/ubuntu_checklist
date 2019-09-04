@@ -49,6 +49,7 @@ INSTALL_YOUTUBE_DL=0
 INSTALL_ACTIVE_MQ=0
 INSTALL_SAMBA=0
 INSTALL_FREECAD=0
+FIX_CALCULATOR_KEYBOARD_SHORTCUT=0
 SET_FAVORITES_BAR=0
 SET_DOCK_POSITION_BOTTOM=0
 ADD_NEW_TEXT_FILE_TEMPLATE=0
@@ -387,6 +388,11 @@ if [ "$INSTALL_FREECAD" -eq 1 ]; then
     chmod +x FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
 fi
 
+if [ "$FIX_CALCULATOR_KEYBOARD_SHORTCUT" -eq 1 ]; then
+    echo ---------- Fix calculator shortcut
+    snap remove gnome-calculator
+    apt install gnome-calculator
+fi
 
 
 # VERSION 18 / 19 SPECIFIC
