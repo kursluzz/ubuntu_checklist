@@ -286,7 +286,15 @@ fi
 
 if [ "$INSTALL_POSTMAN" -eq 1 ]; then
     echo ---------- Installing Postman
-    snap install postman
+    wget https://dl.pstmn.io/download/latest/linux64
+    mv linux64 postnam-latest.tar.gz
+    tar -xzf postman-latest.tar.gz -C /opt/
+    mkdir -p /home/${MYUSER}/.local/bin
+    su - $MYUSER -c "echo /home/${MYUSER}/.local/bin/postman > '#!/bin/bash
+/opt/Postman/Postman >/dev/null &
+'"
+    chmod +x /home/${MYUSER}/.local/bin/postman
+    rm linux64 postnam-latest.tar.gz
 fi
 
 if [ "$INSTALL_SHUTTER" -eq 1 ]; then
