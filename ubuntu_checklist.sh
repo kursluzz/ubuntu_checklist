@@ -294,7 +294,7 @@ if [ "$INSTALL_POSTMAN" -eq 1 ]; then
 /opt/Postman/Postman >/dev/null &
 '"
     chmod +x /home/${MYUSER}/.local/bin/postman
-    rm linux64 postnam-latest.tar.gz
+    rm postnam-latest.tar.gz
 fi
 
 if [ "$INSTALL_SHUTTER" -eq 1 ]; then
