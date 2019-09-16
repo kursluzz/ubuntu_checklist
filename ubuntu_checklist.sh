@@ -37,7 +37,7 @@ INSTALL_PYCHARM=0
 INSTALL_CHROMIUM=0
 INSTALL_SUBLIME=0
 INSTALL_KRITA=0
-INSTALL_POSTMAN=0
+INSTALL_POSTMAN=1
 INSTALL_SHUTTER=0
 INSTALL_FORTICLIENT_VPN=0
 INSTALL_DOCKER=0
@@ -287,14 +287,13 @@ fi
 if [ "$INSTALL_POSTMAN" -eq 1 ]; then
     echo ---------- Installing Postman
     wget https://dl.pstmn.io/download/latest/linux64
-    mv linux64 postnam-latest.tar.gz
+    mv linux64 postman-latest.tar.gz
     tar -xzf postman-latest.tar.gz -C /opt/
-    mkdir -p /home/${MYUSER}/.local/bin
-    su - $MYUSER -c "echo /home/${MYUSER}/.local/bin/postman > '#!/bin/bash
+    echo '#!/bin/bash
 /opt/Postman/Postman >/dev/null &
-'"
-    chmod +x /home/${MYUSER}/.local/bin/postman
-    rm postnam-latest.tar.gz
+' > /bin/postman
+    chmod +x /bin/postman
+    rm postman-latest.tar.gz
 fi
 
 if [ "$INSTALL_SHUTTER" -eq 1 ]; then
