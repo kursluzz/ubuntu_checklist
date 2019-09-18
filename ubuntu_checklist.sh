@@ -132,7 +132,7 @@ fi
 
 if [ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]; then
     echo ---------- Installing mysql dev dependencies
-    apt install libmysqlclient-dev
+    apt -y install libmysqlclient-dev
 fi
 
 if [ "$INSTALL_PIP3" -eq 1 ]; then
@@ -142,16 +142,16 @@ fi
 
 if [ "$INSTALL_PYTHON_3_7" -eq 1 ]; then
     echo ---------- Installing Puthon 3.7
-    apt install software-properties-common
+    apt -y install software-properties-common
     add-apt-repository ppa:deadsnakes/ppa
-    apt install python3.7
+    apt -y install python3.7
 fi
 
 if [ "$INSTALL_NGINX" -eq 1 ]; then
     echo ---------- Installing nginx
     apt update
     apt upgrade
-    apt install nginx
+    apt -y install nginx
 
 fi
 
@@ -173,7 +173,7 @@ fi
 
 if [ "$INSTALL_NODEJS_NPM" -eq 1 ]; then
     echo ---------- Installing nodejs npm
-    apt install nodejs npm
+    apt -y install nodejs npm
 fi
 
 if [ "$INSTALL_ANGULAR_CLI" -eq 1 ]; then
@@ -188,7 +188,7 @@ fi
 
 if [ "$INSTALL_JDK11" -eq 1 ]; then
     echo ---------- Installing JDK11
-    sudo apt install openjdk-11-jdk-headless
+    sudo apt -y install openjdk-11-jdk-headless
 fi
 
 if [ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]; then
@@ -308,7 +308,7 @@ if [ "$INSTALL_SHUTTER" -eq 1 ]; then
     wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
     sudo dpkg -i libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
     rm libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
-    sudo apt install -f
+    sudo apt -y install -f
     sudo killall shutter
 fi
 
@@ -372,7 +372,7 @@ fi
 
 if [ "$INSTALL_SAMBA" -eq 1 ]; then
     echo ---------- Installing Samba
-    apt install samba
+    apt -y install samba
     echo --- creating backup for samba config
     cp /etc/samba/smb.conf /etc/samba/smb-bk.conf
     echo "
@@ -398,7 +398,7 @@ fi
 if [ "$FIX_CALCULATOR_KEYBOARD_SHORTCUT" -eq 1 ]; then
     echo ---------- Fix calculator shortcut
     snap remove gnome-calculator
-    apt install gnome-calculator
+    apt -y install gnome-calculator
 fi
 
 
