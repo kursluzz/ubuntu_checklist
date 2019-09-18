@@ -434,4 +434,6 @@ if [[ ${ADD_NEW_TEXT_FILE_TEMPLATE} -eq 1 ]]; then
     sudo -u ${MYUSER} touch /home/${MYUSER}/Templates/New\ File.txt
 fi
 
-echo done running Ubuntu checklist!
+echo 'done running Ubuntu checklist!
+- Please complete the Dropbox installation and login
+- Please set SSH public key in Bitbucket and Github!'
