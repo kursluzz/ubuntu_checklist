@@ -242,19 +242,27 @@ fi
 if [ "$CREATE_SSH_CONFIG_FILE" -eq 1 ]; then
     echo ---------- Creating ssh .config example
     su - $MYUSER -c "echo 'Host userver
-            HostName 10.0.0.7
-            User oleg
-    Host raspiw
-            HostName 10.0.0.60
-            User pi
-    Host raspi3
-            HostName 10.0.0.4
-            User pi
-    Host someserver2
-            HostName 10.1.1.2
-            User pi
-            IdentityFile ~/.ssh/someserver.pem
-    ' > /home/$MYUSER/.ssh/config"
+    HostName 10.0.0.7
+    User oleg
+Host raspiw
+    HostName 10.0.0.60
+    User pi
+Host raspi3
+    HostName 10.0.0.4
+    User pi
+Host bitbucket.org
+    HostName bitbucket.org
+    User git
+    IdentityFile ~/.ssh/id_rsa
+Host bitbucket.org-kz
+    HostName bitbucket.org
+    User git
+    IdentityFile ~/.ssh/kz
+Host someserver2
+    HostName 10.1.1.2
+    User pi
+    IdentityFile ~/.ssh/someserver.pem
+' > /home/$MYUSER/.ssh/config"
 fi
 
 if [ "$INSTALL_CHROME" -eq 1 ]; then
