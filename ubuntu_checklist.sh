@@ -38,6 +38,7 @@ INSTALL_PYCHARM=0
 INSTALL_CHROMIUM=0
 INSTALL_SUBLIME=0
 INSTALL_KRITA=0
+INSTALL_AUDACITY=0
 INSTALL_POSTMAN=1
 INSTALL_SHUTTER=0
 INSTALL_FORTICLIENT_VPN=0
@@ -291,6 +292,11 @@ fi
 if [ "$INSTALL_KRITA" -eq 1 ]; then
     echo ---------- Installing Krita
     snap install krita
+fi
+
+if [ "$INSTALL_AUDACITY" -eq 1 ]; then
+    echo ---------- Installing Audacity
+    snap install audacity
 fi
 
 if [ "$INSTALL_POSTMAN" -eq 1 ]; then
