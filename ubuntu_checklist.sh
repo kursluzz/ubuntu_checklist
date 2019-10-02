@@ -319,18 +319,7 @@ fi
 
 if [ "$INSTALL_SHUTTER" -eq 1 ]; then
     echo ---------- Installing Shutter
-    snap install shutter
-    wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas-common_1.0.0-1_all.deb
-    sudo dpkg -i libgoocanvas-common_1.0.0-1_all.deb
-    rm libgoocanvas-common_1.0.0-1_all.deb
-    wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_amd64.deb
-    sudo dpkg -i libgoocanvas3_1.0.0-1_amd64.deb
-    rm libgoocanvas3_1.0.0-1_amd64.deb
-    wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
-    sudo dpkg -i libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
-    rm libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
-    sudo apt -y install -f
-    sudo killall shutter
+    apt install shutter
 fi
 
 if [ "$INSTALL_FORTICLIENT_VPN" -eq 1 ]; then
