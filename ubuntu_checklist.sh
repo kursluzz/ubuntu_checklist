@@ -35,6 +35,7 @@ CREATE_ALIASES=1
 CREATE_SSH_CONFIG_FILE=1
 INSTALL_CHROME=1
 INSTALL_PYCHARM=1
+INSTALL_VSCODE=1
 INSTALL_CHROMIUM=1
 INSTALL_SUBLIME=1
 INSTALL_KRITA=1
@@ -277,6 +278,11 @@ fi
 if [ "$INSTALL_PYCHARM" -eq 1 ]; then
     echo ---------- Installing PyCharm
     snap install pycharm-community --classic
+fi
+
+if [ "$INSTALL_VSCODE" -eq 1 ]; then
+    echo ---------- Installing VSCode
+    snap install code --classic
 fi
 
 if [ "$INSTALL_CHROMIUM" -eq 1 ]; then
