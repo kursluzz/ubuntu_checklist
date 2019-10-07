@@ -15,6 +15,7 @@ SAMBA_SHARE_PASSWORD=s111000000
 INSTALL_CURL=1
 INSTALL_VIM=1
 INSTALL_BYOBU=1
+INSTALL_WAKEONLAN=1
 INSTALL_MAKE=1
 INSTALL_SSH_SERVER=1
 INSTALL_GIT=1
@@ -112,6 +113,11 @@ fi
 if [ "$INSTALL_BYOBU" -eq 1 ]; then
     echo ---------- Installing byobu
     apt -y install byobu
+fi
+
+if [ "$INSTALL_WAKEONLAN" -eq 1 ]; then
+    echo ---------- Installing wakeonlan
+    apt -y install wakeonlan
 fi
 
 if [ "$INSTALL_MAKE" -eq 1 ]; then
