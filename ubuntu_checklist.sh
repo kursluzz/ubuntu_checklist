@@ -53,6 +53,7 @@ INSTALL_YOUTUBE_DL=1
 INSTALL_ACTIVE_MQ=0
 INSTALL_SAMBA=1
 INSTALL_FREECAD=0
+INSTALL_HYDROGEN=0
 FIX_CALCULATOR_KEYBOARD_SHORTCUT=1
 SET_FAVORITES_BAR=1
 SET_DOCK_POSITION_BOTTOM=0
@@ -410,6 +411,11 @@ if [ "$INSTALL_FREECAD" -eq 1 ]; then
     cd /home/${MYUSER}/Soft
     sudo -u $MYUSER wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.2/FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage -P /home/${MYUSER}/Soft
     chmod +x FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
+fi
+
+if [ "$INSTALL_HYDROGEN" -eq 1 ]; then
+    echo ---------- Installing Hydrogen
+    apt -y install hydrogen
 fi
 
 if [ "$FIX_CALCULATOR_KEYBOARD_SHORTCUT" -eq 1 ]; then
