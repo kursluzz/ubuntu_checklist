@@ -22,14 +22,14 @@ INSTALL_GIT=1
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=1
 INSTALL_PIP3=1
 INSTALL_VENV=1
-INSTALL_PYTHON_3_7=0
-INSTALL_NGINX=0
+INSTALL_PYTHON_3_7=1
+INSTALL_NGINX=1
 INSTALL_AWS_CLI=1
 INSTALL_AWS_EB=1
 INSTALL_NODEJS_NPM=1
 INSTALL_ANGULAR_CLI=1
-INSTALL_SERVERLESS=0
-INSTALL_JDK11=1
+INSTALL_SERVERLESS=1
+INSTALL_GDK=1
 ADD_SSH_KEY_FOR_GIT=1
 ADD_ADDITIONAL_SSH_KEY_FOR_GIT=1
 CREATE_ALIASES=1
@@ -46,17 +46,17 @@ INSTALL_SHUTTER=1
 INSTALL_FORTICLIENT_VPN=1
 INSTALL_DOCKER=1
 INSTALL_MYSQL_DOCKER=1
-INSTALL_DYNAMO_DB=0
+INSTALL_DYNAMO_DB=1
 INSTALL_MYSQLWORKBENCH=1
 INSTALL_DROPBOX=1
 INSTALL_YOUTUBE_DL=1
-INSTALL_ACTIVE_MQ=0
+INSTALL_ACTIVE_MQ=1
 INSTALL_SAMBA=1
-INSTALL_FREECAD=0
-INSTALL_HYDROGEN=0
+INSTALL_FREECAD=1
+INSTALL_HYDROGEN=1
 FIX_CALCULATOR_KEYBOARD_SHORTCUT=1
 SET_FAVORITES_BAR=1
-SET_DOCK_POSITION_BOTTOM=0
+SET_DOCK_POSITION_BOTTOM=1
 ADD_NEW_TEXT_FILE_TEMPLATE=1
 INSTALL_YANDEXDISK=1
 
@@ -192,7 +192,7 @@ if [ "$INSTALL_SERVERLESS" -eq 1 ]; then
   npm install -g serverless
 fi
 
-if [ "$INSTALL_JDK11" -eq 1 ]; then
+if [ "$INSTALL_GDK" -eq 1 ]; then
   echo ---------- Installing JDK11
   sudo apt -y install openjdk-11-jdk-headless
 fi
@@ -456,7 +456,9 @@ fi
 
 if [ "$INSTALL_YANDEXDISK" -eq 1 ]; then
   echo ---------- Installing Yandex Disk
-  su - $MYUSER -c 'echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk'
+  # original command with sudo [https://yandex.com/support/disk/cli-clients.html]
+  # echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk
+  echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | apt-key add - && apt-get update && apt-get install -y yandex-disk
 fi
 
 echo done running Ubuntu checklist!
