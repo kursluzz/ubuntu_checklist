@@ -50,6 +50,7 @@ INSTALL_DYNAMO_DB=1
 INSTALL_MYSQLWORKBENCH=1
 INSTALL_DROPBOX=1
 INSTALL_YOUTUBE_DL=1
+INSTALL_ACESTREAMPLAYER=1
 INSTALL_ACTIVE_MQ=1
 INSTALL_SAMBA=1
 INSTALL_FREECAD=1
@@ -371,6 +372,11 @@ if [ "$INSTALL_YOUTUBE_DL" -eq 1 ]; then
   echo ---------- Installing youtube-dl
   apt get ffmpeg
   sudo -u $MYUSER pip3 install youtube-dl
+fi
+
+if [ "$INSTALL_ACESTREAMPLAYER" -eq 1 ]; then
+  echo ---------- Installing acestreamplayer
+  snap install acestreamplayer
 fi
 
 if [ "$INSTALL_ACTIVE_MQ" -eq 1 ]; then
