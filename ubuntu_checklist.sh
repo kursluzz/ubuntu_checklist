@@ -55,6 +55,7 @@ INSTALL_ACTIVE_MQ=1
 INSTALL_SAMBA=1
 INSTALL_FREECAD=1
 INSTALL_HYDROGEN=1
+INSTALL_CALIBRE=1
 FIX_CALCULATOR_KEYBOARD_SHORTCUT=1
 SET_FAVORITES_BAR=1
 SET_DOCK_POSITION_BOTTOM=1
@@ -420,6 +421,11 @@ fi
 if [ "$INSTALL_HYDROGEN" -eq 1 ]; then
   echo ---------- Installing Hydrogen
   apt -y install hydrogen
+fi
+
+if [ "$INSTALL_CALIBRE" -eq 1 ]; then
+  echo "---------- Installing Calibre (ebook manager)"
+  wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sh /dev/stdin
 fi
 
 if [ "$FIX_CALCULATOR_KEYBOARD_SHORTCUT" -eq 1 ]; then
