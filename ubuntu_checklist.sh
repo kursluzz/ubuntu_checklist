@@ -358,7 +358,14 @@ fi
 
 if [ "$INSTALL_DYNAMO_DB" -eq 1 ]; then
   echo ---------- Installing DynamoDB Docker
-  docker run -p 9000:8000 amazon/dynamodb-local
+  docker run --name dynamodb-container -p 9000:8000 amazon/dynamodb-local
+  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
+  su - $MYUSER -c "echo '[Desktop Entry]
+Name=DynamoDB
+Exec=docker start dynamodb-container
+Type=Application
+X-GNOME-Autostart-enabled=true
+' > /home/$MYUSER/.config/autostart/dynamodb.desktop"
 fi
 
 if [ "$INSTALL_DROPBOX" -eq 1 ]; then
@@ -382,12 +389,14 @@ fi
 
 if [ "$INSTALL_ACTIVE_MQ" -eq 1 ]; then
   echo ---------- Installing ActiveMQ
-  sudo -u $MYUSER mkdir -p /home/${MYUSER}/Soft
-  wget http://www.apache.org/dyn/closer.cgi?filename=/activemq/5.15.9/apache-activemq-5.15.9-bin.tar.gz &
-  action=download
-  tar -xzf apache-activemq-5.15.9-bin.tar.gz
-  rm apache-activemq-5.15.9-bin.tar.gz
-  cd /home/${MYUSER}/Downloads
+  docker run --name activemq-container -p 61613:61613 -p 8161:8161 rmohr/activemq
+  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
+  su - $MYUSER -c "echo '[Desktop Entry]
+Name=ActiveMQ
+Exec=docker start activemq-container
+Type=Application
+X-GNOME-Autostart-enabled=true
+' > /home/$MYUSER/.config/autostart/activemq.desktop"
 fi
 
 if [ "$INSTALL_SAMBA" -eq 1 ]; then
