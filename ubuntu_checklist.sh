@@ -10,6 +10,8 @@ SAMBA_SHARE_DIR=/home/${MYUSER}/Shared
 SAMBA_SHARE_NAME=Shared
 SAMBA_SHARE_READONLY=no
 SAMBA_SHARE_PASSWORD=s111000000
+MONGODB_USER=root
+MONGODB_PWD=123456
 
 # 2. Set what you want to install 1 for yes, 0 for no
 INSTALL_CURL=1
@@ -46,8 +48,10 @@ INSTALL_SHUTTER=1
 INSTALL_FORTICLIENT_VPN=1
 INSTALL_DOCKER=1
 INSTALL_MYSQL_DOCKER=1
-INSTALL_DYNAMO_DB=1
-INSTALL_MYSQLWORKBENCH=1
+INSTALL_MONGODB_DOCKER=1
+INSTALL_DYNAMODB_DOCKER=1
+INSTALL_MYSQL_WORKBENCH=1
+INSTALL_MONGODB_COMPASS=1
 INSTALL_DROPBOX=1
 INSTALL_YOUTUBE_DL=1
 INSTALL_ACESTREAMPLAYER=1
@@ -356,7 +360,25 @@ X-GNOME-Autostart-enabled=true
 ' > /home/$MYUSER/.config/autostart/mysql-docker.desktop"
 fi
 
-if [ "$INSTALL_DYNAMO_DB" -eq 1 ]; then
+if [ "$INSTALL_MONGODB_DOCKER" -eq 1 ]; then
+  # https://hub.docker.com/_/mongo
+  echo ---------- Installing MongoDB
+  docker run --name mongodb-container \
+     -e MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER \
+     -e MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PWD \
+     -v /home/$MYUSER/mongodb:/data/db \
+     -p 27017:27017
+     -d mongo:3.6-xenial
+  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
+  su - $MYUSER -c "echo '[Desktop Entry]
+Name=MongoDB
+Exec=docker start mongodb-container
+Type=Application
+X-GNOME-Autostart-enabled=true
+' > /home/$MYUSER/.config/autostart/mongodb-docker.desktop"
+fi
+
+if [ "$INSTALL_DYNAMODB_DOCKER" -eq 1 ]; then
   echo ---------- Installing DynamoDB Docker
   docker run --name dynamodb-container -p 9000:8000 amazon/dynamodb-local
   sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
@@ -443,32 +465,24 @@ if [ "$FIX_CALCULATOR_KEYBOARD_SHORTCUT" -eq 1 ]; then
   apt -y install gnome-calculator
 fi
 
-# VERSION 18 / 19 SPECIFIC
-if [ $(get_os_version_id) = "19.04" ]; then
-  # version 19docker
-  echo ---------- Ubuntu 19 detected, installing specifically for 19
-  if [ "$SET_DOCK_POSITION_BOTTOM" -eq 1 ]; then
-    echo ---------- Moving dock to bottom
-    #su - $MYUSER -c "gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM"
-    #sudo -u oleg DISPLAY=:0 gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM
-    sudo -u "oleg" dbus-launch --exit-with-session gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM
-  fi
-else # version 18
-  echo ---------- Ubuntu 18 or elier detected, installing specifically for 18
-  if [ "$INSTALL_MYSQLWORKBENCH" -eq 1 ]; then
-    echo ---------- Installing MySQL Workbench
-    apt -y install mysql-workbench
-  fi
+if [ "$INSTALL_MYSQL_WORKBENCH" -eq 1 ]; then
+  echo ---------- Installing MySQL Workbench
+  apt -y install mysql-workbench
+fi
 
-  if [ "$SET_DOCK_POSITION_BOTTOM" -eq 1 ]; then
-    echo ---------- Moving dock to bottom
-    su - $MYUSER -c "gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM"
-  fi
+if [ "$INSTALL_MONGODB_COMPASS" -eq 1 ]; then
+  echo ---------- Installing MySQL Compass
+  apt -y install mongodb-compass
+fi
 
-  if [ "$SET_FAVORITES_BAR" -eq 1 ]; then
-    echo ---------- Setting favorites bar
-    su - $MYUSER -c "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Terminal.desktop', 'google-chrome.desktop', 'sublime-text_subl.desktop', 'pycharm-community_pycharm-community.desktop', 'postman_postman.desktop', 'chromium_chromium.desktop', 'mysql-workbench.desktop', 'firefox.desktop', 'krita_krita.desktop', 'org.gnome.Nautilus.desktop']\""
-  fi
+if [ "$SET_DOCK_POSITION_BOTTOM" -eq 1 ]; then
+  echo ---------- Moving dock to bottom
+  su - $MYUSER -c "gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM"
+fi
+
+if [ "$SET_FAVORITES_BAR" -eq 1 ]; then
+  echo ---------- Setting favorites bar
+  su - $MYUSER -c "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Terminal.desktop', 'google-chrome.desktop', 'sublime-text_subl.desktop', 'pycharm-community_pycharm-community.desktop', 'postman_postman.desktop', 'chromium_chromium.desktop', 'mysql-workbench.desktop', 'firefox.desktop', 'krita_krita.desktop', 'org.gnome.Nautilus.desktop']\""
 fi
 
 if [[ ${ADD_NEW_TEXT_FILE_TEMPLATE} -eq 1 ]]; then
