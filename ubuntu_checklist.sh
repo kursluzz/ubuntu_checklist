@@ -367,7 +367,7 @@ if [ "$INSTALL_MONGODB_DOCKER" -eq 1 ]; then
      -e MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER \
      -e MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PWD \
      -v /home/$MYUSER/mongodb:/data/db \
-     -p 27017:27017
+     -p 27017:27017 \
      -d mongo:3.6-xenial
   sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
   su - $MYUSER -c "echo '[Desktop Entry]
