@@ -472,7 +472,10 @@ fi
 
 if [ "$INSTALL_MONGODB_COMPASS" -eq 1 ]; then
   echo ---------- Installing MySQL Compass
-  apt -y install mongodb-compass
+  wget https://downloads.mongodb.com/compass/mongodb-compass_1.20.4_amd64.deb
+  dpkg -i mongodb-compass_1.20.4_amd64.deb
+  apt -y install -f
+  rm mongodb-compass_1.20.4_amd64.deb
 fi
 
 if [ "$SET_DOCK_POSITION_BOTTOM" -eq 1 ]; then
