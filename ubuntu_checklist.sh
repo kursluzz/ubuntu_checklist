@@ -321,7 +321,7 @@ fi
 
 if [ "$INSTALL_SHUTTER" -eq 1 ]; then
   echo ---------- Installing Shutter
-  apt install shutter
+  apt -f install shutter
   # snap install shutter
   wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas-common_1.0.0-1_all.deb
   dpkg -i libgoocanvas-common_1.0.0-1_all.deb
@@ -332,7 +332,7 @@ if [ "$INSTALL_SHUTTER" -eq 1 ]; then
   wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
   dpkg -i libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
   rm libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
-  apt install -f
+  apt -f install -f
   killall shutter
 fi
 
