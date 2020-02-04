@@ -315,15 +315,8 @@ if [ "$INSTALL_AUDACITY" -eq 1 ]; then
 fi
 
 if [ "$INSTALL_POSTMAN" -eq 1 ]; then
-  echo ---------- Installing Postman
-  wget https://dl.pstmn.io/download/latest/linux64
-  mv linux64 postman-latest.tar.gz
-  tar -xzf postman-latest.tar.gz -C /opt/
-  echo '#!/bin/bash
-/opt/Postman/Postman >/dev/null &
-' >/bin/postman
-  chmod +x /bin/postman
-  rm postman-latest.tar.gz
+    echo ---------- Installing Postman
+    snap install postman
 fi
 
 if [ "$INSTALL_SHUTTER" -eq 1 ]; then
