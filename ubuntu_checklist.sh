@@ -2,16 +2,21 @@
 
 # USER SETTINGS
 # 1. Set your configuration
-MYUSER=oleg
-MYGITNAME=Oleg
-MYGITEMAIL=oleg@work
-ADDITIONAL_SSH_KEY_NAME=kz
+MYUSER=username
+MYGITNAME=John
+MYGITEMAIL=john@work
+ADDITIONAL_SSH_KEY_NAME=id_rsa2
 SAMBA_SHARE_DIR=/home/${MYUSER}/Shared
 SAMBA_SHARE_NAME=Shared
 SAMBA_SHARE_READONLY=no
-SAMBA_SHARE_PASSWORD=s111000000
+SAMBA_SHARE_PASSWORD=sharesecret
+MYSQL_ROOT_PASSWORD=123456
 MONGODB_USER=root
 MONGODB_PWD=123456
+
+if [[ -f ubuntu_checklist_config.sh ]]; then
+  sourse ubuntu_checklist_config.sh
+fi
 
 # 2. Set what you want to install 1 for yes, 0 for no
 INSTALL_CURL=1
@@ -47,9 +52,6 @@ INSTALL_POSTMAN=1
 INSTALL_SHUTTER=1
 INSTALL_FORTICLIENT_VPN=1
 INSTALL_DOCKER=1
-INSTALL_MYSQL_DOCKER=1
-INSTALL_MONGODB_DOCKER=1
-INSTALL_DYNAMODB_DOCKER=1
 INSTALL_MYSQL_WORKBENCH=1
 INSTALL_MONGODB_COMPASS=1
 INSTALL_DROPBOX=1
@@ -60,11 +62,15 @@ INSTALL_SAMBA=1
 INSTALL_FREECAD=1
 INSTALL_HYDROGEN=1
 INSTALL_CALIBRE=1
+INSTALL_BLENDER=1
+INSTALL_OPENSHOT=1
 FIX_CALCULATOR_KEYBOARD_SHORTCUT=1
 SET_FAVORITES_BAR=1
 SET_DOCK_POSITION_BOTTOM=1
 ADD_NEW_TEXT_FILE_TEMPLATE=1
 INSTALL_YANDEXDISK=1
+INSTALL_MYSQL_DOCKER=1
+INSTALL_MONGODB_DOCKER=1
 
 # dependencies
 # todo: implement smart dependency will check if dependency exists before installing it
@@ -351,50 +357,6 @@ if [ "$INSTALL_DOCKER" -eq 1 ]; then
   usermod -aG docker $MYUSER
 fi
 
-if [ "$INSTALL_MYSQL_DOCKER" -eq 1 ]; then
-  echo ---------- Installing MySQL Docker
-  docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_ROOT_HOST=172.17.0.1 \
-    -p 3306:3306 -v /home/$MYUSER/mysql:/var/lib/mysql -d mysql/mysql-server:5.7 \
-    --character-set-server=utf8 --collation-server=utf8_general_ci
-  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
-  su - $MYUSER -c "echo '[Desktop Entry]
-Name=MySQL
-Exec=docker start mysql-container
-Type=Application
-X-GNOME-Autostart-enabled=true
-' > /home/$MYUSER/.config/autostart/mysql-docker.desktop"
-fi
-
-if [ "$INSTALL_MONGODB_DOCKER" -eq 1 ]; then
-  # https://hub.docker.com/_/mongo
-  echo ---------- Installing MongoDB
-  docker run --name mongodb-container \
-     -e MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER \
-     -e MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PWD \
-     -v /home/$MYUSER/mongodb:/data/db \
-     -p 27017:27017 \
-     -d mongo:3.6-xenial
-  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
-  su - $MYUSER -c "echo '[Desktop Entry]
-Name=MongoDB
-Exec=docker start mongodb-container
-Type=Application
-X-GNOME-Autostart-enabled=true
-' > /home/$MYUSER/.config/autostart/mongodb-docker.desktop"
-fi
-
-if [ "$INSTALL_DYNAMODB_DOCKER" -eq 1 ]; then
-  echo ---------- Installing DynamoDB Docker
-  docker run --name dynamodb-container -p 9000:8000 amazon/dynamodb-local
-  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
-  su - $MYUSER -c "echo '[Desktop Entry]
-Name=DynamoDB
-Exec=docker start dynamodb-container
-Type=Application
-X-GNOME-Autostart-enabled=true
-' > /home/$MYUSER/.config/autostart/dynamodb.desktop"
-fi
-
 if [ "$INSTALL_DROPBOX" -eq 1 ]; then
   echo ---------- Installing Dropbox
   wget https://linux.dropbox.com/packages/ubuntu/dropbox_2019.02.14_amd64.deb
@@ -464,6 +426,16 @@ if [ "$INSTALL_CALIBRE" -eq 1 ]; then
   wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sh /dev/stdin
 fi
 
+if [ "$INSTALL_BLENDER" -eq 1 ]; then
+  echo "---------- Installing Blender (3D / video editor)"
+  apt -y install blender
+fi
+
+if [ "$INSTALL_OPENSHOT" -eq 1 ]; then
+  echo "---------- Installing Openshot (video editor)"
+  apt -y install openshot-qt
+fi
+
 if [ "$FIX_CALCULATOR_KEYBOARD_SHORTCUT" -eq 1 ]; then
   echo ---------- Fix calculator shortcut
   snap remove gnome-calculator
@@ -483,16 +455,6 @@ if [ "$INSTALL_MONGODB_COMPASS" -eq 1 ]; then
   rm mongodb-compass_1.20.4_amd64.deb
 fi
 
-if [ "$SET_DOCK_POSITION_BOTTOM" -eq 1 ]; then
-  echo ---------- Moving dock to bottom
-  su - $MYUSER -c "gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM"
-fi
-
-if [ "$SET_FAVORITES_BAR" -eq 1 ]; then
-  echo ---------- Setting favorites bar
-  su - $MYUSER -c "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Terminal.desktop', 'google-chrome.desktop', 'sublime-text_subl.desktop', 'pycharm-community_pycharm-community.desktop', 'postman_postman.desktop', 'chromium_chromium.desktop', 'mysql-workbench.desktop', 'firefox.desktop', 'krita_krita.desktop', 'org.gnome.Nautilus.desktop']\""
-fi
-
 if [[ ${ADD_NEW_TEXT_FILE_TEMPLATE} -eq 1 ]]; then
   sudo -u ${MYUSER} touch /home/${MYUSER}/Templates/New\ File.txt
 fi
@@ -502,6 +464,49 @@ if [ "$INSTALL_YANDEXDISK" -eq 1 ]; then
   # original command with sudo [https://yandex.com/support/disk/cli-clients.html]
   # echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk
   echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | apt-key add - && apt-get update && apt-get install -y yandex-disk
+fi
+
+if [ "$INSTALL_MYSQL_DOCKER" -eq 1 ]; then
+  echo ---------- Installing MySQL Docker
+  docker run --name mysql-container -e MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" -e MYSQL_ROOT_HOST=172.17.0.1 \
+    -p 3306:3306 -v /home/$MYUSER/mysql:/var/lib/mysql -d mysql/mysql-server:5.7 \
+    --character-set-server=utf8 --collation-server=utf8_general_ci
+  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
+  su - $MYUSER -c "echo '[Desktop Entry]
+Name=MySQL
+Exec=docker start mysql-container
+Type=Application
+X-GNOME-Autostart-enabled=true
+' > /home/$MYUSER/.config/autostart/mysql-docker.desktop"
+fi
+
+if [ "$INSTALL_MONGODB_DOCKER" -eq 1 ]; then
+  # https://hub.docker.com/_/mongo
+  echo ---------- Installing MongoDB
+  docker run --name mongodb-container \
+     -e MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER \
+     -e MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PWD \
+     -v /home/$MYUSER/mongodb:/data/db \
+     -p 27017:27017 \
+     -d mongo:3.6-xenial
+  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
+  su - $MYUSER -c "echo '[Desktop Entry]
+Name=MongoDB
+Exec=docker start mongodb-container
+Type=Application
+X-GNOME-Autostart-enabled=true
+' > /home/$MYUSER/.config/autostart/mongodb-docker.desktop"
+fi
+
+# favorites bar
+if [ "$SET_DOCK_POSITION_BOTTOM" -eq 1 ]; then
+  echo ---------- Moving dock to bottom
+  su - $MYUSER -c "gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM"
+fi
+
+if [ "$SET_FAVORITES_BAR" -eq 1 ]; then
+  echo ---------- Setting favorites bar
+  su - $MYUSER -c "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Terminal.desktop', 'google-chrome.desktop', 'sublime-text_subl.desktop', 'pycharm-community_pycharm-community.desktop', 'postman_postman.desktop', 'chromium_chromium.desktop', 'mysql-workbench.desktop', 'firefox.desktop', 'krita_krita.desktop', 'org.gnome.Nautilus.desktop']\""
 fi
 
 echo done running Ubuntu checklist!
@@ -517,3 +522,4 @@ if [ "$INSTALL_YANDEXDISK" -eq 1 ]; then
     sudo -u $MYUSER yandex-disk setup
   fi
 fi
+
