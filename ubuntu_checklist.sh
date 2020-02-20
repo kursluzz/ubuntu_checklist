@@ -110,6 +110,9 @@ fi
 
 cd /home/$MYUSER/Downloads
 
+apt -y update
+apt -y upgrade
+
 if [ "$INSTALL_CURL" -eq 1 ]; then
   echo ---------- Installing curl
   apt -y install curl
@@ -168,8 +171,6 @@ fi
 
 if [ "$INSTALL_NGINX" -eq 1 ]; then
   echo ---------- Installing nginx
-  apt update
-  apt upgrade
   apt -y install nginx
 
 fi
