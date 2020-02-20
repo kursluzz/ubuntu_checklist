@@ -286,7 +286,7 @@ if [ "$INSTALL_CHROME" -eq 1 ]; then
   echo ---------- Installing latest Chrome
   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   dpkg -i google-chrome-stable_current_amd64.deb
-  apt -f install -f
+  apt -y install -f
   rm google-chrome-stable_current_amd64.deb
 fi
 
@@ -327,7 +327,7 @@ fi
 
 if [ "$INSTALL_SHUTTER" -eq 1 ]; then
   echo ---------- Installing Shutter
-  apt -f install shutter
+  apt -y install shutter
   # snap install shutter
   wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas-common_1.0.0-1_all.deb
   dpkg -i libgoocanvas-common_1.0.0-1_all.deb
@@ -338,7 +338,7 @@ if [ "$INSTALL_SHUTTER" -eq 1 ]; then
   wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
   dpkg -i libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
   rm libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
-  apt -f install -f
+  apt -y install -f
   killall shutter
 fi
 
