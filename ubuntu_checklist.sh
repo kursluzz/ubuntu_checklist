@@ -36,7 +36,7 @@ INSTALL_AWS_EB=1
 INSTALL_NODEJS_NPM=1
 INSTALL_ANGULAR_CLI=1
 INSTALL_SERVERLESS=1
-INSTALL_GDK=1
+INSTALL_JDK=1
 ADD_SSH_KEY_FOR_GIT=1
 ADD_ADDITIONAL_SSH_KEY_FOR_GIT=1
 CREATE_ALIASES=1
@@ -57,7 +57,6 @@ INSTALL_MONGODB_COMPASS=1
 INSTALL_DROPBOX=1
 INSTALL_YOUTUBE_DL=1
 INSTALL_ACESTREAMPLAYER=1
-INSTALL_ACTIVE_MQ=1
 INSTALL_SAMBA=1
 INSTALL_FREECAD=1
 INSTALL_HYDROGEN=1
@@ -70,6 +69,7 @@ SET_DOCK_POSITION_BOTTOM=1
 ADD_NEW_TEXT_FILE_TEMPLATE=1
 INSTALL_YANDEXDISK=1
 INSTALL_MYSQL_DOCKER=1
+INSTALL_ACTIVEMQ_DOCKER=1
 INSTALL_MONGODB_DOCKER=1
 
 # dependencies
@@ -204,7 +204,7 @@ if [ "$INSTALL_SERVERLESS" -eq 1 ]; then
   npm install -g serverless
 fi
 
-if [ "$INSTALL_GDK" -eq 1 ]; then
+if [ "$INSTALL_JDK" -eq 1 ]; then
   echo ---------- Installing JDK11
   sudo apt -y install openjdk-11-jdk-headless
 fi
@@ -376,18 +376,6 @@ if [ "$INSTALL_ACESTREAMPLAYER" -eq 1 ]; then
   snap install acestreamplayer
 fi
 
-if [ "$INSTALL_ACTIVE_MQ" -eq 1 ]; then
-  echo ---------- Installing ActiveMQ
-  docker run --name activemq-container -p 61613:61613 -p 8161:8161 rmohr/activemq
-  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
-  su - $MYUSER -c "echo '[Desktop Entry]
-Name=ActiveMQ
-Exec=docker start activemq-container
-Type=Application
-X-GNOME-Autostart-enabled=true
-' > /home/$MYUSER/.config/autostart/activemq.desktop"
-fi
-
 if [ "$INSTALL_SAMBA" -eq 1 ]; then
   echo ---------- Installing Samba
   sudo -u $MYUSER mkdir -p "${SAMBA_SHARE_DIR}"
@@ -480,6 +468,18 @@ X-GNOME-Autostart-enabled=true
 ' > /home/$MYUSER/.config/autostart/mysql-docker.desktop"
 fi
 
+if [ "$INSTALL_ACTIVEMQ_DOCKER" -eq 1 ]; then
+  echo ---------- Installing ActiveMQ
+  docker run --name activemq-container -p 61613:61613 -p 8161:8161 rmohr/activemq
+  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
+  su - $MYUSER -c "echo '[Desktop Entry]
+Name=ActiveMQ
+Exec=docker start activemq-container
+Type=Application
+X-GNOME-Autostart-enabled=true
+' > /home/$MYUSER/.config/autostart/activemq.desktop"
+fi
+
 if [ "$INSTALL_MONGODB_DOCKER" -eq 1 ]; then
   # https://hub.docker.com/_/mongo
   echo ---------- Installing MongoDB
@@ -509,6 +509,7 @@ if [ "$SET_FAVORITES_BAR" -eq 1 ]; then
   su - $MYUSER -c "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Terminal.desktop', 'google-chrome.desktop', 'sublime-text_subl.desktop', 'pycharm-community_pycharm-community.desktop', 'postman_postman.desktop', 'chromium_chromium.desktop', 'mysql-workbench.desktop', 'firefox.desktop', 'krita_krita.desktop', 'org.gnome.Nautilus.desktop']\""
 fi
 
+# final prompts and notices
 echo done running Ubuntu checklist!
 if [ "$INSTALL_DROPBOX" -eq 1 ]; then
   echo '- Please complete the Dropbox installation and login'
