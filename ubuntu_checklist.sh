@@ -15,7 +15,7 @@ MONGODB_USER=root
 MONGODB_PWD=123456
 
 if [[ -f ubuntu_checklist_config.sh ]]; then
-  sourse ubuntu_checklist_config.sh
+  source ubuntu_checklist_config.sh
 fi
 
 # 2. Set what you want to install 1 for yes, 0 for no
