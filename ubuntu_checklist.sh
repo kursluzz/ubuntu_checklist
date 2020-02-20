@@ -29,7 +29,6 @@ INSTALL_GIT=1
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=1
 INSTALL_PIP3=1
 INSTALL_VENV=1
-INSTALL_PYTHON_3_7=1
 INSTALL_NGINX=1
 INSTALL_AWS_CLI=1
 INSTALL_AWS_EB=1
@@ -160,13 +159,6 @@ fi
 if [ "$INSTALL_PIP3" -eq 1 ]; then
   echo ---------- Installing pip3
   apt -y install python3-pip
-fi
-
-if [ "$INSTALL_PYTHON_3_7" -eq 1 ]; then
-  echo ---------- Installing Puthon 3.7
-  apt -y install software-properties-common
-  add-apt-repository ppa:deadsnakes/ppa
-  apt -y install python3.7
 fi
 
 if [ "$INSTALL_NGINX" -eq 1 ]; then
