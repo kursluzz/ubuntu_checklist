@@ -13,6 +13,8 @@ SAMBA_SHARE_PASSWORD=sharesecret
 MYSQL_ROOT_PASSWORD=123456
 MONGODB_USER=root
 MONGODB_PWD=123456
+YANDEX_DISK_USERNAME=username
+YANDEX_DISK_PASSWORD=password
 
 if [[ -f ubuntu_checklist_config.sh ]]; then
   source ubuntu_checklist_config.sh
@@ -440,13 +442,6 @@ if [[ ${ADD_NEW_TEXT_FILE_TEMPLATE} -eq 1 ]]; then
   sudo -u ${MYUSER} touch /home/${MYUSER}/Templates/New\ File.txt
 fi
 
-if [ "$INSTALL_YANDEXDISK" -eq 1 ]; then
-  echo ---------- Installing Yandex Disk
-  # original command with sudo [https://yandex.com/support/disk/cli-clients.html]
-  # echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk
-  echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | apt-key add - && apt-get update && apt-get install -y yandex-disk
-fi
-
 if [ "$INSTALL_MYSQL_DOCKER" -eq 1 ]; then
   echo ---------- Installing MySQL Docker
   docker run --name mysql-container -e MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" -e MYSQL_ROOT_HOST=172.17.0.1 \
@@ -502,18 +497,20 @@ if [ "$SET_FAVORITES_BAR" -eq 1 ]; then
   su - $MYUSER -c "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Terminal.desktop', 'google-chrome.desktop', 'sublime-text_subl.desktop', 'pycharm-community_pycharm-community.desktop', 'postman_postman.desktop', 'chromium_chromium.desktop', 'mysql-workbench.desktop', 'firefox.desktop', 'krita_krita.desktop', 'org.gnome.Nautilus.desktop']\""
 fi
 
+if [ "$INSTALL_YANDEXDISK" -eq 1 ]; then
+  echo ---------- Installing Yandex Disk
+  # original command with sudo [https://yandex.com/support/disk/cli-clients.html]
+  # echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk
+  echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | apt-key add - && apt-get update && apt-get install -y yandex-disk
+  printf "n\n%s\n%s\n\n" "$YANDEX_DISK_USERNAME" "$YANDEX_DISK_PASSWORD" | yandex-disk setup
+fi
+
 # final prompts and notices
 echo done running Ubuntu checklist!
 if [ "$INSTALL_DROPBOX" -eq 1 ]; then
   echo '- Please complete the Dropbox installation and login'
 fi
+
 if [ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]; then
   echo '- Please set SSH public key in Bitbucket and Github!'
 fi
-if [ "$INSTALL_YANDEXDISK" -eq 1 ]; then
-  read -p 'Do you want to run yandex-disk setup? [Y/n]: ' CH
-  if [ "$CH" = '' ] || [ "$CH" = 'y' ] || [ "$CH" = 'Y' ]; then
-    sudo -u $MYUSER yandex-disk setup
-  fi
-fi
-
