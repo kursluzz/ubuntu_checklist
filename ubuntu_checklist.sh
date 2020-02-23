@@ -15,31 +15,25 @@ MONGODB_USER=root
 MONGODB_PWD=123456
 YANDEX_DISK_USERNAME=username
 YANDEX_DISK_PASSWORD=password
-SSH_CONFIG='Host userver
-    HostName 10.0.0.7
-    User oleg
-Host raspiw
-    HostName 10.0.0.60
-    User pi
-Host raspi3
-    HostName 10.0.0.4
-    User pi
+SSH_CONFIG='Host someserver
+    HostName 10.0.0.100
+    User user
+Host someserver2
+    HostName 10.0.0.101
+    User user
+    IdentityFile ~/.ssh/someserver2.pem
 Host bitbucket.org
     HostName bitbucket.org
     User git
     IdentityFile ~/.ssh/id_rsa
-Host bitbucket.org-kz
+Host bitbucket.org-id_rsa2
     HostName bitbucket.org
     User git
-    IdentityFile ~/.ssh/kz
-Host someserver2
-    HostName 10.1.1.2
-    User pi
-    IdentityFile ~/.ssh/someserver.pem
+    IdentityFile ~/.ssh/id_rsa2
+
 '
-BASH_ALIASES='alias ymp3=\"youtube-dl --extract-audio --audio-format mp3 --audio-quality 0 --add-metadata\"
-alias tabs-prj=\"gnome-terminal --tab --working-directory=/home/oleg/projects --tab --working-directory=/home/oleg/scripts\"
-'
+BASH_ALIASES="alias git-branch-sort='git branch -a --sort=-committerdate'
+"
 
 if [[ -f ubuntu_checklist_config.sh ]]; then
   source ubuntu_checklist_config.sh
