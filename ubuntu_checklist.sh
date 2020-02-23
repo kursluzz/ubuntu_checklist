@@ -31,7 +31,7 @@ Host bitbucket.org-id_rsa2
     User git
     IdentityFile ~/.ssh/id_rsa2
 '
-BASH_ALIASES='alias git-branch-sort=\"git branch -a --sort=-committerdate\"
+BASH_ALIASES='alias git-branch-sort="git branch -a --sort=-committerdate"
 '
 
 if [[ -f ubuntu_checklist_config.sh ]]; then
