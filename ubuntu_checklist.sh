@@ -15,6 +15,31 @@ MONGODB_USER=root
 MONGODB_PWD=123456
 YANDEX_DISK_USERNAME=username
 YANDEX_DISK_PASSWORD=password
+SSH_CONFIG='Host userver
+    HostName 10.0.0.7
+    User oleg
+Host raspiw
+    HostName 10.0.0.60
+    User pi
+Host raspi3
+    HostName 10.0.0.4
+    User pi
+Host bitbucket.org
+    HostName bitbucket.org
+    User git
+    IdentityFile ~/.ssh/id_rsa
+Host bitbucket.org-kz
+    HostName bitbucket.org
+    User git
+    IdentityFile ~/.ssh/kz
+Host someserver2
+    HostName 10.1.1.2
+    User pi
+    IdentityFile ~/.ssh/someserver.pem
+'
+BASH_ALIASES='alias ymp3=\"youtube-dl --extract-audio --audio-format mp3 --audio-quality 0 --add-metadata\"
+alias tabs-prj=\"gnome-terminal --tab --working-directory=/home/oleg/projects --tab --working-directory=/home/oleg/scripts\"
+'
 
 if [[ -f ubuntu_checklist_config.sh ]]; then
   source ubuntu_checklist_config.sh
@@ -244,37 +269,12 @@ fi
 
 if [ "$CREATE_ALIASES" -eq 1 ]; then
   echo ---------- Creating aliases
-  su - $MYUSER -c "echo 'alias ymp3=\"youtube-dl --extract-audio --audio-format mp3 --audio-quality 0 --add-metadata\"
-    alias tabs-prj=\"gnome-terminal
-    --tab --working-directory=/home/oleg/projects 
-    --tab --working-directory=/home/oleg/scripts\"
-    ' > /home/$MYUSER/.bash_aliases"
+  su - $MYUSER -c "echo '${BASH_ALIASES}' > /home/$MYUSER/.bash_aliases"
 fi
 
 if [ "$CREATE_SSH_CONFIG_FILE" -eq 1 ]; then
   echo ---------- Creating ssh .config example
-  su - $MYUSER -c "echo 'Host userver
-    HostName 10.0.0.7
-    User oleg
-Host raspiw
-    HostName 10.0.0.60
-    User pi
-Host raspi3
-    HostName 10.0.0.4
-    User pi
-Host bitbucket.org
-    HostName bitbucket.org
-    User git
-    IdentityFile ~/.ssh/id_rsa
-Host bitbucket.org-kz
-    HostName bitbucket.org
-    User git
-    IdentityFile ~/.ssh/kz
-Host someserver2
-    HostName 10.1.1.2
-    User pi
-    IdentityFile ~/.ssh/someserver.pem
-' > /home/$MYUSER/.ssh/config"
+  su - $MYUSER -c "echo '${SSH_CONFIG}' > /home/$MYUSER/.ssh/config"
 fi
 
 if [ "$INSTALL_CHROME" -eq 1 ]; then
