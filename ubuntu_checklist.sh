@@ -507,3 +507,7 @@ fi
 if [ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]; then
   echo '- Please set SSH public key in Bitbucket and Github!'
 fi
+
+# todo
+# Visual Studio Code is unable to watch for file changes in this large workspace
+# https://code.visualstudio.com/docs/setup/linux#_visual-studio-code-is-unable-to-watch-for-file-changes-in-this-large-workspace-error-enospc
