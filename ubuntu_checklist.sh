@@ -185,10 +185,13 @@ fi
 
 if [ "$INSTALL_NODEJS_NPM" -eq 1 ]; then
   echo ---------- Installing nodejs npm
-  apt -y install nodejs npm
-  # alternative - https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/
+  # https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/
   # curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
   # sudo apt-get install -y nodejs
+  curl -sL https://deb.nodesource.com/setup_10.x | bash -
+  apt-get install -y nodejs  
+  # old alternative 
+  # apt -y install nodejs npm
 fi
 
 if [ "$INSTALL_ANGULAR_CLI" -eq 1 ]; then
