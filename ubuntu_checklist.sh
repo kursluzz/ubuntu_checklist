@@ -2,16 +2,41 @@
 
 # USER SETTINGS
 # 1. Set your configuration
-MYUSER=oleg
-MYGITNAME=Oleg
-MYGITEMAIL=oleg@work
-ADDITIONAL_SSH_KEY_NAME=kz
+MYUSER=username
+MYGITNAME=John
+MYGITEMAIL=john@work
+ADDITIONAL_SSH_KEY_NAME=id_rsa2
 SAMBA_SHARE_DIR=/home/${MYUSER}/Shared
 SAMBA_SHARE_NAME=Shared
 SAMBA_SHARE_READONLY=no
-SAMBA_SHARE_PASSWORD=s111000000
+SAMBA_SHARE_PASSWORD=sharesecret
+MYSQL_ROOT_PASSWORD=123456
 MONGODB_USER=root
 MONGODB_PWD=123456
+YANDEX_DISK_USERNAME=username
+YANDEX_DISK_PASSWORD=password
+SSH_CONFIG='Host someserver
+    HostName 10.0.0.100
+    User user
+Host someserver2
+    HostName 10.0.0.101
+    User user
+    IdentityFile ~/.ssh/someserver2.pem
+Host bitbucket.org
+    HostName bitbucket.org
+    User git
+    IdentityFile ~/.ssh/id_rsa
+Host bitbucket.org-id_rsa2
+    HostName bitbucket.org
+    User git
+    IdentityFile ~/.ssh/id_rsa2
+'
+BASH_ALIASES='alias git-branch-sort="git branch -a --sort=-committerdate"
+'
+
+if [[ -f ubuntu_checklist_config.sh ]]; then
+  source ubuntu_checklist_config.sh
+fi
 
 # 2. Set what you want to install 1 for yes, 0 for no
 INSTALL_CURL=1
@@ -24,14 +49,13 @@ INSTALL_GIT=1
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=1
 INSTALL_PIP3=1
 INSTALL_VENV=1
-INSTALL_PYTHON_3_7=1
 INSTALL_NGINX=1
 INSTALL_AWS_CLI=1
 INSTALL_AWS_EB=1
 INSTALL_NODEJS_NPM=1
 INSTALL_ANGULAR_CLI=1
 INSTALL_SERVERLESS=1
-INSTALL_GDK=1
+INSTALL_JDK=1
 ADD_SSH_KEY_FOR_GIT=1
 ADD_ADDITIONAL_SSH_KEY_FOR_GIT=1
 CREATE_ALIASES=1
@@ -47,24 +71,25 @@ INSTALL_POSTMAN=1
 INSTALL_SHUTTER=1
 INSTALL_FORTICLIENT_VPN=1
 INSTALL_DOCKER=1
-INSTALL_MYSQL_DOCKER=1
-INSTALL_MONGODB_DOCKER=1
-INSTALL_DYNAMODB_DOCKER=1
 INSTALL_MYSQL_WORKBENCH=1
 INSTALL_MONGODB_COMPASS=1
 INSTALL_DROPBOX=1
 INSTALL_YOUTUBE_DL=1
 INSTALL_ACESTREAMPLAYER=1
-INSTALL_ACTIVE_MQ=1
 INSTALL_SAMBA=1
 INSTALL_FREECAD=1
 INSTALL_HYDROGEN=1
 INSTALL_CALIBRE=1
+INSTALL_BLENDER=1
+INSTALL_OPENSHOT=1
 FIX_CALCULATOR_KEYBOARD_SHORTCUT=1
 SET_FAVORITES_BAR=1
 SET_DOCK_POSITION_BOTTOM=1
 ADD_NEW_TEXT_FILE_TEMPLATE=1
 INSTALL_YANDEXDISK=1
+INSTALL_MYSQL_DOCKER=1
+INSTALL_ACTIVEMQ_DOCKER=1
+INSTALL_MONGODB_DOCKER=1
 
 # dependencies
 # todo: implement smart dependency will check if dependency exists before installing it
@@ -103,6 +128,9 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 cd /home/$MYUSER/Downloads
+
+apt -y update
+apt -y upgrade
 
 if [ "$INSTALL_CURL" -eq 1 ]; then
   echo ---------- Installing curl
@@ -153,17 +181,8 @@ if [ "$INSTALL_PIP3" -eq 1 ]; then
   apt -y install python3-pip
 fi
 
-if [ "$INSTALL_PYTHON_3_7" -eq 1 ]; then
-  echo ---------- Installing Puthon 3.7
-  apt -y install software-properties-common
-  add-apt-repository ppa:deadsnakes/ppa
-  apt -y install python3.7
-fi
-
 if [ "$INSTALL_NGINX" -eq 1 ]; then
   echo ---------- Installing nginx
-  apt update
-  apt upgrade
   apt -y install nginx
 
 fi
@@ -204,7 +223,7 @@ if [ "$INSTALL_SERVERLESS" -eq 1 ]; then
   npm install -g serverless
 fi
 
-if [ "$INSTALL_GDK" -eq 1 ]; then
+if [ "$INSTALL_JDK" -eq 1 ]; then
   echo ---------- Installing JDK11
   sudo apt -y install openjdk-11-jdk-headless
 fi
@@ -249,44 +268,19 @@ fi
 
 if [ "$CREATE_ALIASES" -eq 1 ]; then
   echo ---------- Creating aliases
-  su - $MYUSER -c "echo 'alias ymp3=\"youtube-dl --extract-audio --audio-format mp3 --audio-quality 0 --add-metadata\"
-    alias tabs-prj=\"gnome-terminal
-    --tab --working-directory=/home/oleg/projects 
-    --tab --working-directory=/home/oleg/scripts\"
-    ' > /home/$MYUSER/.bash_aliases"
+  su - $MYUSER -c "echo '${BASH_ALIASES}' > /home/$MYUSER/.bash_aliases"
 fi
 
 if [ "$CREATE_SSH_CONFIG_FILE" -eq 1 ]; then
   echo ---------- Creating ssh .config example
-  su - $MYUSER -c "echo 'Host userver
-    HostName 10.0.0.7
-    User oleg
-Host raspiw
-    HostName 10.0.0.60
-    User pi
-Host raspi3
-    HostName 10.0.0.4
-    User pi
-Host bitbucket.org
-    HostName bitbucket.org
-    User git
-    IdentityFile ~/.ssh/id_rsa
-Host bitbucket.org-kz
-    HostName bitbucket.org
-    User git
-    IdentityFile ~/.ssh/kz
-Host someserver2
-    HostName 10.1.1.2
-    User pi
-    IdentityFile ~/.ssh/someserver.pem
-' > /home/$MYUSER/.ssh/config"
+  su - $MYUSER -c "echo '${SSH_CONFIG}' > /home/$MYUSER/.ssh/config"
 fi
 
 if [ "$INSTALL_CHROME" -eq 1 ]; then
   echo ---------- Installing latest Chrome
   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   dpkg -i google-chrome-stable_current_amd64.deb
-  apt -f install -f
+  apt -y install -f
   rm google-chrome-stable_current_amd64.deb
 fi
 
@@ -321,31 +315,24 @@ if [ "$INSTALL_AUDACITY" -eq 1 ]; then
 fi
 
 if [ "$INSTALL_POSTMAN" -eq 1 ]; then
-  echo ---------- Installing Postman
-  wget https://dl.pstmn.io/download/latest/linux64
-  mv linux64 postman-latest.tar.gz
-  tar -xzf postman-latest.tar.gz -C /opt/
-  echo '#!/bin/bash
-/opt/Postman/Postman >/dev/null &
-' >/bin/postman
-  chmod +x /bin/postman
-  rm postman-latest.tar.gz
+    echo ---------- Installing Postman
+    snap install postman
 fi
 
 if [ "$INSTALL_SHUTTER" -eq 1 ]; then
   echo ---------- Installing Shutter
-  apt install shutter
+  apt -y install shutter
   # snap install shutter
   wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas-common_1.0.0-1_all.deb
   dpkg -i libgoocanvas-common_1.0.0-1_all.deb
   rm libgoocanvas-common_1.0.0-1_all.deb
-  https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_amd64.deb
+  wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_amd64.deb
   dpkg -i libgoocanvas3_1.0.0-1_amd64.deb
   rm libgoocanvas3_1.0.0-1_amd64.deb
   wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
   dpkg -i libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
   rm libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
-  apt install -f
+  apt -y install -f
   killall shutter
 fi
 
@@ -362,50 +349,6 @@ if [ "$INSTALL_DOCKER" -eq 1 ]; then
   sh get-docker.sh
   rm get-docker.sh
   usermod -aG docker $MYUSER
-fi
-
-if [ "$INSTALL_MYSQL_DOCKER" -eq 1 ]; then
-  echo ---------- Installing MySQL Docker
-  docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_ROOT_HOST=172.17.0.1 \
-    -p 3306:3306 -v /home/$MYUSER/mysql:/var/lib/mysql -d mysql/mysql-server:5.7 \
-    --character-set-server=utf8 --collation-server=utf8_general_ci
-  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
-  su - $MYUSER -c "echo '[Desktop Entry]
-Name=MySQL
-Exec=docker start mysql-container
-Type=Application
-X-GNOME-Autostart-enabled=true
-' > /home/$MYUSER/.config/autostart/mysql-docker.desktop"
-fi
-
-if [ "$INSTALL_MONGODB_DOCKER" -eq 1 ]; then
-  # https://hub.docker.com/_/mongo
-  echo ---------- Installing MongoDB
-  docker run --name mongodb-container \
-     -e MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER \
-     -e MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PWD \
-     -v /home/$MYUSER/mongodb:/data/db \
-     -p 27017:27017 \
-     -d mongo:3.6-xenial
-  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
-  su - $MYUSER -c "echo '[Desktop Entry]
-Name=MongoDB
-Exec=docker start mongodb-container
-Type=Application
-X-GNOME-Autostart-enabled=true
-' > /home/$MYUSER/.config/autostart/mongodb-docker.desktop"
-fi
-
-if [ "$INSTALL_DYNAMODB_DOCKER" -eq 1 ]; then
-  echo ---------- Installing DynamoDB Docker
-  docker run --name dynamodb-container -p 9000:8000 amazon/dynamodb-local
-  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
-  su - $MYUSER -c "echo '[Desktop Entry]
-Name=DynamoDB
-Exec=docker start dynamodb-container
-Type=Application
-X-GNOME-Autostart-enabled=true
-' > /home/$MYUSER/.config/autostart/dynamodb.desktop"
 fi
 
 if [ "$INSTALL_DROPBOX" -eq 1 ]; then
@@ -425,18 +368,6 @@ fi
 if [ "$INSTALL_ACESTREAMPLAYER" -eq 1 ]; then
   echo ---------- Installing acestreamplayer
   snap install acestreamplayer
-fi
-
-if [ "$INSTALL_ACTIVE_MQ" -eq 1 ]; then
-  echo ---------- Installing ActiveMQ
-  docker run --name activemq-container -p 61613:61613 -p 8161:8161 rmohr/activemq
-  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
-  su - $MYUSER -c "echo '[Desktop Entry]
-Name=ActiveMQ
-Exec=docker start activemq-container
-Type=Application
-X-GNOME-Autostart-enabled=true
-' > /home/$MYUSER/.config/autostart/activemq.desktop"
 fi
 
 if [ "$INSTALL_SAMBA" -eq 1 ]; then
@@ -477,6 +408,16 @@ if [ "$INSTALL_CALIBRE" -eq 1 ]; then
   wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sh /dev/stdin
 fi
 
+if [ "$INSTALL_BLENDER" -eq 1 ]; then
+  echo "---------- Installing Blender (3D / video editor)"
+  apt -y install blender
+fi
+
+if [ "$INSTALL_OPENSHOT" -eq 1 ]; then
+  echo "---------- Installing Openshot (video editor)"
+  apt -y install openshot-qt
+fi
+
 if [ "$FIX_CALCULATOR_KEYBOARD_SHORTCUT" -eq 1 ]; then
   echo ---------- Fix calculator shortcut
   snap remove gnome-calculator
@@ -496,6 +437,55 @@ if [ "$INSTALL_MONGODB_COMPASS" -eq 1 ]; then
   rm mongodb-compass_1.20.4_amd64.deb
 fi
 
+if [[ ${ADD_NEW_TEXT_FILE_TEMPLATE} -eq 1 ]]; then
+  sudo -u ${MYUSER} touch /home/${MYUSER}/Templates/New\ File.txt
+fi
+
+if [ "$INSTALL_MYSQL_DOCKER" -eq 1 ]; then
+  echo ---------- Installing MySQL Docker
+  docker run --name mysql-container -e MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" -e MYSQL_ROOT_HOST=172.17.0.1 \
+    -p 3306:3306 -v /home/$MYUSER/mysql:/var/lib/mysql -d mysql/mysql-server:5.7 \
+    --character-set-server=utf8 --collation-server=utf8_general_ci
+  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
+  su - $MYUSER -c "echo '[Desktop Entry]
+Name=MySQL
+Exec=docker start mysql-container
+Type=Application
+X-GNOME-Autostart-enabled=true
+' > /home/$MYUSER/.config/autostart/mysql-docker.desktop"
+fi
+
+if [ "$INSTALL_ACTIVEMQ_DOCKER" -eq 1 ]; then
+  echo ---------- Installing ActiveMQ
+  docker run --name activemq-container -p 61613:61613 -p 8161:8161 -d rmohr/activemq
+  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
+  su - $MYUSER -c "echo '[Desktop Entry]
+Name=ActiveMQ
+Exec=docker start activemq-container
+Type=Application
+X-GNOME-Autostart-enabled=true
+' > /home/$MYUSER/.config/autostart/activemq.desktop"
+fi
+
+if [ "$INSTALL_MONGODB_DOCKER" -eq 1 ]; then
+  # https://hub.docker.com/_/mongo
+  echo ---------- Installing MongoDB
+  docker run --name mongodb-container \
+     -e MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER \
+     -e MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PWD \
+     -v /home/$MYUSER/mongodb:/data/db \
+     -p 27017:27017 \
+     -d mongo:3.6-xenial
+  sudo -u $MYUSER mkdir -p /home/$MYUSER/.config/autostart
+  su - $MYUSER -c "echo '[Desktop Entry]
+Name=MongoDB
+Exec=docker start mongodb-container
+Type=Application
+X-GNOME-Autostart-enabled=true
+' > /home/$MYUSER/.config/autostart/mongodb-docker.desktop"
+fi
+
+# favorites bar
 if [ "$SET_DOCK_POSITION_BOTTOM" -eq 1 ]; then
   echo ---------- Moving dock to bottom
   su - $MYUSER -c "gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM"
@@ -506,27 +496,24 @@ if [ "$SET_FAVORITES_BAR" -eq 1 ]; then
   su - $MYUSER -c "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Terminal.desktop', 'google-chrome.desktop', 'sublime-text_subl.desktop', 'pycharm-community_pycharm-community.desktop', 'postman_postman.desktop', 'chromium_chromium.desktop', 'mysql-workbench.desktop', 'firefox.desktop', 'krita_krita.desktop', 'org.gnome.Nautilus.desktop']\""
 fi
 
-if [[ ${ADD_NEW_TEXT_FILE_TEMPLATE} -eq 1 ]]; then
-  sudo -u ${MYUSER} touch /home/${MYUSER}/Templates/New\ File.txt
-fi
-
 if [ "$INSTALL_YANDEXDISK" -eq 1 ]; then
   echo ---------- Installing Yandex Disk
   # original command with sudo [https://yandex.com/support/disk/cli-clients.html]
   # echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk
   echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | apt-key add - && apt-get update && apt-get install -y yandex-disk
+  printf "n\n%s\n%s\n\n" "$YANDEX_DISK_USERNAME" "$YANDEX_DISK_PASSWORD" | yandex-disk setup
 fi
 
+# final prompts and notices
 echo done running Ubuntu checklist!
 if [ "$INSTALL_DROPBOX" -eq 1 ]; then
   echo '- Please complete the Dropbox installation and login'
 fi
+
 if [ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]; then
   echo '- Please set SSH public key in Bitbucket and Github!'
 fi
-if [ "$INSTALL_YANDEXDISK" -eq 1 ]; then
-  read -p 'Do you want to run yandex-disk setup? [Y/n]: ' CH
-  if [ "$CH" = '' ] || [ "$CH" = 'y' ] || [ "$CH" = 'Y' ]; then
-    sudo -u $MYUSER yandex-disk setup
-  fi
-fi
+
+# todo
+# Visual Studio Code is unable to watch for file changes in this large workspace
+# https://code.visualstudio.com/docs/setup/linux#_visual-studio-code-is-unable-to-watch-for-file-changes-in-this-large-workspace-error-enospc
