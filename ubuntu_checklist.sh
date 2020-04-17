@@ -34,8 +34,8 @@ Host bitbucket.org-id_rsa2
 BASH_ALIASES='alias git-branch-sort="git branch -a --sort=-committerdate"
 '
 
-if [[ -f checklist_config.sh ]]; then
-  source checklist_config.sh
+if [[ -f ubuntu_checklist_config.sh ]]; then
+  source ubuntu_checklist_config.sh
 fi
 
 # 2. Set what you want to install 1 for yes, 0 for no
