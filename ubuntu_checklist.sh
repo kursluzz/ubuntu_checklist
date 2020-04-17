@@ -361,7 +361,7 @@ fi
 
 if [ "$INSTALL_YOUTUBE_DL" -eq 1 ]; then
   echo ---------- Installing youtube-dl
-  apt get ffmpeg
+  apt -y install ffmpeg
   sudo -u $MYUSER pip3 install youtube-dl
 fi
 
