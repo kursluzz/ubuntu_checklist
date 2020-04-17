@@ -127,6 +127,7 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
+sudo -u $MYUSER mkdir -p /home/$MYUSER/Downloads
 cd /home/$MYUSER/Downloads
 
 apt -y update
