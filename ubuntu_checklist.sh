@@ -207,9 +207,9 @@ if [ "$INSTALL_NODEJS_NPM" -eq 1 ]; then
   echo ---------- Installing nodejs npm
   # https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/
   # curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-  # sudo apt-get install -y nodejs
+  # sudo apt install -y nodejs
   curl -sL https://deb.nodesource.com/setup_10.x | bash -
-  apt-get install -y nodejs  
+  apt install -y nodejs  
   # old alternative 
   # apt -y install nodejs npm
 fi
@@ -500,8 +500,8 @@ fi
 if [ "$INSTALL_YANDEXDISK" -eq 1 ]; then
   echo ---------- Installing Yandex Disk
   # original command with sudo [https://yandex.com/support/disk/cli-clients.html]
-  # echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk
-  echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | apt-key add - && apt-get update && apt-get install -y yandex-disk
+  # echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | sudo apt-key add - && sudo apt-get update && sudo apt install -y yandex-disk
+  echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | apt-key add - && apt-get update && apt install -y yandex-disk
   printf "n\n%s\n%s\n\n" "$YANDEX_DISK_USERNAME" "$YANDEX_DISK_PASSWORD" | yandex-disk setup
 fi
 
