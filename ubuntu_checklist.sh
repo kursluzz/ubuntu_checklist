@@ -63,6 +63,7 @@ CREATE_ALIASES=1
 CREATE_SSH_CONFIG_FILE=1
 INSTALL_CHROME=1
 INSTALL_PYCHARM=1
+INSTALL_PYCHARM_PRO=1
 INSTALL_VSCODE=1
 INSTALL_CHROMIUM=1
 INSTALL_SUBLIME=1
@@ -305,6 +306,14 @@ fi
 if [ "$INSTALL_PYCHARM" -eq 1 ]; then
   echo ---------- Installing PyCharm
   snap install pycharm-community --classic
+fi
+
+if [ "$INSTALL_PYCHARM_PRO" -eq 1 ]; then
+  echo ---------- Installing PyCharm Pro
+  wget https://download-cf.jetbrains.com/python/pycharm-professional-2020.1.1.tar.gz
+  tar xzf pycharm-professional-2020.1.1.tar.gz
+  mv pycharm-2020.1.1 /opt/pycharm-2020.1.1 -r
+  rm pycharm-professional-2020.1.1.tar.gz
 fi
 
 if [ "$INSTALL_VSCODE" -eq 1 ]; then
