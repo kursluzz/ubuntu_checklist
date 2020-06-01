@@ -46,6 +46,7 @@ INSTALL_WAKEONLAN=1
 INSTALL_MAKE=1
 INSTALL_SSH_SERVER=1
 INSTALL_GIT=1
+INSTALL_PYTHON36=1
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=1
 INSTALL_PIP3=1
 INSTALL_VENV=1
@@ -170,6 +171,22 @@ if [ "$INSTALL_GIT" -eq 1 ]; then
   echo ---------- Setting git global user and password
   sudo -u $MYUSER git config --global user.email "$MYGITEMAIL"
   sudo -u $MYUSER git config --global user.name "$MYGITNAME"
+fi
+
+if [ "$INSTALL_PYTHON36" -eq 1 ]; then
+  echo ---------- Installing python 3.6
+  apt update
+  apt install -y build-essential checkinstall
+  apt install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+  wget https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz
+  tar xzf Python-3.6.9.tgz
+  cd Python-3.6.9
+  ./configure --enable-optimizations
+  make altinstall
+
+
+
+  rm Python-3.6.9.tgz
 fi
 
 if [ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]; then
