@@ -307,7 +307,8 @@ if [ "$INSTALL_PYCHARM_PRO" -eq 1 ]; then
   echo ---------- Installing PyCharm Pro
   wget https://download-cf.jetbrains.com/python/pycharm-professional-2020.1.1.tar.gz
   tar xzf pycharm-professional-2020.1.1.tar.gz
-  mv pycharm-2020.1.1 /opt/pycharm-2020.1.1
+  mv pycharm-2020.1.1 /opt/pycharm
+  chown -R $MYUSER:$MYUSER /opt/pycharm
   rm pycharm-professional-2020.1.1.tar.gz
 fi
 
