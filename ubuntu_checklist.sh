@@ -175,6 +175,7 @@ if [ "$INSTALL_GIT" -eq 1 ]; then
 fi
 
 if [ "$INSTALL_PYTHON36" -eq 1 ]; then
+  # https://towardsdatascience.com/building-python-from-source-on-ubuntu-20-04-2ed29eec152b
   echo ---------- Installing python 3.6
   apt update
   apt install -y build-essential checkinstall
@@ -185,6 +186,16 @@ if [ "$INSTALL_PYTHON36" -eq 1 ]; then
   ./configure --enable-optimizations
   make altinstall
   rm Python-3.6.9.tgz
+  # for local run with sudo
+  #  sudo apt update
+  #  sudo apt install -y build-essential checkinstall
+  #  sudo apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+  #  wget https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz
+  #  tar xzf Python-3.6.9.tgz
+  #  cd Python-3.6.9
+  #  sudo ./configure --enable-optimizations
+  #  sudo make altinstall
+  #  rm Python-3.6.9.tgz
 fi
 
 if [ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]; then
@@ -210,6 +221,7 @@ fi
 
 if [ "$INSTALL_AWS_CLI" -eq 1 ]; then
   echo ---------- Installing AWS CLI
+  # pip3 install awscli --upgrade --user
   snap install aws-cli --classic
 fi
 
