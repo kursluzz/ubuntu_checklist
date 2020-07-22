@@ -464,8 +464,8 @@ fi
 if [[ "$INSTALL_MYSQL_DOCKER" -eq 1 ]]; then
   echo ---------- Installing MySQL Docker
   docker run --name mysql-container -e MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" -e MYSQL_ROOT_HOST=172.17.0.1 \
-    -p 3306:3306 -v /home/${MYUSER}/mysql:/var/lib/mysql -d mysql/mysql-server:5.7 \
-    --character-set-server=utf8 --collation-server=utf8_general_ci --restart=unless-stopped
+    -p 3306:3306 -v /home/${MYUSER}/mysql:/var/lib/mysql --restart=unless-stopped -d mysql/mysql-server:5.7 \
+    --character-set-server=utf8 --collation-server=utf8_general_ci
 #  sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/.config/autostart
 #  su - ${MYUSER} -c "echo '[Desktop Entry]
 #Name=MySQL
@@ -477,7 +477,7 @@ fi
 
 if [[ "$INSTALL_ACTIVEMQ_DOCKER" -eq 1 ]]; then
   echo ---------- Installing ActiveMQ
-  docker run --name activemq-container -p 61613:61613 -p 8161:8161 -d rmohr/activemq --restart=unless-stopped
+  docker run --name activemq-container -p 61613:61613 -p 8161:8161 --restart=unless-stopped -d rmohr/activemq
 #  sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/.config/autostart
 #  su - ${MYUSER} -c "echo '[Desktop Entry]
 #Name=ActiveMQ
@@ -495,8 +495,8 @@ if [[ "$INSTALL_MONGODB_DOCKER" -eq 1 ]]; then
      -e MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PWD \
      -v /home/${MYUSER}/mongodb:/data/db \
      -p 27017:27017 \
-     -d mongo:3.6-xenial \
-     --restart=unless-stopped
+     --restart=unless-stopped \
+     -d mongo:3.6-xenial
 #  sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/.config/autostart
 #  su - ${MYUSER} -c "echo '[Desktop Entry]
 #Name=MongoDB
