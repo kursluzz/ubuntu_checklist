@@ -65,6 +65,7 @@ INSTALL_CHROME=1
 INSTALL_PYCHARM=1
 INSTALL_PYCHARM_PRO=1
 INSTALL_VSCODE=1
+INSTALL_SELENIUM=1
 INSTALL_CHROMIUM=1
 INSTALL_SUBLIME=1
 INSTALL_KRITA=1
@@ -309,6 +310,15 @@ fi
 if [[ "$INSTALL_VSCODE" -eq 1 ]]; then
   echo ---------- Installing VSCode
   snap install code --classic
+fi
+
+if [[ "$INSTALL_SELENIUM" -eq 1 ]]; then
+  echo ---------- Installing Selenium
+  # https://www.liquidweb.com/kb/how-to-install-selenium-tools-on-ubuntu-18-04/
+  # install chromedriver
+  # install selenium server
+  # install java jdk
+  # install xvfb
 fi
 
 if [[ "$INSTALL_CHROMIUM" -eq 1 ]]; then
