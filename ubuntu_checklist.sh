@@ -319,10 +319,20 @@ fi
 if [[ "$INSTALL_SELENIUM" -eq 1 ]]; then
   echo ---------- Installing Selenium
   # https://www.liquidweb.com/kb/how-to-install-selenium-tools-on-ubuntu-18-04/
+  # https://tecadmin.net/setup-selenium-chromedriver-on-ubuntu/
   # install selenium server
+  wget -P /opt/selenium https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
+  mv /opt/selenium/selenium-server-standalone-3.141.59.jar /opt/selenium/selenium-server-standalone.jar
   # install chromedriver
+  cd /home/"$MYUSER"/Downloads
+  wget https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_linux64.zip
+  unzip chromedriver_linux64.zip
+  mv chromedriver /usr/bin/
+  rm chromedriver_linux64.zip
   # install java jdk
+  apt install -y default-jdk
   # install xvfb
+  apt install -y xvfb
 fi
 
 if [[ "$INSTALL_CHROMIUM" -eq 1 ]]; then
