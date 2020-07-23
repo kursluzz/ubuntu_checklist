@@ -112,8 +112,12 @@ if [[ "$EUID" -ne 0 ]]; then
   exit
 fi
 
+# crete directory if not exists
 sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/Downloads
 cd /home/${MYUSER}/Downloads
+
+# create /home/${MYUSER}/.local/bin
+mkdir -p /home/${MYUSER}/.local/bin
 
 apt -y update
 apt -y upgrade
@@ -315,8 +319,8 @@ fi
 if [[ "$INSTALL_SELENIUM" -eq 1 ]]; then
   echo ---------- Installing Selenium
   # https://www.liquidweb.com/kb/how-to-install-selenium-tools-on-ubuntu-18-04/
-  # install chromedriver
   # install selenium server
+  # install chromedriver
   # install java jdk
   # install xvfb
 fi
@@ -419,10 +423,10 @@ fi
 
 if [[ "$INSTALL_FREECAD" -eq 1 ]]; then
   echo ---------- Installing FreeCAD
-  sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/Soft
-  cd /home/${MYUSER}/Soft
-  sudo -u ${MYUSER} wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.2/FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage -P /home/${MYUSER}/Soft
+  cd /opt
+  wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.2/FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
   chmod +x FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
+  sudo -u ${MYUSER} ln -s /opt/FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage /home/${MYUSER}/.local/bin/freecad
 fi
 
 if [[ "$INSTALL_HYDROGEN" -eq 1 ]]; then
