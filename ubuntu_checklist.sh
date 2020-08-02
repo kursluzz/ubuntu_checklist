@@ -168,7 +168,7 @@ if [[ "$INSTALL_PYTHON36" -eq 1 ]]; then
   apt install -y build-essential checkinstall
   apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
   wget https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz
-  tar xzf Python-3.6.9.tgz
+  tar -xzf Python-3.6.9.tgz
   cd Python-3.6.9
   ./configure --enable-optimizations
   make altinstall
@@ -178,7 +178,7 @@ if [[ "$INSTALL_PYTHON36" -eq 1 ]]; then
   #  sudo apt install -y build-essential checkinstall
   #  sudo apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
   #  wget https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz
-  #  tar xzf Python-3.6.9.tgz
+  #  tar -xzf Python-3.6.9.tgz
   #  cd Python-3.6.9
   #  sudo ./configure --enable-optimizations
   #  sudo make altinstall
@@ -304,11 +304,11 @@ fi
 
 if [[ "$INSTALL_PYCHARM_PRO" -eq 1 ]]; then
   echo ---------- Installing PyCharm Pro
-  wget https://download-cf.jetbrains.com/python/pycharm-professional-2020.1.1.tar.gz
-  tar xzf pycharm-professional-2020.1.1.tar.gz
-  mv pycharm-2020.1.1 /opt/pycharm
+  wget https://download.jetbrains.com/python/pycharm-professional-2020.1.4.tar.gz
+  tar -xzf pycharm-professional-2020.1.4.tar.gz
+  mv pycharm-2020.1.4 /opt/pycharm
   chown -R ${MYUSER}:${MYUSER} /opt/pycharm
-  rm pycharm-professional-2020.1.1.tar.gz
+  rm pycharm-professional-2020.1.4.tar.gz
 fi
 
 if [[ "$INSTALL_VSCODE" -eq 1 ]]; then
