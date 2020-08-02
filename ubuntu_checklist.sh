@@ -74,6 +74,7 @@ INSTALL_POSTMAN=1
 INSTALL_SHUTTER=1
 INSTALL_FORTICLIENT_VPN=1
 INSTALL_DOCKER=1
+INSTALL_DOCKER_COMPOSE=1
 INSTALL_MYSQL_WORKBENCH=1
 INSTALL_MONGODB_COMPASS=1
 INSTALL_DROPBOX=1
@@ -390,6 +391,11 @@ if [[ "$INSTALL_DOCKER" -eq 1 ]]; then
   sh get-docker.sh
   rm get-docker.sh
   usermod -aG docker ${MYUSER}
+fi
+
+if [[ "$INSTALL_DOCKER_COMPOSE" -eq 1 ]]; then
+  echo ---------- Installing Docker Compose
+  curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 fi
 
 if [[ "$INSTALL_DROPBOX" -eq 1 ]]; then
