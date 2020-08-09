@@ -53,6 +53,7 @@ INSTALL_VENV=1
 INSTALL_NGINX=1
 INSTALL_AWS_CLI=1
 INSTALL_AWS_EB=1
+INSTALL_KUBECTL=1
 INSTALL_NODEJS_NPM=1
 INSTALL_ANGULAR_CLI=1
 INSTALL_SERVERLESS=1
@@ -216,6 +217,26 @@ fi
 if [[ "$INSTALL_AWS_EB" -eq 1 ]]; then
   echo ---------- Installing AWS EB
   pip3 install --upgrade awsebcli
+fi
+
+if [[ "$INSTALL_KUBECTL" -eq 1 ]]; then
+  echo ---------- Installing KUBECTL
+  # https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux
+  apt-get update && sudo apt-get install -y apt-transport-https gnupg2
+  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+  echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
+  apt-get update
+  apt-get install -y kubectl
+  # manual install with sudo
+#  	sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2
+#	curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+#	echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+#	sudo apt-get update
+#	sudo apt-get install -y kubectl
+  # ge3neric install as binary download
+#	curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+#	chmod +x ./kubectl
+#	sudo mv ./kubectl /usr/local/bin/kubectl
 fi
 
 if [[ "$INSTALL_NODEJS_NPM" -eq 1 ]]; then
