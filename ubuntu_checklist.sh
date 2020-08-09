@@ -47,6 +47,7 @@ INSTALL_MAKE=1
 INSTALL_SSH_SERVER=1
 INSTALL_GIT=1
 INSTALL_PYTHON36=1
+INSTALL_PYTHON38=0
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=1
 INSTALL_PIP3=1
 INSTALL_VENV=1
@@ -186,6 +187,32 @@ if [[ "$INSTALL_PYTHON36" -eq 1 ]]; then
   #  sudo make altinstall
   #  rm Python-3.6.9.tgz
 fi
+
+if [[ "$INSTALL_PYTHON38" -eq 1 ]]; then
+  # https://towardsdatascience.com/building-python-from-source-on-ubuntu-20-04-2ed29eec152b
+  echo ---------- Installing python 3.6
+  apt update
+  apt install -y build-essential checkinstall
+  apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+  wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz
+  tar -xzf Python-3.8.5.tgz
+  cd Python-3.8.5
+  ./configure --enable-optimizations
+  make altinstall
+  rm Python-3.8.5.tgz
+  # for local run with sudo
+  #  sudo apt update
+  #  sudo apt install -y build-essential checkinstall
+  #  sudo apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+  #  wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz
+  #  tar -xzf Python-3.8.5.tgz
+  #  cd Python-3.8.5
+  #  sudo ./configure --enable-optimizations
+  #  sudo make altinstall
+  #  rm Python-3.8.5.tgz
+fi
+
+
 
 if [[ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]]; then
   echo ---------- Installing mysql dev dependencies
