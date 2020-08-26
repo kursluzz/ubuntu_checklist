@@ -120,7 +120,7 @@ sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/Downloads
 cd /home/${MYUSER}/Downloads
 
 # create /home/${MYUSER}/.local/bin
-mkdir -p /home/${MYUSER}/.local/bin
+sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/.local/bin
 
 apt -y update
 apt -y upgrade
