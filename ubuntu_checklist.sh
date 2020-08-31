@@ -54,6 +54,7 @@ INSTALL_VENV=1
 INSTALL_NGINX=1
 INSTALL_AWS_CLI=1
 INSTALL_AWS_EB=1
+INSTALL_EKSCTL=1
 INSTALL_KUBECTL=1
 INSTALL_NODEJS_NPM=1
 INSTALL_ANGULAR_CLI=1
@@ -247,6 +248,12 @@ fi
 if [[ "$INSTALL_AWS_EB" -eq 1 ]]; then
   echo ---------- Installing AWS EB
   pip3 install --upgrade awsebcli
+fi
+
+if [[ "$INSTALL_EKSCTL" -eq 1 ]]; then
+  echo ---------- Installing EKSCTL
+  curl --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+  mv /tmp/eksctl /usr/local/bin
 fi
 
 if [[ "$INSTALL_KUBECTL" -eq 1 ]]; then
