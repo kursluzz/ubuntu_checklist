@@ -240,6 +240,7 @@ if [[ "$INSTALL_AWS_CLI" -eq 1 ]]; then
   echo ---------- Installing AWS CLI
   # pip3 install awscli --upgrade --user
   # snap install aws-cli --classic
+  # https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html
   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
   unzip awscliv2.zip -d /tmp
   /tmp/aws/install
@@ -252,6 +253,7 @@ fi
 
 if [[ "$INSTALL_EKSCTL" -eq 1 ]]; then
   echo ---------- Installing EKSCTL
+  # https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html
   curl --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
   mv /tmp/eksctl /usr/local/bin
 fi
@@ -274,6 +276,8 @@ if [[ "$INSTALL_KUBECTL" -eq 1 ]]; then
 #	curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
 #	chmod +x ./kubectl
 #	sudo mv ./kubectl /usr/local/bin/kubectl
+
+# another way to install https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html
 fi
 
 if [[ "$INSTALL_NODEJS_NPM" -eq 1 ]]; then
