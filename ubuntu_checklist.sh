@@ -238,7 +238,10 @@ fi
 if [[ "$INSTALL_AWS_CLI" -eq 1 ]]; then
   echo ---------- Installing AWS CLI
   # pip3 install awscli --upgrade --user
-  snap install aws-cli --classic
+  # snap install aws-cli --classic
+  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+  unzip awscliv2.zip -d /tmp
+  /tmp/aws/install
 fi
 
 if [[ "$INSTALL_AWS_EB" -eq 1 ]]; then
