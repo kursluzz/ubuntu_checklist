@@ -615,7 +615,7 @@ if [[ "$INSTALL_YANDEXDISK" -eq 1 ]]; then
   # original command with sudo [https://yandex.com/support/disk/cli-clients.html]
   # echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | sudo apt-key add - && sudo apt-get update && sudo apt install -y yandex-disk
   echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | apt-key add - && apt-get update && apt install -y yandex-disk
-  printf "n\n%s\n%s\n\n" "$YANDEX_DISK_USERNAME" "$YANDEX_DISK_PASSWORD" | yandex-disk setup
+  printf "n\n%s\n%s\n\n\n" "$YANDEX_DISK_USERNAME" "$YANDEX_DISK_PASSWORD" | yandex-disk setup
 fi
 
 # final prompts and notices
