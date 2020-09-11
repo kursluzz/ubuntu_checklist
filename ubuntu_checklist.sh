@@ -400,7 +400,7 @@ fi
 
 if [[ "$INSTALL_CHROMIUM" -eq 1 ]]; then
   echo ---------- Installing Chromium
-  snap install chromium
+  apt install -y chromium-browser
 fi
 
 if [[ "$INSTALL_SUBLIME" -eq 1 ]]; then
@@ -410,12 +410,12 @@ fi
 
 if [[ "$INSTALL_KRITA" -eq 1 ]]; then
   echo ---------- Installing Krita
-  snap install krita
+  apt install -y krita
 fi
 
 if [[ "$INSTALL_AUDACITY" -eq 1 ]]; then
   echo ---------- Installing Audacity
-  snap install audacity
+  apt install -y audacity
 fi
 
 if [[ "$INSTALL_POSTMAN" -eq 1 ]]; then
