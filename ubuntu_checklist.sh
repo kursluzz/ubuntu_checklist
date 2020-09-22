@@ -242,7 +242,7 @@ if [[ "$INSTALL_AWS_CLI" -eq 1 ]]; then
   # snap install aws-cli --classic
   # https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html
   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
-  unzip awscliv2.zip -d /tmp
+  unzip /tmp/awscliv2.zip -d /tmp
   /tmp/aws/install
 fi
 
