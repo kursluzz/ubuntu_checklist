@@ -266,6 +266,9 @@ if [[ "$INSTALL_KUBECTL" -eq 1 ]]; then
   echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
   apt-get update
   apt-get install -y kubectl
+  # auto completion
+  kubectl completion bash | tee /etc/bash_completion.d/kubectl
+
   # manual install with sudo
 #  	sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2
 #	curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -276,6 +279,8 @@ if [[ "$INSTALL_KUBECTL" -eq 1 ]]; then
 #	curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
 #	chmod +x ./kubectl
 #	sudo mv ./kubectl /usr/local/bin/kubectl
+#   # auto completion
+#  kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl
 
 # another way to install https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html
 fi
