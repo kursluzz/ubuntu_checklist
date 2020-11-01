@@ -506,6 +506,7 @@ if [[ "$INSTALL_SAMBA" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_FREECAD" -eq 1 ]]; then
+  # todo change to better icon /usr/share/icons
   echo ---------- Installing FreeCAD
   wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.4/FreeCAD_0.18-16146-rev1-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage -O /opt/freecad.AppImage
   chmod +x /opt/freecad.AppImage
