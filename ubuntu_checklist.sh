@@ -507,10 +507,16 @@ fi
 
 if [[ "$INSTALL_FREECAD" -eq 1 ]]; then
   echo ---------- Installing FreeCAD
-  cd /opt
-  wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.2/FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
-  chmod +x FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
-  sudo -u ${MYUSER} ln -s /opt/FreeCAD_0.18-16117-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage /home/${MYUSER}/.local/bin/freecad
+  wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.4/FreeCAD_0.18-16146-rev1-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage -O /opt/freecad.AppImage
+  chmod +x /opt/freecad.AppImage
+
+  echo "[Desktop Entry]
+Type=Application
+Terminal=false
+Exec="/opt/freecad.AppImage"
+Name="FreeCAD"
+Comment=Custom launcher
+Icon=/usr/share/gtk-doc/html/iio-sensor-proxy/right-insensitive.png" > /usr/share/applications/freecad.desktop
 fi
 
 if [[ "$INSTALL_HYDROGEN" -eq 1 ]]; then
