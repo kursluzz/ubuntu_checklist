@@ -517,7 +517,7 @@ Terminal=false
 Exec="/opt/freecad.AppImage"
 Name="FreeCAD"
 Comment=Custom launcher
-Icon=/usr/share/gtk-doc/html/iio-sensor-proxy/right-insensitive.png" > /usr/share/applications/freecad.desktop
+Icon=/usr/share/icons/Adwaita/48x48/legacy/input-tablet.png" > /usr/share/applications/freecad.desktop
 fi
 
 if [[ "$INSTALL_HYDROGEN" -eq 1 ]]; then
