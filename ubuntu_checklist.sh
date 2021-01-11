@@ -547,10 +547,10 @@ fi
 
 if [[ "$INSTALL_MYSQL_WORKBENCH" -eq 1 ]]; then
   echo ---------- Installing MySQL Workbench
-  wget https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community_8.0.20-1ubuntu20.04_amd64.deb
-  dpkg -i mysql-workbench-community_8.0.20-1ubuntu20.04_amd64.deb
+  wget https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community_8.0.22-1ubuntu20.04_amd64.deb
+  dpkg -i mysql-workbench-community_8.0.22-1ubuntu20.04_amd64.deb
   apt -y install -f
-  rm mysql-workbench-community_8.0.20-1ubuntu20.04_amd64.deb
+  rm mysql-workbench-community_8.0.22-1ubuntu20.04_amd64.deb
 fi
 
 if [[ "$INSTALL_MONGODB_COMPASS" -eq 1 ]]; then
