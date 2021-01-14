@@ -82,6 +82,7 @@ INSTALL_MYSQL_WORKBENCH=1
 INSTALL_MONGODB_COMPASS=1
 INSTALL_DROPBOX=1
 INSTALL_YOUTUBE_DL=1
+INSTALL_VLC=1
 INSTALL_ACESTREAMPLAYER=1
 INSTALL_SAMBA=1
 INSTALL_FREECAD=1
@@ -480,6 +481,11 @@ if [[ "$INSTALL_YOUTUBE_DL" -eq 1 ]]; then
   echo ---------- Installing youtube-dl
   apt -y install ffmpeg
   sudo -u ${MYUSER} pip3 install youtube-dl
+fi
+
+if [[ "$INSTALL_VLC" -eq 1 ]]; then
+  echo ---------- Installing vlc
+  apt -y install vlc
 fi
 
 if [[ "$INSTALL_ACESTREAMPLAYER" -eq 1 ]]; then
