@@ -13,6 +13,8 @@ SAMBA_SHARE_PASSWORD=sharesecret
 MYSQL_ROOT_PASSWORD=123456
 MONGODB_USER=root
 MONGODB_PWD=123456
+ACTIVEMQ_USER=admin
+ACTIVEMQ_PWD=123456
 YANDEX_DISK_USERNAME=username
 YANDEX_DISK_PASSWORD=password
 SSH_CONFIG='Host someserver
@@ -589,7 +591,21 @@ fi
 
 if [[ "$INSTALL_ACTIVEMQ_DOCKER" -eq 1 ]]; then
   echo ---------- Installing ActiveMQ
-  docker run --name activemq-container -p 61613:61613 -p 8161:8161 --restart=unless-stopped -d rmohr/activemq
+  # default login is user admin password admin
+  docker run --name activemq-container -p 61613:61613 -p 8161:8161 -d rmohr/activemq:5.15.9
+#    -v /home/${MYUSER}/activemq/conf:/mnt/conf \
+#    -v /home/${MYUSER}/activemq/data:/mnt/data \
+
+#  docker run --name=activemq-container -d \
+#    -e ACTIVEMQ_ADMIN_LOGIN="$ACTIVEMQ_USER" -e ACTIVEMQ_ADMIN_PASSWORD="$ACTIVEMQ_PWD" \
+#    -e ACTIVEMQ_CONFIG_MINMEMORY=1024 -e  ACTIVEMQ_CONFIG_MAXMEMORY=2048 \
+#    -v /home/${MYUSER}/activemq:/data \
+#    -v /var/log/activemq:/var/log/activemq \
+#    -p 8161:8161 \
+#    -p 61616:61616 \
+#    -p 61613:61613 \
+#    webcenter/activemq:5.15.8
+
 #  sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/.config/autostart
 #  su - ${MYUSER} -c "echo '[Desktop Entry]
 #Name=ActiveMQ
