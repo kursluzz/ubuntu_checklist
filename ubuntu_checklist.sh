@@ -47,6 +47,7 @@ INSTALL_BYOBU=1
 INSTALL_WAKEONLAN=1
 INSTALL_MAKE=1
 INSTALL_SSH_SERVER=1
+INSTALL_SSH_AVAHI_DAEMON=1
 INSTALL_GIT=1
 INSTALL_PYTHON36=1
 INSTALL_PYTHON38=0
@@ -157,6 +158,12 @@ fi
 if [[ "$INSTALL_SSH_SERVER" -eq 1 ]]; then
   echo ---------- Installing SSH server
   apt -y install openssh-server
+fi
+
+if [[ "$INSTALL_SSH_AVAHI_DAEMON" -eq 1 ]]; then
+  # lets you access computer in LAN by computer-name.local (a must for samba)
+  echo ---------- Installing avahi-daemon
+  apt -y install avahi-daemon
 fi
 
 if [[ "$INSTALL_GIT" -eq 1 ]]; then
