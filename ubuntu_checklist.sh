@@ -422,7 +422,11 @@ fi
 
 if [[ "$INSTALL_SUBLIME" -eq 1 ]]; then
   echo ---------- Installing Sublime
-  snap install sublime-text --classic
+#  snap install sublime-text --classic
+  # https://www.howtoforge.com/installation-of-sublime-text-on-ubuntu-20-04/
+  wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | apt-key add -
+  apt-get update
+  apt-get install sublime-text
 fi
 
 if [[ "$INSTALL_KRITA" -eq 1 ]]; then
