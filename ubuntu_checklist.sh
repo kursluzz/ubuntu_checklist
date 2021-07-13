@@ -71,6 +71,7 @@ INSTALL_CHROME=1
 INSTALL_PYCHARM=1
 INSTALL_PYCHARM_PRO=1
 INSTALL_VSCODE=1
+INSTALL_TEAMS=1
 INSTALL_SELENIUM=1
 INSTALL_CHROMIUM=1
 INSTALL_SUBLIME=1
@@ -132,43 +133,43 @@ apt -y upgrade
 
 if [[ "$INSTALL_CURL" -eq 1 ]]; then
   echo ---------- Installing curl
-  apt -y install curl
+  apt install -y curl
 fi
 
 if [[ "$INSTALL_VIM" -eq 1 ]]; then
   echo ---------- Installing vim
-  apt -y install vim
+  apt install -y vim
 fi
 
 if [[ "$INSTALL_BYOBU" -eq 1 ]]; then
   echo ---------- Installing byobu
-  apt -y install byobu
+  apt install -y byobu
 fi
 
 if [[ "$INSTALL_WAKEONLAN" -eq 1 ]]; then
   echo ---------- Installing wakeonlan
-  apt -y install wakeonlan
+  apt install -y wakeonlan
 fi
 
 if [[ "$INSTALL_MAKE" -eq 1 ]]; then
   echo ---------- Installing make
-  apt -y install make
+  apt install -y make
 fi
 
 if [[ "$INSTALL_SSH_SERVER" -eq 1 ]]; then
   echo ---------- Installing SSH server
-  apt -y install openssh-server
+  apt install -y openssh-server
 fi
 
 if [[ "$INSTALL_SSH_AVAHI_DAEMON" -eq 1 ]]; then
   # lets you access computer in LAN by computer-name.local (a must for samba)
   echo ---------- Installing avahi-daemon
-  apt -y install avahi-daemon
+  apt install -y avahi-daemon
 fi
 
 if [[ "$INSTALL_GIT" -eq 1 ]]; then
   echo ---------- Installing git
-  apt -y install git
+  apt install -y git
 
   echo ---------- Setting git global user and password
   sudo -u ${MYUSER} git config --global user.email "$MYGITEMAIL"
@@ -229,23 +230,23 @@ fi
 
 if [[ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]]; then
   echo ---------- Installing mysql dev dependencies
-  apt -y install libmysqlclient-dev
+  apt install -y libmysqlclient-dev
 fi
 
 if [[ "$INSTALL_PIP3" -eq 1 ]]; then
   echo ---------- Installing pip3
-  apt -y install python3-pip
+  apt install -y python3-pip
 fi
 
 if [[ "$INSTALL_NGINX" -eq 1 ]]; then
   echo ---------- Installing nginx
-  apt -y install nginx
+  apt install -y nginx
 
 fi
 
 if [[ "$INSTALL_VENV" -eq 1 ]]; then
   echo ---------- Installing VENV
-  apt -y install python3-venv
+  apt install -y python3-venv
 fi
 
 if [[ "$INSTALL_AWS_CLI" -eq 1 ]]; then
@@ -318,7 +319,7 @@ fi
 
 if [[ "$INSTALL_JDK" -eq 1 ]]; then
   echo ---------- Installing JDK11
-  sudo apt -y install openjdk-11-jdk-headless
+  sudo apt install -y openjdk-11-jdk-headless
 fi
 
 if [[ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]]; then
@@ -373,7 +374,7 @@ if [[ "$INSTALL_CHROME" -eq 1 ]]; then
   echo ---------- Installing latest Chrome
   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   dpkg -i google-chrome-stable_current_amd64.deb
-  apt -y install -f
+  apt install -y -f
   rm google-chrome-stable_current_amd64.deb
 fi
 
@@ -394,6 +395,15 @@ fi
 if [[ "$INSTALL_VSCODE" -eq 1 ]]; then
   echo ---------- Installing VSCode
   snap install code --classic
+fi
+
+if [[ "$INSTALL_VSCODE" -eq 1 ]]; then
+  echo ---------- Installing teams
+  # https://pureinfotech.com/install-microsoft-teams-linux/
+  curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+  sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
+  apt update
+  apt install -y teams
 fi
 
 if [[ "$INSTALL_SELENIUM" -eq 1 ]]; then
@@ -448,7 +458,7 @@ fi
 
 if [[ "$INSTALL_SHUTTER" -eq 1 ]]; then
   echo ---------- Installing Shutter
-  apt -y install shutter
+  apt install -y shutter
   # snap install shutter
   wget http://de.archive.ubuntu.com/ubuntu/pool/universe/g/goocanvas/libgoocanvas-common_1.0.0-1_all.deb
   dpkg -i libgoocanvas-common_1.0.0-1_all.deb
@@ -459,7 +469,7 @@ if [[ "$INSTALL_SHUTTER" -eq 1 ]]; then
   wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
   dpkg -i libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
   rm libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
-  apt -y install -f
+  apt install -y -f
   killall shutter
 fi
 
@@ -488,19 +498,19 @@ if [[ "$INSTALL_DROPBOX" -eq 1 ]]; then
   echo ---------- Installing Dropbox
   wget https://linux.dropbox.com/packages/ubuntu/dropbox_2019.02.14_amd64.deb
   dpkg -i dropbox_2019.02.14_amd64.deb
-  apt -y install -f
+  apt install -y -f
   rm dropbox_2019.02.14_amd64.deb
 fi
 
 if [[ "$INSTALL_YOUTUBE_DL" -eq 1 ]]; then
   echo ---------- Installing youtube-dl
-  apt -y install ffmpeg
+  apt install -y ffmpeg
   sudo -u ${MYUSER} pip3 install youtube-dl
 fi
 
 if [[ "$INSTALL_VLC" -eq 1 ]]; then
   echo ---------- Installing vlc
-  apt -y install vlc
+  apt install -y vlc
 fi
 
 if [[ "$INSTALL_ACESTREAMPLAYER" -eq 1 ]]; then
@@ -511,7 +521,7 @@ fi
 if [[ "$INSTALL_SAMBA" -eq 1 ]]; then
   echo ---------- Installing Samba
   sudo -u ${MYUSER} mkdir -p "${SAMBA_SHARE_DIR}"
-  apt -y install samba
+  apt install -y samba
   echo --- creating backup for samba config
   cp /etc/samba/smb.conf /etc/samba/smb-bk.conf
   echo "
@@ -544,7 +554,7 @@ fi
 
 if [[ "$INSTALL_HYDROGEN" -eq 1 ]]; then
   echo ---------- Installing Hydrogen
-  apt -y install hydrogen
+  apt install -y hydrogen
 fi
 
 if [[ "$INSTALL_CALIBRE" -eq 1 ]]; then
@@ -554,25 +564,25 @@ fi
 
 if [[ "$INSTALL_BLENDER" -eq 1 ]]; then
   echo "---------- Installing Blender (3D / video editor)"
-  apt -y install blender
+  apt install -y blender
 fi
 
 if [[ "$INSTALL_OPENSHOT" -eq 1 ]]; then
   echo "---------- Installing Openshot (video editor)"
-  apt -y install openshot-qt
+  apt install -y openshot-qt
 fi
 
 if [[ "$FIX_CALCULATOR_KEYBOARD_SHORTCUT" -eq 1 ]]; then
   echo ---------- Fix calculator shortcut
   snap remove gnome-calculator
-  apt -y install gnome-calculator
+  apt install -y gnome-calculator
 fi
 
 if [[ "$INSTALL_MYSQL_WORKBENCH" -eq 1 ]]; then
   echo ---------- Installing MySQL Workbench
   wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
   dpkg -i mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
-  apt -y install -f
+  apt install -y -f
   rm mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
 fi
 
@@ -580,7 +590,7 @@ if [[ "$INSTALL_MONGODB_COMPASS" -eq 1 ]]; then
   echo ---------- Installing MySQL Compass
   wget https://downloads.mongodb.com/compass/mongodb-compass_1.20.4_amd64.deb
   dpkg -i mongodb-compass_1.20.4_amd64.deb
-  apt -y install -f
+  apt install -y -f
   rm mongodb-compass_1.20.4_amd64.deb
 fi
 
