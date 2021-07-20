@@ -49,6 +49,7 @@ INSTALL_MAKE=1
 INSTALL_SSH_SERVER=1
 INSTALL_SSH_AVAHI_DAEMON=1
 INSTALL_GIT=1
+INSTALL_SSHUTTLE=1
 INSTALL_PYTHON36=1
 INSTALL_PYTHON38=0
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=1
@@ -69,7 +70,7 @@ CREATE_ALIASES=1
 CREATE_SSH_CONFIG_FILE=1
 INSTALL_CHROME=1
 INSTALL_PYCHARM=1
-INSTALL_PYCHARM_PRO=1
+INSTALL_PYCHARM_PRO=0
 INSTALL_VSCODE=1
 INSTALL_TEAMS=1
 INSTALL_SELENIUM=1
@@ -174,6 +175,11 @@ if [[ "$INSTALL_GIT" -eq 1 ]]; then
   echo ---------- Setting git global user and password
   sudo -u ${MYUSER} git config --global user.email "$MYGITEMAIL"
   sudo -u ${MYUSER} git config --global user.name "$MYGITNAME"
+fi
+
+if [[ "$INSTALL_SSHUTTLE" -eq 1 ]]; then
+  echo ---------- Installing sshuttle
+  apt install -y sshuttle
 fi
 
 if [[ "$INSTALL_PYTHON36" -eq 1 ]]; then
