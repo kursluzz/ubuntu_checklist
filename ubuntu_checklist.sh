@@ -391,11 +391,13 @@ fi
 
 if [[ "$INSTALL_PYCHARM_PRO" -eq 1 ]]; then
   echo ---------- Installing PyCharm Pro
-  wget https://download.jetbrains.com/python/pycharm-professional-2020.1.4.tar.gz
-  tar -xzf pycharm-professional-2020.1.4.tar.gz
-  mv pycharm-2020.1.4 /opt/pycharm
+  # https://www.jetbrains.com/pycharm/download/other.html
+  # wget https://download.jetbrains.com/python/pycharm-professional-2020.1.4.tar.gz
+  wget https://download.jetbrains.com/python/pycharm-professional-2020.1.5.tar.gz
+  tar -xzf pycharm-professional-2020.1.5.tar.gz 
+  mv pycharm-2020.1.5 /opt/pycharm
   chown -R ${MYUSER}:${MYUSER} /opt/pycharm
-  rm pycharm-professional-2020.1.4.tar.gz
+  rm pycharm-professional-2020.1.5.tar.gz
 fi
 
 if [[ "$INSTALL_VSCODE" -eq 1 ]]; then
