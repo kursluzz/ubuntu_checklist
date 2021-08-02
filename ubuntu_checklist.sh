@@ -60,6 +60,9 @@ INSTALL_AWS_CLI=1
 INSTALL_AWS_EB=1
 INSTALL_EKSCTL=1
 INSTALL_KUBECTL=1
+INSTALL_ANSIBLE=1
+INSTALL_TERRAFORM=1
+INSTALL_HELM=1
 INSTALL_NODEJS_NPM=1
 INSTALL_ANGULAR_CLI=1
 INSTALL_SERVERLESS=1
@@ -302,6 +305,32 @@ if [[ "$INSTALL_KUBECTL" -eq 1 ]]; then
 #  kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl
 
 # another way to install https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html
+fi
+
+if [[ "$INSTALL_ANSIBLE" -eq 1 ]]; then
+  echo ---------- Installing ansible
+  apt install -y ansible
+fi
+
+if [[ "$INSTALL_TERRAFORM" -eq 1 ]]; then
+  echo ---------- Installing terraform
+  # https://www.terraform.io/docs/cli/install/apt.html
+  # with sudo
+  # curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+  # sudo apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+  # sudo apt install terraform
+  curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+  apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+  apt install -y terraform
+fi
+
+if [[ "$INSTALL_HELM" -eq 1 ]]; then
+  echo ---------- Installing helm
+  # https://helm.sh/docs/intro/install/
+  #  $ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+  #  $ chmod 700 get_helm.sh
+  #  $ ./get_helm.sh
+  curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 fi
 
 if [[ "$INSTALL_NODEJS_NPM" -eq 1 ]]; then
