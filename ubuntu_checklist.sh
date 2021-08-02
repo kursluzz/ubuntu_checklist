@@ -44,6 +44,7 @@ fi
 INSTALL_CURL=1
 INSTALL_VIM=1
 INSTALL_BYOBU=1
+INSTALL_BPYTOP=1
 INSTALL_WAKEONLAN=1
 INSTALL_MAKE=1
 INSTALL_SSH_SERVER=1
@@ -148,6 +149,11 @@ fi
 if [[ "$INSTALL_BYOBU" -eq 1 ]]; then
   echo ---------- Installing byobu
   apt install -y byobu
+fi
+
+if [[ "$INSTALL_BPYTOP" -eq 1 ]]; then
+  echo ---------- Installing bpytop
+  snap install bpytop
 fi
 
 if [[ "$INSTALL_WAKEONLAN" -eq 1 ]]; then
