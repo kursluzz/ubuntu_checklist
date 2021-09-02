@@ -47,6 +47,7 @@ INSTALL_BYOBU=1
 INSTALL_BPYTOP=1
 INSTALL_WAKEONLAN=1
 INSTALL_MAKE=1
+INSTALL_EXPECT=1
 INSTALL_SSH_SERVER=1
 INSTALL_SSH_AVAHI_DAEMON=1
 INSTALL_GIT=1
@@ -164,6 +165,12 @@ fi
 if [[ "$INSTALL_MAKE" -eq 1 ]]; then
   echo ---------- Installing make
   apt install -y make
+fi
+
+if [[ "$INSTALL_EXPECT" -eq 1 ]]; then
+  echo ---------- Installing expect
+  # https://likegeeks.com/expect-command/
+  apt install -y expect
 fi
 
 if [[ "$INSTALL_SSH_SERVER" -eq 1 ]]; then
