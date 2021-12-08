@@ -349,14 +349,14 @@ fi
 if [[ "$INSTALL_NODEJS_NPM" -eq 1 ]]; then
   echo ---------- Installing nodejs npm
   # https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/
-  # curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-  curl -sL https://deb.nodesource.com/setup_10.x | bash -
+  # curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+  curl -sL https://deb.nodesource.com/setup_16.x | bash -
   apt install -y nodejs
 fi
 
 if [[ "$INSTALL_ANGULAR_CLI" -eq 1 ]]; then
   echo ---------- Installing Angular CLI
-  #npm install -g @angular/cli
+  #sudo npm install -g @angular/cli
   printf "\n" | npm install -g @angular/cli
 fi
 
