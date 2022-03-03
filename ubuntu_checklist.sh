@@ -100,9 +100,6 @@ INSTALL_HYDROGEN=1
 INSTALL_CALIBRE=1
 INSTALL_BLENDER=1
 INSTALL_OPENSHOT=1
-FIX_CALCULATOR_KEYBOARD_SHORTCUT=1
-SET_FAVORITES_BAR=1
-SET_DOCK_POSITION_BOTTOM=1
 ADD_NEW_TEXT_FILE_TEMPLATE=1
 INSTALL_YANDEXDISK=1
 INSTALL_MYSQL_DOCKER=1
@@ -202,6 +199,7 @@ if [[ "$INSTALL_PYTHON36" -eq 1 ]]; then
   # https://towardsdatascience.com/building-python-from-source-on-ubuntu-20-04-2ed29eec152b
   echo ---------- Installing python 3.6
   apt update
+  apt install -y liblzma-dev lzma
   apt install -y build-essential checkinstall
   apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
   wget https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz
@@ -622,12 +620,6 @@ if [[ "$INSTALL_OPENSHOT" -eq 1 ]]; then
   apt install -y openshot-qt
 fi
 
-if [[ "$FIX_CALCULATOR_KEYBOARD_SHORTCUT" -eq 1 ]]; then
-  echo ---------- Fix calculator shortcut
-  snap remove gnome-calculator
-  apt install -y gnome-calculator
-fi
-
 if [[ "$INSTALL_MYSQL_WORKBENCH" -eq 1 ]]; then
   echo ---------- Installing MySQL Workbench
   wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
@@ -705,17 +697,6 @@ if [[ "$INSTALL_MONGODB_DOCKER" -eq 1 ]]; then
 #Type=Application
 #X-GNOME-Autostart-enabled=true
 #' > /home/${MYUSER}/.config/autostart/mongodb-docker.desktop"
-fi
-
-# favorites bar
-if [[ "$SET_DOCK_POSITION_BOTTOM" -eq 1 ]]; then
-  echo ---------- Moving dock to bottom
-  su - ${MYUSER} -c "gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM"
-fi
-
-if [[ "$SET_FAVORITES_BAR" -eq 1 ]]; then
-  echo ---------- Setting favorites bar
-  su - ${MYUSER} -c "gsettings set org.gnome.shell favorite-apps \"['org.gnome.Terminal.desktop', 'google-chrome.desktop', 'sublime-text_subl.desktop', 'pycharm-community_pycharm-community.desktop', 'postman_postman.desktop', 'chromium_chromium.desktop', 'mysql-workbench.desktop', 'firefox.desktop', 'krita_krita.desktop', 'org.gnome.Nautilus.desktop']\""
 fi
 
 if [[ "$INSTALL_YANDEXDISK" -eq 1 ]]; then
