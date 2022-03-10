@@ -246,8 +246,6 @@ if [[ "$INSTALL_PYTHON38" -eq 1 ]]; then
   #  rm Python-3.8.5.tgz
 fi
 
-
-
 if [[ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]]; then
   echo ---------- Installing mysql dev dependencies
   apt install -y libmysqlclient-dev
