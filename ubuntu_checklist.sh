@@ -82,6 +82,7 @@ INSTALL_SELENIUM=1
 INSTALL_CHROMIUM=1
 INSTALL_SUBLIME=1
 INSTALL_KRITA=1
+INSTALL_XOURNAL=1
 INSTALL_AUDACITY=1
 INSTALL_POSTMAN=1
 INSTALL_SHUTTER=1
@@ -490,6 +491,11 @@ fi
 if [[ "$INSTALL_KRITA" -eq 1 ]]; then
   echo ---------- Installing Krita
   apt install -y krita
+fi
+
+if [[ "$INSTALL_XOURNAL" -eq 1 ]]; then
+  echo ---------- Installing Xournal
+  apt install -y xournal
 fi
 
 if [[ "$INSTALL_AUDACITY" -eq 1 ]]; then
