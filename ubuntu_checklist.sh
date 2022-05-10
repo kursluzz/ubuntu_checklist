@@ -13,10 +13,6 @@ SAMBA_SHARE_PASSWORD=sharesecret
 MYSQL_ROOT_PASSWORD=123456
 MONGODB_USER=root
 MONGODB_PWD=123456
-ACTIVEMQ_USER=admin
-ACTIVEMQ_PWD=123456
-YANDEX_DISK_USERNAME=username
-YANDEX_DISK_PASSWORD=password
 SSH_CONFIG='Host someserver
     HostName 10.0.0.100
     User user
@@ -82,6 +78,7 @@ INSTALL_SELENIUM=1
 INSTALL_CHROMIUM=1
 INSTALL_SUBLIME=1
 INSTALL_KRITA=1
+INSTALL_INKSCACE=1
 INSTALL_XOURNAL=1
 INSTALL_AUDACITY=1
 INSTALL_POSTMAN=1
@@ -491,6 +488,11 @@ fi
 if [[ "$INSTALL_KRITA" -eq 1 ]]; then
   echo ---------- Installing Krita
   apt install -y krita
+fi
+
+if [[ "$INSTALL_INKSCACE" -eq 1 ]]; then
+  echo ---------- Installing Incspace
+  apt install -y inkscape
 fi
 
 if [[ "$INSTALL_XOURNAL" -eq 1 ]]; then
