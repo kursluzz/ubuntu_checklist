@@ -672,6 +672,18 @@ if [[ "$INSTALL_MYSQL_DOCKER" -eq 1 ]]; then
 #' > /home/${MYUSER}/.config/autostart/mysql-docker.desktop"
 fi
 
+if [[ "$INSTALL_MYSQL_DOCKER" -eq 1 ]]; then
+  echo ---------- Installing Postgres Docker
+  docker run -d \
+    --name postgres-container \
+    --restart=unless-stopped \
+    -e POSTGRES_PASSWORD=postgres \
+    -e PGDATA=/var/lib/postgresql/data/pgdata \
+    -p 5432:5432 \
+    -v /home/${MYUSER}/postgres/data:/var/lib/postgresql/data \
+    postgres
+fi
+
 if [[ "$INSTALL_ACTIVEMQ_DOCKER" -eq 1 ]]; then
   echo ---------- Installing ActiveMQ
   # default login is user admin password admin
