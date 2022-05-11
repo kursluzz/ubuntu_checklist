@@ -87,6 +87,7 @@ INSTALL_FORTICLIENT_VPN=1
 INSTALL_DOCKER=1
 INSTALL_DOCKER_COMPOSE=1
 INSTALL_MYSQL_WORKBENCH=1
+INSTALL_MYSQL_PGADMIN=1
 INSTALL_MONGODB_COMPASS=1
 INSTALL_DROPBOX=1
 INSTALL_YOUTUBE_DL=1
@@ -632,6 +633,17 @@ if [[ "$INSTALL_MYSQL_WORKBENCH" -eq 1 ]]; then
   dpkg -i mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
   apt install -y -f
   rm mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
+fi
+
+if [[ "$INSTALL_MYSQL_PGADMIN" -eq 1 ]]; then
+  echo ---------- Installing MySQL Workbench
+  # original install with sudo - https://www.pgadmin.org/download/pgadmin-4-apt/
+  # sudo curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
+  # sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
+  # sudo apt install pgadmin4-desktop
+  curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | apt-key add
+  sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
+  apt install pgadmin4-desktop
 fi
 
 if [[ "$INSTALL_MONGODB_COMPASS" -eq 1 ]]; then
