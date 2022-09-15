@@ -631,10 +631,7 @@ fi
 
 if [[ "$INSTALL_MYSQL_WORKBENCH" -eq 1 ]]; then
   echo ---------- Installing MySQL Workbench
-  wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
-  dpkg -i mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
-  apt install -y -f
-  rm mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
+  snap install mysql-workbench-community
 fi
 
 if [[ "$INSTALL_MYSQL_PGADMIN" -eq 1 ]]; then
