@@ -94,6 +94,7 @@ INSTALL_MONGODB_COMPASS=1
 INSTALL_DROPBOX=1
 INSTALL_YOUTUBE_DL=1
 INSTALL_VLC=1
+INSTALL_MPV=1
 INSTALL_ACESTREAMPLAYER=1
 INSTALL_SAMBA=1
 INSTALL_FREECAD=1
@@ -582,6 +583,11 @@ fi
 if [[ "$INSTALL_VLC" -eq 1 ]]; then
   echo ---------- Installing vlc
   apt install -y vlc
+fi
+
+if [[ "$INSTALL_MPV" -eq 1 ]]; then
+  echo ---------- Installing mpv
+  apt install -y mpv
 fi
 
 if [[ "$INSTALL_ACESTREAMPLAYER" -eq 1 ]]; then
