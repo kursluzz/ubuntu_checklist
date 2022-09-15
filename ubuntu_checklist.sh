@@ -197,6 +197,20 @@ if [[ "$INSTALL_SSHUTTLE" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_PYTHON36" -eq 1 ]]; then
+  # todo: change to python 3.6.15
+  # https://stackoverflow.com/questions/72102435/how-to-install-python3-6-on-ubuntu-22-04
+  #sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
+  #libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
+  #libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev \
+  #libgdbm-dev libnss3-dev libedit-dev libc6-dev
+  #wget https://www.python.org/ftp/python/3.6.15/Python-3.6.15.tgz
+  #tar -xzf Python-3.6.15.tgz
+  #cd Python-3.6.15
+  #./configure --enable-optimizations  -with-lto  --with-pydebug
+  #make -j 8  # adjust for number of your CPU cores
+  #sudo make altinstall
+  #python3.6 -V
+
   # https://towardsdatascience.com/building-python-from-source-on-ubuntu-20-04-2ed29eec152b
   echo ---------- Installing python 3.6
   apt update
@@ -631,7 +645,10 @@ fi
 
 if [[ "$INSTALL_MYSQL_WORKBENCH" -eq 1 ]]; then
   echo ---------- Installing MySQL Workbench
-  snap install mysql-workbench-community
+  wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
+  dpkg -i mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
+  apt install -y -f
+  rm mysql-workbench-community_8.0.25-1ubuntu20.04_amd64.deb
 fi
 
 if [[ "$INSTALL_MYSQL_PGADMIN" -eq 1 ]]; then
