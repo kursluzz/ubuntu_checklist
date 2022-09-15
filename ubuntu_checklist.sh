@@ -48,6 +48,8 @@ INSTALL_SSH_SERVER=1
 INSTALL_SSH_AVAHI_DAEMON=1
 INSTALL_GIT=1
 INSTALL_SSHUTTLE=1
+# todo: replace python to more simple installation without compiling
+# https://www.linuxcapable.com/how-to-install-python-3-8-on-ubuntu-22-04-lts/
 INSTALL_PYTHON36=1
 INSTALL_PYTHON38=0
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=1
