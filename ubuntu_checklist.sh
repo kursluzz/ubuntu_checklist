@@ -307,6 +307,9 @@ fi
 if [[ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]]; then
   echo ---------- Installing mysql dev dependencies
   apt install -y libmysqlclient-dev
+  wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+  dpkg -i libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+  rm libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
 fi
 
 if [[ "$INSTALL_PIP3" -eq 1 ]]; then
