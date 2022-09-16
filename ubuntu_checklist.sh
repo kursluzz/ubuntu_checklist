@@ -48,10 +48,8 @@ INSTALL_SSH_SERVER=1
 INSTALL_SSH_AVAHI_DAEMON=1
 INSTALL_GIT=1
 INSTALL_SSHUTTLE=1
-# todo: replace python to more simple installation without compiling
-# https://www.linuxcapable.com/how-to-install-python-3-8-on-ubuntu-22-04-lts/
 INSTALL_PYTHON36=1
-INSTALL_PYTHON38=0
+INSTALL_PYTHON38=1
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=1
 INSTALL_PIP3=1
 INSTALL_VENV=1
@@ -198,34 +196,50 @@ if [[ "$INSTALL_SSHUTTLE" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_PYTHON36" -eq 1 ]]; then
-  # todo: change to python 3.6.15
-  # https://stackoverflow.com/questions/72102435/how-to-install-python3-6-on-ubuntu-22-04
-  #sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
-  #libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-  #libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev \
-  #libgdbm-dev libnss3-dev libedit-dev libc6-dev
-  #wget https://www.python.org/ftp/python/3.6.15/Python-3.6.15.tgz
-  #tar -xzf Python-3.6.15.tgz
-  #cd Python-3.6.15
-  #./configure --enable-optimizations  -with-lto  --with-pydebug
-  #make -j 8  # adjust for number of your CPU cores
-  #sudo make altinstall
-  #python3.6 -V
 
-  # https://towardsdatascience.com/building-python-from-source-on-ubuntu-20-04-2ed29eec152b
   echo ---------- Installing python 3.6
-  apt update
-  apt install -y liblzma-dev lzma
-  apt install -y build-essential checkinstall
-  apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
-  wget https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz
-  tar -xzf Python-3.6.9.tgz
-  cd Python-3.6.9
+  # https://stackoverflow.com/questions/72102435/how-to-install-python3-6-on-ubuntu-22-04
+  apt install -y make build-essential libssl-dev zlib1g-dev \
+  libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
+  libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev \
+  libgdbm-dev libnss3-dev libedit-dev libc6-dev
+  wget https://www.python.org/ftp/python/3.6.15/Python-3.6.15.tgz
+  tar -xzf Python-3.6.15.tgz
+  cd Python-3.6.15
   ./configure --enable-optimizations
-  make altinstall
+  sudo make altinstall
   cd ..
-  rm Python-3.6.9.tgz
-  rm -rf Python-3.6.9
+  rm Python-3.6.15.tgz
+  rm -rf Python-3.6.15
+
+  # 3.6.15 with sudo version
+#  sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
+#  libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
+#  libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev \
+#  libgdbm-dev libnss3-dev libedit-dev libc6-dev
+#  wget https://www.python.org/ftp/python/3.6.15/Python-3.6.15.tgz
+#  tar -xzf Python-3.6.15.tgz
+#  cd Python-3.6.15
+#  ./configure --enable-optimizations  -with-lto  --with-pydebug
+#  make -j 8  # adjust for number of your CPU cores
+#  sudo make altinstall
+#  python3.6 -V
+
+  # 3.6.9 version
+  # https://towardsdatascience.com/building-python-from-source-on-ubuntu-20-04-2ed29eec152b
+#  apt update
+#  apt install -y liblzma-dev lzma
+#  apt install -y build-essential checkinstall
+#  apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+#  wget https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz
+#  tar -xzf Python-3.6.9.tgz
+#  cd Python-3.6.9
+#  ./configure --enable-optimizations
+#  make altinstall
+#  cd ..
+#  rm Python-3.6.9.tgz
+#  rm -rf Python-3.6.9
+
   # for local run with sudo
   #  sudo apt update
   #  sudo apt install -y build-essential checkinstall
@@ -239,17 +253,45 @@ if [[ "$INSTALL_PYTHON36" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_PYTHON38" -eq 1 ]]; then
-  # https://towardsdatascience.com/building-python-from-source-on-ubuntu-20-04-2ed29eec152b
-  echo ---------- Installing python 3.6
+
+  echo ---------- Installing python 3.8
+  # https://www.linuxcapable.com/how-to-install-python-3-8-on-ubuntu-22-04-lts/
+  apt update && sudo apt upgrade
+  apt install software-properties-common -y
+  add-apt-repository ppa:deadsnakes/ppa -y
   apt update
-  apt install -y build-essential checkinstall
-  apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
-  wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz
-  tar -xzf Python-3.8.5.tgz
-  cd Python-3.8.5
-  ./configure --enable-optimizations
-  make altinstall
-  rm Python-3.8.5.tgz
+  apt install python3.8 -y
+  apt install python3.8-dev -y
+  apt install python3.8-venv -y
+  apt install python3.8-distutils -y
+  apt install python3.8-lib2to3 -y
+  apt install python3.8-gdbm -y
+
+  # with sudo version
+  #  sudo apt update && sudo apt upgrade
+  #  sudo apt install software-properties-common -y
+  #  sudo add-apt-repository ppa:deadsnakes/ppa -y
+  #  sudo apt update
+  #  sudo apt install python3.8 -y
+  #  sudo apt install python3.8-dev -y
+  #  sudo apt install python3.8-venv -y
+  #  sudo apt install python3.8-distutils -y
+  #  sudo apt install python3.8-lib2to3 -y
+  #  sudo apt install python3.8-gdbm -y
+
+################################
+# compile version
+# https://towardsdatascience.com/building-python-from-source-on-ubuntu-20-04-2ed29eec152b
+#  apt update
+#  apt install -y build-essential checkinstall
+#  apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+#  wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz
+#  tar -xzf Python-3.8.5.tgz
+#  cd Python-3.8.5
+#  ./configure --enable-optimizations
+#  make altinstall
+#  rm Python-3.8.5.tgz
+
   # for local run with sudo
   #  sudo apt update
   #  sudo apt install -y build-essential checkinstall
