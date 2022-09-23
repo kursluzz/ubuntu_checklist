@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 # 1. Set what you want to install 1 for yes, 0 for no
 INSTALL_CURL=1
 INSTALL_VIM=1
@@ -135,7 +133,8 @@ fi
 
 if [[ "$INSTALL_GRUB_CUSTOMIZER" -eq 1 ]]; then
   echo ---------- Installing grub-customizer
-  sudo apt install grub-customizer
+  sudo add-apt-repository -y ppa:danielrichter2007/grub-customizer
+  sudo apt install -y grub-customizer
 fi
 
 if [[ "$INSTALL_EXPECT" -eq 1 ]]; then
@@ -253,11 +252,11 @@ fi
 if [[ "$INSTALL_AWS_CLI" -eq 1 ]]; then
   echo ---------- Installing AWS CLI
   # pip3 install awscli --upgrade --user
-  # snap install aws-cli --classic
+  # sudo snap install aws-cli --classic
   # https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html
   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
   unzip /tmp/awscliv2.zip -d /tmp
-  /tmp/aws/install
+  sudo sh /tmp/aws/install
 fi
 
 if [[ "$INSTALL_AWS_EB" -eq 1 ]]; then
@@ -269,13 +268,14 @@ if [[ "$INSTALL_EKSCTL" -eq 1 ]]; then
   echo ---------- Installing EKSCTL
   # https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html
   curl --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-  mv /tmp/eksctl /usr/local/bin
+  sudo mv /tmp/eksctl /usr/local/bin
 fi
 
 if [[ "$INSTALL_KUBECTL" -eq 1 ]]; then
   echo ---------- Installing KUBECTL
   # https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
-  snap install kubectl --classic
+  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+  sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
   # auto completion
   kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl
 
@@ -305,7 +305,7 @@ if [[ "$INSTALL_TERRAFORM" -eq 1 ]]; then
   echo ---------- Installing terraform
   sudo apt install -y gnupg software-properties-common curl
   curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-  sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+  sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
   sudo apt update
   sudo apt install -y terraform
 fi
@@ -313,7 +313,10 @@ fi
 if [[ "$INSTALL_HELM" -eq 1 ]]; then
   echo ---------- Installing helm
   # https://www.how2shout.com/linux/how-to-install-helm-on-ubuntu-22-04-lts-jammy/
-  snap install helm --classic
+  curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+  chmod 700 get_helm.sh
+  ./get_helm.sh
+  rm ./get_helm.sh
 fi
 
 if [[ "$INSTALL_NODEJS_NPM" -eq 1 ]]; then
@@ -322,7 +325,7 @@ if [[ "$INSTALL_NODEJS_NPM" -eq 1 ]]; then
   curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
   sudo apt install -y nodejs
 fi
-
+f
 if [[ "$INSTALL_ANGULAR_CLI" -eq 1 ]]; then
   echo ---------- Installing Angular CLI
   sudo npm install -g @angular/cli
@@ -386,30 +389,37 @@ fi
 
 if [[ "$INSTALL_PYCHARM" -eq 1 ]]; then
   echo ---------- Installing PyCharm
-  snap install pycharm-community --classic
+  wget https://download-cdn.jetbrains.com/python/pycharm-community-2022.2.2.tar.gz
+  tar -xzf pycharm-community-2022.2.2.tar.gz
+  sudo mv pycharm-community-2022.2.2 /opt/pycharm
+  sudo chown -R ${USER}:${USER} /opt/pycharm
+  rm pycharm-community-2022.2.2.tar.gz
 fi
 
 if [[ "$INSTALL_PYCHARM_PRO" -eq 1 ]]; then
   echo ---------- Installing PyCharm Pro
   # https://www.jetbrains.com/pycharm/download/other.html
-  # wget https://download.jetbrains.com/python/pycharm-professional-2020.1.4.tar.gz
   wget https://download.jetbrains.com/python/pycharm-professional-2020.1.5.tar.gz
   tar -xzf pycharm-professional-2020.1.5.tar.gz 
-  mv pycharm-2020.1.5 /opt/pycharm
-  chown -R ${USER}:${USER} /opt/pycharm
+  sudo mv pycharm-2020.1.5 /opt/pycharm
+  sudo chown -R ${USER}:${USER} /opt/pycharm
   rm pycharm-professional-2020.1.5.tar.gz
 fi
 
 if [[ "$INSTALL_VSCODE" -eq 1 ]]; then
   echo ---------- Installing VSCode
-  snap install code --classic
+  sudo apt install software-properties-common apt-transport-https wget -y
+  wget -O- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor | sudo tee /usr/share/keyrings/vscode.gpg
+  echo deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main | sudo tee /etc/apt/sources.list.d/vscode.list
+  sudo apt update
+  sudo apt install -y code
 fi
 
 if [[ "$INSTALL_TEAMS" -eq 1 ]]; then
   echo ---------- Installing teams
   # https://pureinfotech.com/install-microsoft-teams-linux/
   curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-  sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
+  echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" | sudo tee /etc/apt/sources.list.d/teams.list
   sudo apt update
   sudo apt install -y teams
 fi
@@ -420,12 +430,12 @@ if [[ "$INSTALL_SELENIUM" -eq 1 ]]; then
   # https://tecadmin.net/setup-selenium-chromedriver-on-ubuntu/
   # install selenium server
   wget -P /opt/selenium https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
-  mv /opt/selenium/selenium-server-standalone-3.141.59.jar /opt/selenium/selenium-server-standalone.jar
+  sudo mv /opt/selenium/selenium-server-standalone-3.141.59.jar /opt/selenium/selenium-server-standalone.jar
   # install chromedriver
   cd /home/"$USER"/Downloads
   wget https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_linux64.zip
   unzip chromedriver_linux64.zip
-  mv chromedriver /usr/bin/
+  sudo mv chromedriver /usr/bin/
   rm chromedriver_linux64.zip
   # install java jdk
   sudo apt install -y default-jdk
@@ -461,11 +471,11 @@ fi
 
 if [[ "$INSTALL_POSTMAN" -eq 1 ]]; then
     echo ---------- Installing Postman
-    snap install postman
+    sudo snap install postman
 fi
 
 if [[ "$INSTALL_FLAMESHOT" -eq 1 ]]; then
-  echo ---------- Installing Shutter
+  echo ---------- Installing Flameshot
   sudo apt install -y flameshot
 fi
 
@@ -481,17 +491,18 @@ if [[ "$INSTALL_DOCKER" -eq 1 ]]; then
   curl -fsSL https://get.docker.com -o get-docker.sh
   sudo sh get-docker.sh
   rm get-docker.sh
-  usermod -aG docker ${USER}
+  sudo usermod -aG docker ${USER}
 fi
 
 if [[ "$INSTALL_DOCKER_COMPOSE" -eq 1 ]]; then
   echo ---------- Installing Docker Compose
-  sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  chmod +x /usr/local/bin/docker-compose
+  sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  sudo chmod +x /usr/local/bin/docker-compose
 fi
 
 if [[ "$INSTALL_DROPBOX" -eq 1 ]]; then
   echo ---------- Installing Dropbox
+  sudo apt-get install -y libpango1.0-0
   wget https://linux.dropbox.com/packages/ubuntu/dropbox_2020.03.04_amd64.deb
   sudo dpkg -i dropbox_2020.03.04_amd64.deb
   sudo apt install -y -f
@@ -516,7 +527,7 @@ fi
 
 if [[ "$INSTALL_ACESTREAMPLAYER" -eq 1 ]]; then
   echo ---------- Installing acestreamplayer
-  snap install acestreamplayer
+  sudo snap install acestreamplayer
 fi
 
 if [[ "$INSTALL_SAMBA" -eq 1 ]]; then
