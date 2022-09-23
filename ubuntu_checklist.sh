@@ -1,7 +1,76 @@
 #!/bin/bash
 
+# 1. Set what you want to install 1 for yes, 0 for no
+INSTALL_CURL=1
+INSTALL_VIM=1
+INSTALL_WAKEONLAN=1
+INSTALL_MAKE=1
+INSTALL_EXPECT=1
+INSTALL_SSH_SERVER=1
+INSTALL_SSH_AVAHI_DAEMON=1
+INSTALL_GIT=1
+INSTALL_SSHUTTLE=1
+INSTALL_PYTHON36=1
+INSTALL_PYTHON37=1
+INSTALL_PYTHON38=1
+INSTALL_PYTHON39=1
+INSTALL_MYSQL_PYTHON_DEPENDENCIES=1
+INSTALL_PIP3=1
+INSTALL_VENV=1
+INSTALL_NGINX=1
+INSTALL_AWS_CLI=1
+INSTALL_AWS_EB=1
+INSTALL_EKSCTL=1
+INSTALL_KUBECTL=1
+INSTALL_ANSIBLE=1
+INSTALL_TERRAFORM=1
+INSTALL_HELM=1
+INSTALL_NODEJS_NPM=1
+INSTALL_ANGULAR_CLI=1
+INSTALL_SERVERLESS=1
+INSTALL_JDK=1
+ADD_SSH_KEY_FOR_GIT=1
+ADD_ADDITIONAL_SSH_KEY_FOR_GIT=1
+CREATE_ALIASES=1
+CREATE_SSH_CONFIG_FILE=1
+INSTALL_CHROME=1
+INSTALL_PYCHARM=1
+INSTALL_PYCHARM_PRO=0
+INSTALL_VSCODE=1
+INSTALL_TEAMS=1
+INSTALL_SELENIUM=1
+INSTALL_CHROMIUM=1
+INSTALL_SUBLIME=1
+INSTALL_KRITA=1
+INSTALL_INKSCACE=1
+INSTALL_XOURNAL=1
+INSTALL_AUDACITY=1
+INSTALL_POSTMAN=1
+INSTALL_FLAMESHOT=1
+INSTALL_FORTICLIENT_VPN=1
+INSTALL_DOCKER=1
+INSTALL_DOCKER_COMPOSE=1
+INSTALL_MYSQL_WORKBENCH=1
+INSTALL_MYSQL_PGADMIN=1
+INSTALL_MONGODB_COMPASS=1
+INSTALL_MONGOSH=1
+INSTALL_DROPBOX=1
+INSTALL_YOUTUBE_DL=1
+INSTALL_VLC=1
+INSTALL_MPV=1
+INSTALL_ACESTREAMPLAYER=1
+INSTALL_SAMBA=1
+INSTALL_FREECAD=1
+INSTALL_HYDROGEN=1
+INSTALL_CALIBRE=1
+INSTALL_BLENDER=1
+INSTALL_OPENSHOT=1
+ADD_NEW_TEXT_FILE_TEMPLATE=1
+INSTALL_MYSQL_DOCKER=1
+INSTALL_MONGODB_DOCKER=1
+
 # USER SETTINGS
-# 1. Set your configuration
+# 2. Set your configuration
 MYUSER=username
 MYGITNAME=John
 MYGITEMAIL=john@work
@@ -36,75 +105,7 @@ if [[ -f ubuntu_checklist_config.sh ]]; then
   source ubuntu_checklist_config.sh
 fi
 
-# 2. Set what you want to install 1 for yes, 0 for no
-INSTALL_CURL=1
-INSTALL_VIM=1
-INSTALL_BYOBU=1
-INSTALL_BPYTOP=1
-INSTALL_WAKEONLAN=1
-INSTALL_MAKE=1
-INSTALL_EXPECT=1
-INSTALL_SSH_SERVER=1
-INSTALL_SSH_AVAHI_DAEMON=1
-INSTALL_GIT=1
-INSTALL_SSHUTTLE=1
-INSTALL_PYTHON36=1
-INSTALL_PYTHON38=1
-INSTALL_MYSQL_PYTHON_DEPENDENCIES=1
-INSTALL_PIP3=1
-INSTALL_VENV=1
-INSTALL_NGINX=1
-INSTALL_AWS_CLI=1
-INSTALL_AWS_EB=1
-INSTALL_EKSCTL=1
-INSTALL_KUBECTL=1
-INSTALL_ANSIBLE=1
-INSTALL_TERRAFORM=1
-INSTALL_HELM=1
-INSTALL_NODEJS_NPM=1
-INSTALL_ANGULAR_CLI=1
-INSTALL_SERVERLESS=1
-INSTALL_JDK=1
-ADD_SSH_KEY_FOR_GIT=1
-ADD_ADDITIONAL_SSH_KEY_FOR_GIT=1
-CREATE_ALIASES=1
-CREATE_SSH_CONFIG_FILE=1
-INSTALL_CHROME=1
-INSTALL_PYCHARM=1
-INSTALL_PYCHARM_PRO=0
-INSTALL_VSCODE=1
-INSTALL_TEAMS=1
-INSTALL_SELENIUM=1
-INSTALL_CHROMIUM=1
-INSTALL_SUBLIME=1
-INSTALL_KRITA=1
-INSTALL_INKSCACE=1
-INSTALL_XOURNAL=1
-INSTALL_AUDACITY=1
-INSTALL_POSTMAN=1
-INSTALL_SHUTTER=1
-INSTALL_FORTICLIENT_VPN=1
-INSTALL_DOCKER=1
-INSTALL_DOCKER_COMPOSE=1
-INSTALL_MYSQL_WORKBENCH=1
-INSTALL_MYSQL_PGADMIN=1
-INSTALL_MONGODB_COMPASS=1
-INSTALL_DROPBOX=1
-INSTALL_YOUTUBE_DL=1
-INSTALL_VLC=1
-INSTALL_MPV=1
-INSTALL_ACESTREAMPLAYER=1
-INSTALL_SAMBA=1
-INSTALL_FREECAD=1
-INSTALL_HYDROGEN=1
-INSTALL_CALIBRE=1
-INSTALL_BLENDER=1
-INSTALL_OPENSHOT=1
-ADD_NEW_TEXT_FILE_TEMPLATE=1
-INSTALL_YANDEXDISK=1
-INSTALL_MYSQL_DOCKER=1
-INSTALL_ACTIVEMQ_DOCKER=1
-INSTALL_MONGODB_DOCKER=1
+
 
 # FUNCTIONS
 get_os_version_id() {
@@ -142,16 +143,6 @@ fi
 if [[ "$INSTALL_VIM" -eq 1 ]]; then
   echo ---------- Installing vim
   apt install -y vim
-fi
-
-if [[ "$INSTALL_BYOBU" -eq 1 ]]; then
-  echo ---------- Installing byobu
-  apt install -y byobu
-fi
-
-if [[ "$INSTALL_BPYTOP" -eq 1 ]]; then
-  echo ---------- Installing bpytop
-  snap install bpytop
 fi
 
 if [[ "$INSTALL_WAKEONLAN" -eq 1 ]]; then
@@ -196,8 +187,7 @@ if [[ "$INSTALL_SSHUTTLE" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_PYTHON36" -eq 1 ]]; then
-
-  echo ---------- Installing python 3.6
+  echo ---------- Installing python 3.6.15
   # https://stackoverflow.com/questions/72102435/how-to-install-python3-6-on-ubuntu-22-04
   apt install -y make build-essential libssl-dev zlib1g-dev \
   libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
@@ -252,6 +242,22 @@ if [[ "$INSTALL_PYTHON36" -eq 1 ]]; then
   #  rm Python-3.6.9.tgz
 fi
 
+if [[ "$INSTALL_PYTHON37" -eq 1 ]]; then
+  echo ---------- Installing python 3.7
+  https://www.linuxcapable.com/how-to-install-python-3-7-on-debian-11-bullseye/
+  sudo apt update && sudo apt upgrade
+  sudo apt install software-properties-common -y
+  sudo add-apt-repository ppa:deadsnakes/ppa -y
+  sudo apt update
+  sudo apt install python3.7 -y
+  sudo apt install python3.7-dev -y
+  sudo apt install python3.7-venv -y
+  sudo apt install python3.7-distutils -y
+  sudo apt install python3.7-lib2to3 -y
+  sudo apt install python3.7-gdbm -y
+  sudo apt install python3.7-tk -y
+fi
+
 if [[ "$INSTALL_PYTHON38" -eq 1 ]]; then
 
   echo ---------- Installing python 3.8
@@ -266,6 +272,7 @@ if [[ "$INSTALL_PYTHON38" -eq 1 ]]; then
   apt install python3.8-distutils -y
   apt install python3.8-lib2to3 -y
   apt install python3.8-gdbm -y
+  apt install python3.8-tk -y
 
   # with sudo version
   #  sudo apt update && sudo apt upgrade
@@ -278,31 +285,39 @@ if [[ "$INSTALL_PYTHON38" -eq 1 ]]; then
   #  sudo apt install python3.8-distutils -y
   #  sudo apt install python3.8-lib2to3 -y
   #  sudo apt install python3.8-gdbm -y
+  # sudo apt install python3.8-tk -y
 
-################################
-# compile version
-# https://towardsdatascience.com/building-python-from-source-on-ubuntu-20-04-2ed29eec152b
-#  apt update
-#  apt install -y build-essential checkinstall
-#  apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
-#  wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz
-#  tar -xzf Python-3.8.5.tgz
-#  cd Python-3.8.5
-#  ./configure --enable-optimizations
-#  make altinstall
-#  rm Python-3.8.5.tgz
-
-  # for local run with sudo
-  #  sudo apt update
-  #  sudo apt install -y build-essential checkinstall
-  #  sudo apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
-  #  wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz
-  #  tar -xzf Python-3.8.5.tgz
-  #  cd Python-3.8.5
-  #  sudo ./configure --enable-optimizations
-  #  sudo make altinstall
-  #  rm Python-3.8.5.tgz
 fi
+
+if [[ "$INSTALL_PYTHON39" -eq 1 ]]; then
+  echo ---------- Installing python 3.8
+  # https://www.linuxcapable.com/how-to-install-python-3-9-on-ubuntu-22-04-lts/
+  sudo apt update && sudo apt upgrade
+  sudo apt install software-properties-common -y
+  sudo add-apt-repository ppa:deadsnakes/ppa -y
+  sudo apt update
+  sudo apt install python3.9 -y
+  sudo apt install python3.9-dev -y
+  sudo apt install python3.9-venv -y
+  sudo apt install python3.9-distutils -y
+  sudo apt install python3.9-lib2to3 -y
+  sudo apt install python3.9-gdbm -y
+  sudo apt install python3.9-tk -y
+
+  # install with sudo
+#  sudo apt update && sudo apt upgrade
+#  sudo apt install software-properties-common -y
+#  sudo add-apt-repository ppa:deadsnakes/ppa -y
+#  sudo apt update
+#  sudo apt install python3.9 -y
+#  sudo apt install python3.9-dev -y
+#  sudo apt install python3.9-venv -y
+#  sudo apt install python3.9-distutils -y
+#  sudo apt install python3.9-lib2to3 -y
+#  sudo apt install python3.9-gdbm -y
+#  sudo apt install python3.9-tk -y
+fi
+
 
 if [[ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]]; then
   echo ---------- Installing mysql dev dependencies
@@ -573,21 +588,9 @@ if [[ "$INSTALL_POSTMAN" -eq 1 ]]; then
     snap install postman
 fi
 
-if [[ "$INSTALL_SHUTTER" -eq 1 ]]; then
+if [[ "$INSTALL_FLAMESHOT" -eq 1 ]]; then
   echo ---------- Installing Shutter
-  apt install -y shutter
-  # snap install shutter
-  wget http://de.archive.ubuntu.com/ubuntu/pool/universe/g/goocanvas/libgoocanvas-common_1.0.0-1_all.deb
-  dpkg -i libgoocanvas-common_1.0.0-1_all.deb
-  rm libgoocanvas-common_1.0.0-1_all.deb
-  wget http://de.archive.ubuntu.com/ubuntu/pool/universe/g/goocanvas/libgoocanvas3_1.0.0-1_amd64.deb
-  dpkg -i libgoocanvas3_1.0.0-1_amd64.deb
-  rm libgoocanvas3_1.0.0-1_amd64.deb
-  wget https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
-  dpkg -i libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
-  rm libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb
-  apt install -y -f
-  killall shutter
+  apt install -y flameshot
 fi
 
 if [[ "$INSTALL_FORTICLIENT_VPN" -eq 1 ]]; then
@@ -613,10 +616,10 @@ fi
 
 if [[ "$INSTALL_DROPBOX" -eq 1 ]]; then
   echo ---------- Installing Dropbox
-  wget https://linux.dropbox.com/packages/ubuntu/dropbox_2019.02.14_amd64.deb
-  dpkg -i dropbox_2019.02.14_amd64.deb
+  wget https://linux.dropbox.com/packages/ubuntu/dropbox_2020.03.04_amd64.deb
+  dpkg -i dropbox_2020.03.04_amd64.deb
   apt install -y -f
-  rm dropbox_2019.02.14_amd64.deb
+  rm dropbox_2020.03.04_amd64.deb
 fi
 
 if [[ "$INSTALL_YOUTUBE_DL" -eq 1 ]]; then
@@ -714,11 +717,28 @@ if [[ "$INSTALL_MYSQL_PGADMIN" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_MONGODB_COMPASS" -eq 1 ]]; then
-  echo ---------- Installing MySQL Compass
+  echo ---------- Installing Mongo Compass
   wget https://downloads.mongodb.com/compass/mongodb-compass_1.20.4_amd64.deb
   dpkg -i mongodb-compass_1.20.4_amd64.deb
   apt install -y -f
   rm mongodb-compass_1.20.4_amd64.deb
+fi
+
+if [[ "$INSTALL_MONGOSH" -eq 1 ]]; then
+  echo ---------- Installing Mongosh cli
+  apt install -y gnupg
+  wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add -
+  echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+  apt update
+  sudo apt install -y mongocli
+
+  # install with sudo
+#  sudo apt-get install gnupg
+#  wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+#  echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+#  sudo apt-get update
+#  sudo apt-get install -y mongocli
+
 fi
 
 if [[ ${ADD_NEW_TEXT_FILE_TEMPLATE} -eq 1 ]]; then
@@ -751,32 +771,6 @@ if [[ "$INSTALL_MYSQL_DOCKER" -eq 1 ]]; then
     postgres
 fi
 
-if [[ "$INSTALL_ACTIVEMQ_DOCKER" -eq 1 ]]; then
-  echo ---------- Installing ActiveMQ
-  # default login is user admin password admin
-  docker run --name activemq-container -p 61613:61613 -p 8161:8161 -d rmohr/activemq:5.15.9
-#    -v /home/${MYUSER}/activemq/conf:/mnt/conf \
-#    -v /home/${MYUSER}/activemq/data:/mnt/data \
-
-#  docker run --name=activemq-container -d \
-#    -e ACTIVEMQ_ADMIN_LOGIN="$ACTIVEMQ_USER" -e ACTIVEMQ_ADMIN_PASSWORD="$ACTIVEMQ_PWD" \
-#    -e ACTIVEMQ_CONFIG_MINMEMORY=1024 -e  ACTIVEMQ_CONFIG_MAXMEMORY=2048 \
-#    -v /home/${MYUSER}/activemq:/data \
-#    -v /var/log/activemq:/var/log/activemq \
-#    -p 8161:8161 \
-#    -p 61616:61616 \
-#    -p 61613:61613 \
-#    webcenter/activemq:5.15.8
-
-#  sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/.config/autostart
-#  su - ${MYUSER} -c "echo '[Desktop Entry]
-#Name=ActiveMQ
-#Exec=docker start activemq-container
-#Type=Application
-#X-GNOME-Autostart-enabled=true
-#' > /home/${MYUSER}/.config/autostart/activemq.desktop"
-fi
-
 if [[ "$INSTALL_MONGODB_DOCKER" -eq 1 ]]; then
   # https://hub.docker.com/_/mongo
   echo ---------- Installing MongoDB
@@ -794,15 +788,6 @@ if [[ "$INSTALL_MONGODB_DOCKER" -eq 1 ]]; then
 #Type=Application
 #X-GNOME-Autostart-enabled=true
 #' > /home/${MYUSER}/.config/autostart/mongodb-docker.desktop"
-fi
-
-if [[ "$INSTALL_YANDEXDISK" -eq 1 ]]; then
-  echo ---------- Installing Yandex Disk
-  # original command with sudo [https://yandex.com/support/disk/cli-clients.html]
-  # echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | sudo apt-key add - && sudo apt-get update && sudo apt install -y yandex-disk
-  echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | apt-key add - && apt-get update && apt install -y yandex-disk
-  # printf "n\n%s\n%s\n\n\n" "$YANDEX_DISK_USERNAME" "$YANDEX_DISK_PASSWORD" | sudo -u ${MYUSER} yandex-disk setup
-  sudo -u ${MYUSER} yandex-disk setup
 fi
 
 # final prompts and notices
