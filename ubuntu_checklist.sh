@@ -5,12 +5,13 @@ INSTALL_CURL=1
 INSTALL_VIM=1
 INSTALL_WAKEONLAN=1
 INSTALL_MAKE=1
+INSTALL_GRUB_CUSTOMIZER=1
 INSTALL_EXPECT=1
 INSTALL_SSH_SERVER=1
 INSTALL_SSH_AVAHI_DAEMON=1
 INSTALL_GIT=1
 INSTALL_SSHUTTLE=1
-INSTALL_PYTHON36=1
+INSTALL_MINICONDA=1
 INSTALL_PYTHON37=1
 INSTALL_PYTHON38=1
 INSTALL_PYTHON39=1
@@ -27,8 +28,6 @@ INSTALL_TERRAFORM=1
 INSTALL_HELM=1
 INSTALL_NODEJS_NPM=1
 INSTALL_ANGULAR_CLI=1
-INSTALL_SERVERLESS=1
-INSTALL_JDK=1
 ADD_SSH_KEY_FOR_GIT=1
 ADD_ADDITIONAL_SSH_KEY_FOR_GIT=1
 CREATE_ALIASES=1
@@ -39,7 +38,6 @@ INSTALL_PYCHARM_PRO=0
 INSTALL_VSCODE=1
 INSTALL_TEAMS=1
 INSTALL_SELENIUM=1
-INSTALL_CHROMIUM=1
 INSTALL_SUBLIME=1
 INSTALL_KRITA=1
 INSTALL_INKSCACE=1
@@ -67,15 +65,15 @@ INSTALL_BLENDER=1
 INSTALL_OPENSHOT=1
 ADD_NEW_TEXT_FILE_TEMPLATE=1
 INSTALL_MYSQL_DOCKER=1
+INSTALL_POSTGRES_DOCKER=1
 INSTALL_MONGODB_DOCKER=1
 
 # USER SETTINGS
 # 2. Set your configuration
-MYUSER=username
 MYGITNAME=John
 MYGITEMAIL=john@work
 ADDITIONAL_SSH_KEY_NAME=id_rsa2
-SAMBA_SHARE_DIR=/home/${MYUSER}/Shared
+SAMBA_SHARE_DIR=/home/${USER}/Shared
 SAMBA_SHARE_NAME=Shared
 SAMBA_SHARE_READONLY=no
 SAMBA_SHARE_PASSWORD=sharesecret
@@ -101,150 +99,84 @@ Host bitbucket.org-id_rsa2
 BASH_ALIASES='alias git-branch-sort="git branch -a --sort=-committerdate"
 '
 
+sudo apt -y update
+sudo apt -y upgrade
+
+cd /home/${USER}/Downloads
+
 if [[ -f ubuntu_checklist_config.sh ]]; then
   source ubuntu_checklist_config.sh
 fi
 
-
-
-# FUNCTIONS
-get_os_version_id() {
-  cat /etc/os-release | while read line; do
-    if [[ ${line} == "VERSION_ID="* ]]; then
-      eval "local $line"
-      echo ${VERSION_ID}
-      break
-    fi
-  done
-}
-
-# MAIN RUN
-# must run as sudo check
-if [[ "$EUID" -ne 0 ]]; then
-  echo Please run as sudo
-  exit
-fi
-
-# crete directory if not exists
-sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/Downloads
-cd /home/${MYUSER}/Downloads
-
-# create /home/${MYUSER}/.local/bin
-sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/.local/bin
-
-apt -y update
-apt -y upgrade
+mkdir -p /home/${USER}/Downloads
+mkdir -p /home/${USER}/.local/bin
 
 if [[ "$INSTALL_CURL" -eq 1 ]]; then
   echo ---------- Installing curl
-  apt install -y curl
+  sudo apt install -y curl
 fi
 
 if [[ "$INSTALL_VIM" -eq 1 ]]; then
   echo ---------- Installing vim
-  apt install -y vim
+  sudo apt install -y vim
 fi
 
 if [[ "$INSTALL_WAKEONLAN" -eq 1 ]]; then
   echo ---------- Installing wakeonlan
-  apt install -y wakeonlan
+  sudo apt install -y wakeonlan
 fi
 
 if [[ "$INSTALL_MAKE" -eq 1 ]]; then
   echo ---------- Installing make
-  apt install -y make
+  sudo apt install -y make
+fi
+
+if [[ "$INSTALL_GRUB_CUSTOMIZER" -eq 1 ]]; then
+  echo ---------- Installing grub-customizer
+  sudo apt install grub-customizer
 fi
 
 if [[ "$INSTALL_EXPECT" -eq 1 ]]; then
   echo ---------- Installing expect
   # https://likegeeks.com/expect-command/
-  apt install -y expect
+  sudo apt install -y expect
 fi
 
 if [[ "$INSTALL_SSH_SERVER" -eq 1 ]]; then
   echo ---------- Installing SSH server
-  apt install -y openssh-server
+  sudo apt install -y openssh-server
 fi
 
 if [[ "$INSTALL_SSH_AVAHI_DAEMON" -eq 1 ]]; then
   # lets you access computer in LAN by computer-name.local (a must for samba)
   echo ---------- Installing avahi-daemon
-  apt install -y avahi-daemon
+  sudo apt install -y avahi-daemon
 fi
 
 if [[ "$INSTALL_GIT" -eq 1 ]]; then
   echo ---------- Installing git
-  apt install -y git
+  sudo apt install -y git
 
   echo ---------- Setting git global user and password
-  sudo -u ${MYUSER} git config --global user.email "$MYGITEMAIL"
-  sudo -u ${MYUSER} git config --global user.name "$MYGITNAME"
+  git config --global user.email "$MYGITEMAIL"
+  git config --global user.name "$MYGITNAME"
 fi
 
 if [[ "$INSTALL_SSHUTTLE" -eq 1 ]]; then
   echo ---------- Installing sshuttle
-  apt install -y sshuttle
+  sudo apt install -y sshuttle
 fi
 
-if [[ "$INSTALL_PYTHON36" -eq 1 ]]; then
-  echo ---------- Installing python 3.6.15
-  # https://stackoverflow.com/questions/72102435/how-to-install-python3-6-on-ubuntu-22-04
-  apt install -y make build-essential libssl-dev zlib1g-dev \
-  libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-  libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev \
-  libgdbm-dev libnss3-dev libedit-dev libc6-dev
-  wget https://www.python.org/ftp/python/3.6.15/Python-3.6.15.tgz
-  tar -xzf Python-3.6.15.tgz
-  cd Python-3.6.15
-  ./configure --enable-optimizations
-  sudo make altinstall
-  cd ..
-  rm Python-3.6.15.tgz
-  rm -rf Python-3.6.15
-
-  # 3.6.15 with sudo version
-#  sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
-#  libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-#  libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev \
-#  libgdbm-dev libnss3-dev libedit-dev libc6-dev
-#  wget https://www.python.org/ftp/python/3.6.15/Python-3.6.15.tgz
-#  tar -xzf Python-3.6.15.tgz
-#  cd Python-3.6.15
-#  ./configure --enable-optimizations  -with-lto  --with-pydebug
-#  make -j 8  # adjust for number of your CPU cores
-#  sudo make altinstall
-#  python3.6 -V
-
-  # 3.6.9 version
-  # https://towardsdatascience.com/building-python-from-source-on-ubuntu-20-04-2ed29eec152b
-#  apt update
-#  apt install -y liblzma-dev lzma
-#  apt install -y build-essential checkinstall
-#  apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
-#  wget https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz
-#  tar -xzf Python-3.6.9.tgz
-#  cd Python-3.6.9
-#  ./configure --enable-optimizations
-#  make altinstall
-#  cd ..
-#  rm Python-3.6.9.tgz
-#  rm -rf Python-3.6.9
-
-  # for local run with sudo
-  #  sudo apt update
-  #  sudo apt install -y build-essential checkinstall
-  #  sudo apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
-  #  wget https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz
-  #  tar -xzf Python-3.6.9.tgz
-  #  cd Python-3.6.9
-  #  sudo ./configure --enable-optimizations
-  #  sudo make altinstall
-  #  rm Python-3.6.9.tgz
+if [[ "$INSTALL_MINICONDA" -eq 1 ]]; then
+  echo ---------- Installing python miniconda
+  wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/Downloads/miniconda.sh
+  bash ~/Downloads/miniconda.sh -b -p $HOME/miniconda
+  rm ~/Downloads/miniconda.sh
 fi
 
 if [[ "$INSTALL_PYTHON37" -eq 1 ]]; then
   echo ---------- Installing python 3.7
-  https://www.linuxcapable.com/how-to-install-python-3-7-on-debian-11-bullseye/
+  # https://www.linuxcapable.com/how-to-install-python-3-7-on-debian-11-bullseye/
   sudo apt update && sudo apt upgrade
   sudo apt install software-properties-common -y
   sudo add-apt-repository ppa:deadsnakes/ppa -y
@@ -262,35 +194,22 @@ if [[ "$INSTALL_PYTHON38" -eq 1 ]]; then
 
   echo ---------- Installing python 3.8
   # https://www.linuxcapable.com/how-to-install-python-3-8-on-ubuntu-22-04-lts/
-  apt update && sudo apt upgrade
-  apt install software-properties-common -y
-  add-apt-repository ppa:deadsnakes/ppa -y
-  apt update
-  apt install python3.8 -y
-  apt install python3.8-dev -y
-  apt install python3.8-venv -y
-  apt install python3.8-distutils -y
-  apt install python3.8-lib2to3 -y
-  apt install python3.8-gdbm -y
-  apt install python3.8-tk -y
-
-  # with sudo version
-  #  sudo apt update && sudo apt upgrade
-  #  sudo apt install software-properties-common -y
-  #  sudo add-apt-repository ppa:deadsnakes/ppa -y
-  #  sudo apt update
-  #  sudo apt install python3.8 -y
-  #  sudo apt install python3.8-dev -y
-  #  sudo apt install python3.8-venv -y
-  #  sudo apt install python3.8-distutils -y
-  #  sudo apt install python3.8-lib2to3 -y
-  #  sudo apt install python3.8-gdbm -y
-  # sudo apt install python3.8-tk -y
+  sudo apt update && sudo apt upgrade
+  sudo apt install software-properties-common -y
+  sudo add-apt-repository ppa:deadsnakes/ppa -y
+  sudo apt update
+  sudo apt install python3.8 -y
+  sudo apt install python3.8-dev -y
+  sudo apt install python3.8-venv -y
+  sudo apt install python3.8-distutils -y
+  sudo apt install python3.8-lib2to3 -y
+  sudo apt install python3.8-gdbm -y
+  sudo apt install python3.8-tk -y
 
 fi
 
 if [[ "$INSTALL_PYTHON39" -eq 1 ]]; then
-  echo ---------- Installing python 3.8
+  echo ---------- Installing python 3.9
   # https://www.linuxcapable.com/how-to-install-python-3-9-on-ubuntu-22-04-lts/
   sudo apt update && sudo apt upgrade
   sudo apt install software-properties-common -y
@@ -303,44 +222,30 @@ if [[ "$INSTALL_PYTHON39" -eq 1 ]]; then
   sudo apt install python3.9-lib2to3 -y
   sudo apt install python3.9-gdbm -y
   sudo apt install python3.9-tk -y
-
-  # install with sudo
-#  sudo apt update && sudo apt upgrade
-#  sudo apt install software-properties-common -y
-#  sudo add-apt-repository ppa:deadsnakes/ppa -y
-#  sudo apt update
-#  sudo apt install python3.9 -y
-#  sudo apt install python3.9-dev -y
-#  sudo apt install python3.9-venv -y
-#  sudo apt install python3.9-distutils -y
-#  sudo apt install python3.9-lib2to3 -y
-#  sudo apt install python3.9-gdbm -y
-#  sudo apt install python3.9-tk -y
 fi
 
 
 if [[ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]]; then
   echo ---------- Installing mysql dev dependencies
-  apt install -y libmysqlclient-dev
+  sudo apt install -y libmysqlclient-dev
   wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
-  dpkg -i libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+  sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
   rm libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
 fi
 
 if [[ "$INSTALL_PIP3" -eq 1 ]]; then
   echo ---------- Installing pip3
-  apt install -y python3-pip
+  sudo apt install -y python3-pip
 fi
 
 if [[ "$INSTALL_NGINX" -eq 1 ]]; then
   echo ---------- Installing nginx
-  apt install -y nginx
-
+  sudo apt install -y nginx
 fi
 
 if [[ "$INSTALL_VENV" -eq 1 ]]; then
   echo ---------- Installing VENV
-  apt install -y python3-venv
+  sudo apt install -y python3-venv
 fi
 
 if [[ "$INSTALL_AWS_CLI" -eq 1 ]]; then
@@ -367,21 +272,17 @@ fi
 
 if [[ "$INSTALL_KUBECTL" -eq 1 ]]; then
   echo ---------- Installing KUBECTL
-  # https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux
-  apt-get update && sudo apt-get install -y apt-transport-https gnupg2
-  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-  echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
-  apt-get update
-  apt-get install -y kubectl
+  # https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+  snap install kubectl --classic
   # auto completion
-  kubectl completion bash | tee /etc/bash_completion.d/kubectl
+  kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl
 
   # manual install with sudo
-#  	sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2
+#  	sudo apt update && sudo apt install -y apt-transport-https gnupg2
 #	curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 #	echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-#	sudo apt-get update
-#	sudo apt-get install -y kubectl
+#	sudo apt update
+#	sudo apt install -y kubectl
   # ge3neric install as binary download
 #	curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
 #	chmod +x ./kubectl
@@ -394,107 +295,90 @@ fi
 
 if [[ "$INSTALL_ANSIBLE" -eq 1 ]]; then
   echo ---------- Installing ansible
-  apt install -y ansible
+  sudo apt install -y ansible
 fi
 
 if [[ "$INSTALL_TERRAFORM" -eq 1 ]]; then
+  # https://nextgentips.com/2022/06/17/how-to-install-terraform-on-ubuntu-22-04/
   echo ---------- Installing terraform
-  # https://www.terraform.io/docs/cli/install/apt.html
-  # with sudo
-  # curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-  # sudo apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-  # sudo apt install terraform
-  curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
-  apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-  apt install -y terraform
+  sudo apt install -y gnupg software-properties-common curl
+  curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+  sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+  sudo apt update
+  sudo apt install -y terraform
 fi
 
 if [[ "$INSTALL_HELM" -eq 1 ]]; then
   echo ---------- Installing helm
-  # https://helm.sh/docs/intro/install/
-  #  $ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-  #  $ chmod 700 get_helm.sh
-  #  $ ./get_helm.sh
-  curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+  # https://www.how2shout.com/linux/how-to-install-helm-on-ubuntu-22-04-lts-jammy/
+  snap install helm --classic
 fi
 
 if [[ "$INSTALL_NODEJS_NPM" -eq 1 ]]; then
   echo ---------- Installing nodejs npm
   # https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/
-  # curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-  curl -sL https://deb.nodesource.com/setup_16.x | bash -
-  apt install -y nodejs
+  curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+  sudo apt install -y nodejs
 fi
 
 if [[ "$INSTALL_ANGULAR_CLI" -eq 1 ]]; then
   echo ---------- Installing Angular CLI
-  #sudo npm install -g @angular/cli
-  printf "\n" | npm install -g @angular/cli
-fi
-
-if [[ "$INSTALL_SERVERLESS" -eq 1 ]]; then
-  echo ---------- Installing serverless
-  npm install -g serverless
-fi
-
-if [[ "$INSTALL_JDK" -eq 1 ]]; then
-  echo ---------- Installing JDK11
-  sudo apt install -y openjdk-11-jdk-headless
+  sudo npm install -g @angular/cli
 fi
 
 if [[ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]]; then
   echo ---------- Adding SSH key for git
   DO_SSH=0
-  if [[ -e /home/${MYUSER}/.ssh/id_rsa ]]; then
+  if [[ -e ~/.ssh/id_rsa ]]; then
     read -p 'File ~/.ssh/id_rsa already exists! Do you want do delete it? [Y/n]: ' CH
     if [[ "$CH" = '' ]] || [[ "$CH" = 'y' ]] || [[ "$CH" = 'Y' ]]; then
-      sudo -u ${MYUSER} rm ~/.ssh/id_rsa*
+      rm ~/.ssh/id_rsa*
       DO_SSH=1
     fi
   else
     DO_SSH=1
   fi
   if [[ "$DO_SSH" -eq 1 ]]; then
-    sudo -u ${MYUSER} ssh-keygen -f /home/${MYUSER}/.ssh/id_rsa -P ''
-    eval $(sudo -u ${MYUSER} ssh-agent)
-    ssh-add /home/${MYUSER}/.ssh/id_rsa
+    ssh-keygen -f ~/.ssh/id_rsa -P ''
+    eval $(ssh-agent)
+    ssh-add ~/.ssh/id_rsa
   fi
 fi
 
 if [[ "$ADD_ADDITIONAL_SSH_KEY_FOR_GIT" -eq 1 ]]; then
   echo ---------- Adding additional SSH key for git
   DO_SSH=0
-  if [[ -e /home/${MYUSER}/.ssh/${ADDITIONAL_SSH_KEY_NAME} ]]; then
+  if [[ -e ~/.ssh/${ADDITIONAL_SSH_KEY_NAME} ]]; then
     read -p "File ~/.ssh/${ADDITIONAL_SSH_KEY_NAME} already exists! Do you want do delete it? [Y/n]: " CH
     if [[ "$CH" = '' ]] || [[ "$CH" = 'y' ]] || [[ "$CH" = 'Y' ]]; then
-      sudo -u ${MYUSER} rm "/home/${MYUSER}/.ssh/${ADDITIONAL_SSH_KEY_NAME}*"
+      rm "~/.ssh/${ADDITIONAL_SSH_KEY_NAME}*"
       DO_SSH=1
     fi
   else
     DO_SSH=1
   fi
   if [[ "${DO_SSH}" -eq 1 ]]; then
-    sudo -u ${MYUSER} ssh-keygen -f /home/${MYUSER}/.ssh/${ADDITIONAL_SSH_KEY_NAME} -P ''
-    eval $(sudo -u ${MYUSER} ssh-agent)
-    ssh-add /home/${MYUSER}/.ssh/${ADDITIONAL_SSH_KEY_NAME}
+    ssh-keygen -f /home/${USER}/.ssh/${ADDITIONAL_SSH_KEY_NAME} -P ''
+    eval $(ssh-agent)
+    ssh-add ~/.ssh/${ADDITIONAL_SSH_KEY_NAME}
   fi
 fi
 
 if [[ "$CREATE_ALIASES" -eq 1 ]]; then
   echo ---------- Creating aliases
-  su - ${MYUSER} -c "echo '${BASH_ALIASES}' > /home/${MYUSER}/.bash_aliases"
+  echo '${BASH_ALIASES}' > /home/${USER}/.bash_aliases
 fi
 
 if [[ "$CREATE_SSH_CONFIG_FILE" -eq 1 ]]; then
   echo ---------- Creating ssh .config example
-  su - ${MYUSER} -c "echo '${SSH_CONFIG}' > /home/${MYUSER}/.ssh/config"
+  echo '${SSH_CONFIG}' > /home/${USER}/.ssh/config
 fi
 
 if [[ "$INSTALL_CHROME" -eq 1 ]]; then
   echo ---------- Installing latest Chrome
   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-  dpkg -i google-chrome-stable_current_amd64.deb
-  apt install -y -f
+  sudo dpkg -i google-chrome-stable_current_amd64.deb
+  sudo apt install -y -f
   rm google-chrome-stable_current_amd64.deb
 fi
 
@@ -510,7 +394,7 @@ if [[ "$INSTALL_PYCHARM_PRO" -eq 1 ]]; then
   wget https://download.jetbrains.com/python/pycharm-professional-2020.1.5.tar.gz
   tar -xzf pycharm-professional-2020.1.5.tar.gz 
   mv pycharm-2020.1.5 /opt/pycharm
-  chown -R ${MYUSER}:${MYUSER} /opt/pycharm
+  chown -R ${USER}:${USER} /opt/pycharm
   rm pycharm-professional-2020.1.5.tar.gz
 fi
 
@@ -519,13 +403,13 @@ if [[ "$INSTALL_VSCODE" -eq 1 ]]; then
   snap install code --classic
 fi
 
-if [[ "$INSTALL_VSCODE" -eq 1 ]]; then
+if [[ "$INSTALL_TEAMS" -eq 1 ]]; then
   echo ---------- Installing teams
   # https://pureinfotech.com/install-microsoft-teams-linux/
   curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
   sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
-  apt update
-  apt install -y teams
+  sudo apt update
+  sudo apt install -y teams
 fi
 
 if [[ "$INSTALL_SELENIUM" -eq 1 ]]; then
@@ -536,51 +420,41 @@ if [[ "$INSTALL_SELENIUM" -eq 1 ]]; then
   wget -P /opt/selenium https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
   mv /opt/selenium/selenium-server-standalone-3.141.59.jar /opt/selenium/selenium-server-standalone.jar
   # install chromedriver
-  cd /home/"$MYUSER"/Downloads
+  cd /home/"$USER"/Downloads
   wget https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_linux64.zip
   unzip chromedriver_linux64.zip
   mv chromedriver /usr/bin/
   rm chromedriver_linux64.zip
   # install java jdk
-  apt install -y default-jdk
+  sudo apt install -y default-jdk
   # install xvfb
-  apt install -y xvfb
-fi
-
-if [[ "$INSTALL_CHROMIUM" -eq 1 ]]; then
-  echo ---------- Installing Chromium
-  apt install -y chromium-browser
+  sudo apt install -y xvfb
 fi
 
 if [[ "$INSTALL_SUBLIME" -eq 1 ]]; then
   echo ---------- Installing Sublime
-#  snap install sublime-text --classic
-  # https://www.howtoforge.com/installation-of-sublime-text-on-ubuntu-20-04/
-  # https://www.sublimetext.com/docs/linux_repositories.html
-  wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | apt-key add -
-  echo "deb https://download.sublimetext.com/ apt/stable/" | tee /etc/apt/sources.list.d/sublime-text.list
-  apt-get update
-  apt-get install sublime-text
+  # https://www.how2shout.com/linux/2-ways-to-install-sublime-text-3-on-ubuntu-22-04-20-04/
+  sudo snap install sublime-text --classic
 fi
 
 if [[ "$INSTALL_KRITA" -eq 1 ]]; then
   echo ---------- Installing Krita
-  apt install -y krita
+  sudo apt install -y krita
 fi
 
 if [[ "$INSTALL_INKSCACE" -eq 1 ]]; then
   echo ---------- Installing Incspace
-  apt install -y inkscape
+  sudo apt install -y inkscape
 fi
 
 if [[ "$INSTALL_XOURNAL" -eq 1 ]]; then
   echo ---------- Installing Xournal
-  apt install -y xournal
+  sudo apt install -y xournal
 fi
 
 if [[ "$INSTALL_AUDACITY" -eq 1 ]]; then
   echo ---------- Installing Audacity
-  apt install -y audacity
+  sudo apt install -y audacity
 fi
 
 if [[ "$INSTALL_POSTMAN" -eq 1 ]]; then
@@ -590,52 +464,52 @@ fi
 
 if [[ "$INSTALL_FLAMESHOT" -eq 1 ]]; then
   echo ---------- Installing Shutter
-  apt install -y flameshot
+  sudo apt install -y flameshot
 fi
 
 if [[ "$INSTALL_FORTICLIENT_VPN" -eq 1 ]]; then
   echo ---------- Installing Forticlient VPN
   wget https://hadler.me/files/forticlient-sslvpn_4.4.2333-1_amd64.deb
-  dpkg -i forticlient-sslvpn_4.4.2333-1_amd64.deb
+  sudo dpkg -i forticlient-sslvpn_4.4.2333-1_amd64.deb
   rm forticlient-sslvpn_4.4.2333-1_amd64.deb
 fi
 
 if [[ "$INSTALL_DOCKER" -eq 1 ]]; then
   echo ---------- Installing Docker
   curl -fsSL https://get.docker.com -o get-docker.sh
-  sh get-docker.sh
+  sudo sh get-docker.sh
   rm get-docker.sh
-  usermod -aG docker ${MYUSER}
+  usermod -aG docker ${USER}
 fi
 
 if [[ "$INSTALL_DOCKER_COMPOSE" -eq 1 ]]; then
   echo ---------- Installing Docker Compose
-  curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   chmod +x /usr/local/bin/docker-compose
 fi
 
 if [[ "$INSTALL_DROPBOX" -eq 1 ]]; then
   echo ---------- Installing Dropbox
   wget https://linux.dropbox.com/packages/ubuntu/dropbox_2020.03.04_amd64.deb
-  dpkg -i dropbox_2020.03.04_amd64.deb
-  apt install -y -f
+  sudo dpkg -i dropbox_2020.03.04_amd64.deb
+  sudo apt install -y -f
   rm dropbox_2020.03.04_amd64.deb
 fi
 
 if [[ "$INSTALL_YOUTUBE_DL" -eq 1 ]]; then
   echo ---------- Installing youtube-dl
-  apt install -y ffmpeg
-  sudo -u ${MYUSER} pip3 install youtube-dl
+  sudo apt install -y ffmpeg
+  pip3 install youtube-dl
 fi
 
 if [[ "$INSTALL_VLC" -eq 1 ]]; then
   echo ---------- Installing vlc
-  apt install -y vlc
+  sudo apt install -y vlc
 fi
 
 if [[ "$INSTALL_MPV" -eq 1 ]]; then
   echo ---------- Installing mpv
-  apt install -y mpv
+  sudo apt install -y mpv
 fi
 
 if [[ "$INSTALL_ACESTREAMPLAYER" -eq 1 ]]; then
@@ -645,121 +519,95 @@ fi
 
 if [[ "$INSTALL_SAMBA" -eq 1 ]]; then
   echo ---------- Installing Samba
-  sudo -u ${MYUSER} mkdir -p "${SAMBA_SHARE_DIR}"
-  apt install -y samba
+  mkdir -p "${SAMBA_SHARE_DIR}"
+  sudo apt install -y samba
   echo --- creating backup for samba config
-  cp /etc/samba/smb.conf /etc/samba/smb-bk.conf
-  echo "
+  sudo cp /etc/samba/smb.conf /etc/samba/smb-bk.conf
+  sudo echo "
 [${SAMBA_SHARE_NAME}]
     comment = ubuntu share
     path = ${SAMBA_SHARE_DIR}
     read only = ${SAMBA_SHARE_READONLY}
     browsable = yes
-" >>/etc/samba/smb.conf
+" sudo tee /etc/samba/smb.conf
   service smbd restart
   (
     echo "${SAMBA_SHARE_PASSWORD}"
     echo "${SAMBA_SHARE_PASSWORD}"
-  ) | smbpasswd -s -a ${MYUSER}
+  ) | smbpasswd -s -a ${USER}
 fi
 
 if [[ "$INSTALL_FREECAD" -eq 1 ]]; then
   echo ---------- Installing FreeCAD
-  wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.4/FreeCAD_0.18-16146-rev1-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage -O /opt/freecad.AppImage
-  chmod +x /opt/freecad.AppImage
-
-  echo "[Desktop Entry]
-Type=Application
-Terminal=false
-Exec="/opt/freecad.AppImage"
-Name="FreeCAD"
-Comment=Custom launcher
-Icon=/usr/share/icons/Adwaita/48x48/legacy/input-tablet.png" > /usr/share/applications/freecad.desktop
+  sudo apt install -y freecad
 fi
 
 if [[ "$INSTALL_HYDROGEN" -eq 1 ]]; then
   echo ---------- Installing Hydrogen
-  apt install -y hydrogen
+  sudo apt install -y hydrogen
 fi
 
 if [[ "$INSTALL_CALIBRE" -eq 1 ]]; then
   echo "---------- Installing Calibre (ebook manager)"
-  wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sh /dev/stdin
+  sudo apt install -y calibre
 fi
 
 if [[ "$INSTALL_BLENDER" -eq 1 ]]; then
   echo "---------- Installing Blender (3D / video editor)"
-  apt install -y blender
+  sudo apt install -y blender
 fi
 
 if [[ "$INSTALL_OPENSHOT" -eq 1 ]]; then
   echo "---------- Installing Openshot (video editor)"
-  apt install -y openshot-qt
+  sudo apt install -y openshot-qt
 fi
 
 if [[ "$INSTALL_MYSQL_WORKBENCH" -eq 1 ]]; then
   echo ---------- Installing MySQL Workbench
   wget https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community_8.0.30-1ubuntu22.04_amd64.deb
-  dpkg -i mysql-workbench-community_8.0.30-1ubuntu22.04_amd64.deb
-  apt install -y -f
+  sudo dpkg -i mysql-workbench-community_8.0.30-1ubuntu22.04_amd64.deb
+  sudo apt install -y -f
   rm mysql-workbench-community_8.0.30-1ubuntu22.04_amd64.deb
 fi
 
 if [[ "$INSTALL_MYSQL_PGADMIN" -eq 1 ]]; then
   echo ---------- Installing MySQL Workbench
-  # original install with sudo - https://www.pgadmin.org/download/pgadmin-4-apt/
-  # sudo curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
-  # sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
-  # sudo apt install pgadmin4-desktop
-  curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | apt-key add
-  sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
-  apt install pgadmin4-desktop
+  curl -fsSL https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/pgadmin.gpg
+  sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list'
+  sudo apt update && sudo apt upgrade
+  sudo apt install pgadmin4-desktop
 fi
 
 if [[ "$INSTALL_MONGODB_COMPASS" -eq 1 ]]; then
   echo ---------- Installing Mongo Compass
-  wget https://downloads.mongodb.com/compass/mongodb-compass_1.20.4_amd64.deb
-  dpkg -i mongodb-compass_1.20.4_amd64.deb
-  apt install -y -f
-  rm mongodb-compass_1.20.4_amd64.deb
+  wget https://downloads.mongodb.com/compass/mongodb-compass_1.33.1_amd64.deb
+  sudo dpkg -i mongodb-compass_1.33.1_amd64.deb
+  sudo apt install -y -f
+  rm mongodb-compass_1.33.1_amd64.deb
 fi
 
 if [[ "$INSTALL_MONGOSH" -eq 1 ]]; then
   echo ---------- Installing Mongosh cli
-  apt install -y gnupg
-  wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add -
-  echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-  apt update
+  sudo apt install gnupg
+  wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+  echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+  sudo apt update
   sudo apt install -y mongocli
-
-  # install with sudo
-#  sudo apt-get install gnupg
-#  wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
-#  echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-#  sudo apt-get update
-#  sudo apt-get install -y mongocli
 
 fi
 
 if [[ ${ADD_NEW_TEXT_FILE_TEMPLATE} -eq 1 ]]; then
-  sudo -u ${MYUSER} touch /home/${MYUSER}/Templates/New\ File.txt
+  sudo -u ${USER} touch /home/${USER}/Templates/New\ File.txt
 fi
 
 if [[ "$INSTALL_MYSQL_DOCKER" -eq 1 ]]; then
   echo ---------- Installing MySQL Docker
   docker run --name mysql-container -e MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" -e MYSQL_ROOT_HOST=172.17.0.1 \
-    -p 3306:3306 -v /home/${MYUSER}/mysql:/var/lib/mysql --restart=unless-stopped -d mysql/mysql-server:5.7 \
+    -p 3306:3306 -v /home/${USER}/mysql:/var/lib/mysql --restart=unless-stopped -d mysql/mysql-server:5.7 \
     --character-set-server=utf8 --collation-server=utf8_general_ci
-#  sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/.config/autostart
-#  su - ${MYUSER} -c "echo '[Desktop Entry]
-#Name=MySQL
-#Exec=docker start mysql-container
-#Type=Application
-#X-GNOME-Autostart-enabled=true
-#' > /home/${MYUSER}/.config/autostart/mysql-docker.desktop"
 fi
 
-if [[ "$INSTALL_MYSQL_DOCKER" -eq 1 ]]; then
+if [[ "$INSTALL_POSTGRES_DOCKER" -eq 1 ]]; then
   echo ---------- Installing Postgres Docker
   docker run -d \
     --name postgres-container \
@@ -767,8 +615,9 @@ if [[ "$INSTALL_MYSQL_DOCKER" -eq 1 ]]; then
     -e POSTGRES_PASSWORD=postgres \
     -e PGDATA=/var/lib/postgresql/data/pgdata \
     -p 5432:5432 \
-    -v /home/${MYUSER}/postgres/data:/var/lib/postgresql/data \
-    postgres
+    -v /home/${USER}/postgres/data:/var/lib/postgresql/data \
+    --restart=unless-stopped \
+    -d postgres
 fi
 
 if [[ "$INSTALL_MONGODB_DOCKER" -eq 1 ]]; then
@@ -777,17 +626,10 @@ if [[ "$INSTALL_MONGODB_DOCKER" -eq 1 ]]; then
   docker run --name mongodb-container \
      -e MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER \
      -e MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PWD \
-     -v /home/${MYUSER}/mongodb:/data/db \
+     -v /home/${USER}/mongodb:/data/db \
      -p 27017:27017 \
      --restart=unless-stopped \
      -d mongo:3.6-xenial
-#  sudo -u ${MYUSER} mkdir -p /home/${MYUSER}/.config/autostart
-#  su - ${MYUSER} -c "echo '[Desktop Entry]
-#Name=MongoDB
-#Exec=docker start mongodb-container
-#Type=Application
-#X-GNOME-Autostart-enabled=true
-#' > /home/${MYUSER}/.config/autostart/mongodb-docker.desktop"
 fi
 
 # final prompts and notices
@@ -799,7 +641,3 @@ fi
 if [[ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]]; then
   echo '- Please set SSH public key in Bitbucket and Github!'
 fi
-
-# todo
-# Visual Studio Code is unable to watch for file changes in this large workspace
-# https://code.visualstudio.com/docs/setup/linux#_visual-studio-code-is-unable-to-watch-for-file-changes-in-this-large-workspace-error-enospc
