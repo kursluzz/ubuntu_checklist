@@ -615,9 +615,16 @@ fi
 
 if [[ "$INSTALL_MYSQL_DOCKER" -eq 1 ]]; then
   echo ---------- Installing MySQL Docker
-  docker run --name mysql-container -e MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" -e MYSQL_ROOT_HOST=172.17.0.1 \
-    -p 3306:3306 -v /home/${USER}/mysql:/var/lib/mysql --restart=unless-stopped -d mysql/mysql-server:5.7 \
-    --character-set-server=utf8 --collation-server=utf8_general_ci
+  docker run -d \
+    --name mysql-container \
+    --character-set-server=utf8 \
+    --collation-server=utf8_general_ci \
+    -e MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" \
+    -e MYSQL_ROOT_HOST=172.17.0.1 \
+    -p 3306:3306 \
+    -v /home/${USER}/mysql:/var/lib/mysql \
+    --restart=unless-stopped \
+    mysql/mysql-server:5.7
 fi
 
 if [[ "$INSTALL_POSTGRES_DOCKER" -eq 1 ]]; then
@@ -630,19 +637,19 @@ if [[ "$INSTALL_POSTGRES_DOCKER" -eq 1 ]]; then
     -p 5432:5432 \
     -v /home/${USER}/postgres/data:/var/lib/postgresql/data \
     --restart=unless-stopped \
-    -d postgres
+    postgres
 fi
 
 if [[ "$INSTALL_MONGODB_DOCKER" -eq 1 ]]; then
   # https://hub.docker.com/_/mongo
   echo ---------- Installing MongoDB
-  docker run --name mongodb-container \
+  docker run -d --name mongodb-container \
      -e MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER \
      -e MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PWD \
      -v /home/${USER}/mongodb:/data/db \
      -p 27017:27017 \
      --restart=unless-stopped \
-     -d mongo:3.6-xenial
+     mongo:3.6-xenial
 fi
 
 # final prompts and notices
