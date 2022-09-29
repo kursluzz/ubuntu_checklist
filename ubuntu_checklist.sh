@@ -372,12 +372,12 @@ fi
 
 if [[ "$CREATE_ALIASES" -eq 1 ]]; then
   echo ---------- Creating aliases
-  echo '${BASH_ALIASES}' > /home/${USER}/.bash_aliases
+  echo ${BASH_ALIASES} > /home/${USER}/.bash_aliases
 fi
 
 if [[ "$CREATE_SSH_CONFIG_FILE" -eq 1 ]]; then
   echo ---------- Creating ssh .config example
-  echo '${SSH_CONFIG}' > /home/${USER}/.ssh/config
+  echo ${SSH_CONFIG} > /home/${USER}/.ssh/config
 fi
 
 if [[ "$INSTALL_CHROME" -eq 1 ]]; then
