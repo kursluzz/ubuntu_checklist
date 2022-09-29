@@ -174,7 +174,7 @@ if [[ "$INSTALL_MINICONDA" -eq 1 ]]; then
   wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/Downloads/miniconda.sh
   bash ~/Downloads/miniconda.sh -b
   $HOME/miniconda3/bin/conda init
-  conda config --set auto_activate_base false
+  $HOME/miniconda3/bin/conda config --set auto_activate_base false
   rm ~/Downloads/miniconda.sh
 fi
 
