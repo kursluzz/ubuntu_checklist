@@ -99,14 +99,15 @@ Host bitbucket.org-id_rsa2
 BASH_ALIASES='alias git-branch-sort="git branch -a --sort=-committerdate"
 '
 
-sudo apt -y update
-sudo apt -y upgrade
-
-cd /home/${USER}/Downloads
-
+# overwrite settings from another file
 if [[ -f ubuntu_checklist_config.sh ]]; then
   source ubuntu_checklist_config.sh
 fi
+
+sudo apt update
+sudo apt -y upgrade
+
+cd /home/${USER}/Downloads
 
 mkdir -p /home/${USER}/Downloads
 mkdir -p /home/${USER}/.local/bin
