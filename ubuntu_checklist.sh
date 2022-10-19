@@ -46,6 +46,7 @@ INSTALL_AUDACITY=1
 INSTALL_POSTMAN=1
 INSTALL_FLAMESHOT=1
 INSTALL_FORTICLIENT_VPN=1
+INSTALL_OPENVPN=1
 INSTALL_DOCKER=1
 INSTALL_DOCKER_COMPOSE=1
 INSTALL_MYSQL_WORKBENCH=1
@@ -487,6 +488,16 @@ if [[ "$INSTALL_FORTICLIENT_VPN" -eq 1 ]]; then
   wget https://hadler.me/files/forticlient-sslvpn_4.4.2333-1_amd64.deb
   sudo dpkg -i forticlient-sslvpn_4.4.2333-1_amd64.deb
   rm forticlient-sslvpn_4.4.2333-1_amd64.deb
+fi
+
+if [[ "$INSTALL_OPENVPN" -eq 1 ]]; then
+  echo ---------- Installing Open-VPN
+  # https://community.openvpn.net/openvpn/wiki/OpenVPN3Linux?_gl=1*1rz24vi*_ga*NDk4Nzc2MjU1LjE2NjU1NTk1NzE.*_ga_SPGM8Y8Y79*MTY2NjE3NTMyMi4yLjEuMTY2NjE3NTMzMy4wLjAuMA..&_ga=2.125064526.555942045.1666175322-498776255.1665559571
+  sudo apt install -y apt-transport-https
+  curl -fsSL https://swupdate.openvpn.net/repos/openvpn-repo-pkg-key.pub | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/openvpn-repo-pkg-keyring.gpg
+  curl -fsSL https://swupdate.openvpn.net/community/openvpn3/repos/openvpn3-jammy.list | sudo tee /etc/apt/sources.list.d/openvpn3.list
+  sudo apt update
+  sudo apt install -y openvpn3
 fi
 
 if [[ "$INSTALL_DOCKER" -eq 1 ]]; then
