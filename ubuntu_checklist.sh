@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # 1. Set what you want to install 1 for yes, 0 for no
+INSTALL_SNAP=1
 INSTALL_CURL=1
 INSTALL_VIM=1
 INSTALL_WAKEONLAN=1
@@ -18,7 +19,6 @@ INSTALL_PYTHON39=1
 INSTALL_MYSQL_PYTHON_DEPENDENCIES=1
 INSTALL_PIP3=1
 INSTALL_VENV=1
-INSTALL_NGINX=1
 INSTALL_AWS_CLI=1
 INSTALL_AWS_EB=1
 INSTALL_EKSCTL=1
@@ -37,7 +37,6 @@ INSTALL_PYCHARM=1
 INSTALL_PYCHARM_PRO=0
 INSTALL_VSCODE=1
 INSTALL_TEAMS=1
-INSTALL_SELENIUM=1
 INSTALL_SUBLIME=1
 INSTALL_KRITA=1
 INSTALL_INKSCACE=1
@@ -100,6 +99,8 @@ Host bitbucket.org-id_rsa2
 BASH_ALIASES='alias git-branch-sort="git branch -a --sort=-committerdate"
 '
 
+OS=$(lsb_release -is)
+
 # overwrite settings from another file
 if [[ -f ubuntu_checklist_config.sh ]]; then
   source ubuntu_checklist_config.sh
@@ -112,6 +113,13 @@ cd /home/${USER}/Downloads
 
 mkdir -p /home/${USER}/Downloads
 mkdir -p /home/${USER}/.local/bin
+
+if [[ "$INSTALL_SNAP" -eq 1 ]]; then
+  echo ---------- Installing snap
+  sudo apt update
+  sudo apt install snapd
+  sudo snap install core
+fi
 
 if [[ "$INSTALL_CURL" -eq 1 ]]; then
   echo ---------- Installing curl
@@ -135,7 +143,9 @@ fi
 
 if [[ "$INSTALL_GRUB_CUSTOMIZER" -eq 1 ]]; then
   echo ---------- Installing grub-customizer
-  sudo add-apt-repository -y ppa:danielrichter2007/grub-customizer
+  if [[ ! "$OS" = "Debian" ]]; then
+    sudo add-apt-repository -y ppa:danielrichter2007/grub-customizer
+  fi
   sudo apt install -y grub-customizer
 fi
 
@@ -182,70 +192,100 @@ fi
 if [[ "$INSTALL_PYTHON37" -eq 1 ]]; then
   echo ---------- Installing python 3.7
   # https://www.linuxcapable.com/how-to-install-python-3-7-on-debian-11-bullseye/
-  sudo apt update && sudo apt upgrade
-  sudo apt install software-properties-common -y
-  sudo add-apt-repository ppa:deadsnakes/ppa -y
-  sudo apt update
-  sudo apt install python3.7 -y
-  sudo apt install python3.7-dev -y
-  sudo apt install python3.7-venv -y
-  sudo apt install python3.7-distutils -y
-  sudo apt install python3.7-lib2to3 -y
-  sudo apt install python3.7-gdbm -y
-  sudo apt install python3.7-tk -y
+  if [[ "$OS" = "Debian" ]]; then
+    wget https://www.python.org/ftp/python/3.7.13/Python-3.7.13.tar.xz
+    tar -xf Python-3.7.13.tar.xz
+    sudo mv Python-3.7.13 /opt/
+    sudo apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libsqlite3-dev libreadline-dev libffi-dev curl libbz2-dev -y
+    cd /opt/Python-3.7.13/
+    ./configure --enable-optimizations --enable-shared
+    make
+    make -j 6
+    sudo make altinstall
+    sudo ldconfig /opt/Python-3.7.13
+    cd ~/Downloads
+  else
+    sudo apt update && sudo apt upgrade
+    sudo apt install software-properties-common -y
+    sudo add-apt-repository ppa:deadsnakes/ppa -y
+    sudo apt update
+    sudo apt install python3.7 -y
+    sudo apt install python3.7-dev -y
+    sudo apt install python3.7-venv -y
+    sudo apt install python3.7-distutils -y
+    sudo apt install python3.7-lib2to3 -y
+    sudo apt install python3.7-gdbm -y
+    sudo apt install python3.7-tk -y
+  fi
+
 fi
 
 if [[ "$INSTALL_PYTHON38" -eq 1 ]]; then
 
   echo ---------- Installing python 3.8
-  # https://www.linuxcapable.com/how-to-install-python-3-8-on-ubuntu-22-04-lts/
-  sudo apt update && sudo apt upgrade
-  sudo apt install software-properties-common -y
-  sudo add-apt-repository ppa:deadsnakes/ppa -y
-  sudo apt update
-  sudo apt install python3.8 -y
-  sudo apt install python3.8-dev -y
-  sudo apt install python3.8-venv -y
-  sudo apt install python3.8-distutils -y
-  sudo apt install python3.8-lib2to3 -y
-  sudo apt install python3.8-gdbm -y
-  sudo apt install python3.8-tk -y
-
+  # https://www.linuxcapable.com/how-to-install-python-3-8-on-debian-11-bullseye/
+  if [[ "$OS" = "Debian" ]]; then
+    sudo apt update && sudo apt upgrade
+    wget https://www.python.org/ftp/python/3.8.12/Python-3.8.12.tar.xz
+    tar -xf Python-3.8.12.tar.xz
+    sudo mv Python-3.8.12 /opt/
+    sudo apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libsqlite3-dev libreadline-dev libffi-dev curl libbz2-dev -y
+    cd /opt/Python-3.8.12/
+    ./configure --enable-optimizations --enable-shared
+    make
+    make -j 6
+    sudo make altinstall
+    sudo ldconfig /opt/Python3.8.12
+    cd ~/Downloads
+  else  
+    # https://www.linuxcapable.com/how-to-install-python-3-8-on-ubuntu-22-04-lts/
+    sudo apt update && sudo apt upgrade
+    sudo apt install software-properties-common -y
+    sudo add-apt-repository ppa:deadsnakes/ppa -y
+    sudo apt update
+    sudo apt install python3.8 -y
+    sudo apt install python3.8-dev -y
+    sudo apt install python3.8-venv -y
+    sudo apt install python3.8-distutils -y
+    sudo apt install python3.8-lib2to3 -y
+    sudo apt install python3.8-gdbm -y
+    sudo apt install python3.8-tk -y
+  fi
 fi
 
 if [[ "$INSTALL_PYTHON39" -eq 1 ]]; then
-  echo ---------- Installing python 3.9
-  # https://www.linuxcapable.com/how-to-install-python-3-9-on-ubuntu-22-04-lts/
-  sudo apt update && sudo apt upgrade
-  sudo apt install software-properties-common -y
-  sudo add-apt-repository ppa:deadsnakes/ppa -y
-  sudo apt update
-  sudo apt install python3.9 -y
-  sudo apt install python3.9-dev -y
-  sudo apt install python3.9-venv -y
-  sudo apt install python3.9-distutils -y
-  sudo apt install python3.9-lib2to3 -y
-  sudo apt install python3.9-gdbm -y
-  sudo apt install python3.9-tk -y
+  if [[ ! "$OS" = "Debian" ]]; then
+    echo ---------- Installing python 3.9
+    # https://www.linuxcapable.com/how-to-install-python-3-9-on-ubuntu-22-04-lts/
+    sudo apt update && sudo apt upgrade
+    sudo apt install software-properties-common -y
+    sudo add-apt-repository ppa:deadsnakes/ppa -y
+    sudo apt update
+    sudo apt install python3.9 -y
+    sudo apt install python3.9-dev -y
+    sudo apt install python3.9-venv -y
+    sudo apt install python3.9-distutils -y
+    sudo apt install python3.9-lib2to3 -y
+    sudo apt install python3.9-gdbm -y
+    sudo apt install python3.9-tk -y
+  fi
 fi
-
 
 if [[ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]]; then
   echo ---------- Installing mysql dev dependencies
-  sudo apt install -y libmysqlclient-dev
-  wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
-  sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
-  rm libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+  if [[ "$OS" = "Debian" ]]; then
+    sudo apt -y install default-libmysqlclient-dev libssl-dev
+  else
+    sudo apt install -y libmysqlclient-dev
+    wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+    sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+    rm libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb  
+  fi
 fi
 
 if [[ "$INSTALL_PIP3" -eq 1 ]]; then
   echo ---------- Installing pip3
   sudo apt install -y python3-pip
-fi
-
-if [[ "$INSTALL_NGINX" -eq 1 ]]; then
-  echo ---------- Installing nginx
-  sudo apt install -y nginx
 fi
 
 if [[ "$INSTALL_VENV" -eq 1 ]]; then
@@ -305,22 +345,22 @@ if [[ "$INSTALL_ANSIBLE" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_TERRAFORM" -eq 1 ]]; then
-  # https://nextgentips.com/2022/06/17/how-to-install-terraform-on-ubuntu-22-04/
+  # https://developer.hashicorp.com/terraform/cli/install/apt
   echo ---------- Installing terraform
-  sudo apt install -y gnupg software-properties-common curl
-  curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-  sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+  wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  gpg --no-default-keyring     --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg     --fingerprint
+  echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
   sudo apt update
   sudo apt install -y terraform
 fi
 
 if [[ "$INSTALL_HELM" -eq 1 ]]; then
   echo ---------- Installing helm
-  # https://www.how2shout.com/linux/how-to-install-helm-on-ubuntu-22-04-lts-jammy/
-  curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-  chmod 700 get_helm.sh
-  ./get_helm.sh
-  rm ./get_helm.sh
+  # https://helm.sh/docs/intro/install/
+  cd ~/Downloads
+  wget https://get.helm.sh/helm-v3.10.1-linux-amd64.tar.gz
+  tar -zxvf helm-v3.10.1-linux-amd64.tar.gz
+  sudo mv linux-amd64/helm /usr/local/bin/helm
 fi
 
 if [[ "$INSTALL_NODEJS_NPM" -eq 1 ]]; then
@@ -393,11 +433,11 @@ fi
 
 if [[ "$INSTALL_PYCHARM" -eq 1 ]]; then
   echo ---------- Installing PyCharm
-  wget https://download-cdn.jetbrains.com/python/pycharm-community-2022.2.2.tar.gz
-  tar -xzf pycharm-community-2022.2.2.tar.gz
-  sudo mv pycharm-community-2022.2.2 /opt/pycharm
+  wget https://download-cdn.jetbrains.com/python/pycharm-community-2022.2.3.tar.gz
+  tar -xzf pycharm-community-2022.2.3.tar.gz
+  sudo mv pycharm-community-2022.2.3 /opt/pycharm
   sudo chown -R ${USER}:${USER} /opt/pycharm
-  rm pycharm-community-2022.2.2.tar.gz
+  rm pycharm-community-2022.2.3.tar.gz
 fi
 
 if [[ "$INSTALL_PYCHARM_PRO" -eq 1 ]]; then
@@ -412,9 +452,13 @@ fi
 
 if [[ "$INSTALL_VSCODE" -eq 1 ]]; then
   echo ---------- Installing VSCode
-  sudo apt install software-properties-common apt-transport-https wget -y
-  wget -O- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor | sudo tee /usr/share/keyrings/vscode.gpg
-  echo deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main | sudo tee /etc/apt/sources.list.d/vscode.list
+  # https://code.visualstudio.com/docs/setup/linux
+  sudo apt-get install wget gpg
+  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+  sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+  sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+  rm -f packages.microsoft.gpg
+  sudo apt install apt-transport-https
   sudo apt update
   sudo apt install -y code
 fi
@@ -428,29 +472,10 @@ if [[ "$INSTALL_TEAMS" -eq 1 ]]; then
   sudo apt install -y teams
 fi
 
-if [[ "$INSTALL_SELENIUM" -eq 1 ]]; then
-  echo ---------- Installing Selenium
-  # https://www.liquidweb.com/kb/how-to-install-selenium-tools-on-ubuntu-18-04/
-  # https://tecadmin.net/setup-selenium-chromedriver-on-ubuntu/
-  # install selenium server
-  wget -P /opt/selenium https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
-  sudo mv /opt/selenium/selenium-server-standalone-3.141.59.jar /opt/selenium/selenium-server-standalone.jar
-  # install chromedriver
-  cd /home/"$USER"/Downloads
-  wget https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_linux64.zip
-  unzip chromedriver_linux64.zip
-  sudo mv chromedriver /usr/bin/
-  rm chromedriver_linux64.zip
-  # install java jdk
-  sudo apt install -y default-jdk
-  # install xvfb
-  sudo apt install -y xvfb
-fi
-
 if [[ "$INSTALL_SUBLIME" -eq 1 ]]; then
   echo ---------- Installing Sublime
-  # https://www.how2shout.com/linux/2-ways-to-install-sublime-text-3-on-ubuntu-22-04-20-04/
-  sudo snap install sublime-text --classic
+  wget https://download.sublimetext.com/sublime-text_build-4126_amd64.deb
+  sudo dpkg -i sublime-text_build-4126_amd64.deb
 fi
 
 if [[ "$INSTALL_KRITA" -eq 1 ]]; then
@@ -474,8 +499,20 @@ if [[ "$INSTALL_AUDACITY" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_POSTMAN" -eq 1 ]]; then
-    echo ---------- Installing Postman
-    sudo snap install postman
+  echo ---------- Installing Postman
+  # sudo snap install postman
+  wget https://dl.pstmn.io/download/latest/linux64 -O postman-linux-x64.tar.gz
+  sudo tar -xzf postman-linux-x64.tar.gz -C /opt
+  sudo ln -s /opt/Postman/Postman /usr/bin/postman
+  
+echo  '[Desktop Entry]
+Encoding=UTF-8
+Name=Postman
+Exec=/opt/Postman/app/Postman
+Icon=/opt/Postman/app/resources/app/assets/icon.png
+Terminal=false
+Type=Application
+Categories=Development;' > ~/.local/share/applications/Postman.desktop
 fi
 
 if [[ "$INSTALL_FLAMESHOT" -eq 1 ]]; then
@@ -495,7 +532,7 @@ if [[ "$INSTALL_OPENVPN" -eq 1 ]]; then
   # https://community.openvpn.net/openvpn/wiki/OpenVPN3Linux?_gl=1*1rz24vi*_ga*NDk4Nzc2MjU1LjE2NjU1NTk1NzE.*_ga_SPGM8Y8Y79*MTY2NjE3NTMyMi4yLjEuMTY2NjE3NTMzMy4wLjAuMA..&_ga=2.125064526.555942045.1666175322-498776255.1665559571
   sudo apt install -y apt-transport-https
   curl -fsSL https://swupdate.openvpn.net/repos/openvpn-repo-pkg-key.pub | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/openvpn-repo-pkg-keyring.gpg
-  curl -fsSL https://swupdate.openvpn.net/community/openvpn3/repos/openvpn3-jammy.list | sudo tee /etc/apt/sources.list.d/openvpn3.list
+  curl -fsSL https://swupdate.openvpn.net/community/openvpn3/repos/openvpn3-$(lsb_release -sc).list | sudo tee /etc/apt/sources.list.d/openvpn3.list
   sudo apt update
   sudo apt install -y openvpn3
 fi
@@ -510,7 +547,7 @@ fi
 
 if [[ "$INSTALL_DOCKER_COMPOSE" -eq 1 ]]; then
   echo ---------- Installing Docker Compose
-  sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  sudo curl -L "https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   sudo chmod +x /usr/local/bin/docker-compose
 fi
 
@@ -540,8 +577,9 @@ if [[ "$INSTALL_MPV" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_ACESTREAMPLAYER" -eq 1 ]]; then
+  # todo continue
   echo ---------- Installing acestreamplayer
-  sudo snap install acestreamplayer
+  sudo snap install acestreamplayer  
 fi
 
 if [[ "$INSTALL_SAMBA" -eq 1 ]]; then
