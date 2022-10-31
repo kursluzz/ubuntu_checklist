@@ -656,13 +656,13 @@ if [[ "$INSTALL_MONGODB_COMPASS" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_MONGOSH" -eq 1 ]]; then
+  # https://www.mongodb.com/docs/mongodb-shell/install/
   echo ---------- Installing Mongosh cli
   sudo apt install gnupg
   wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
-  echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+  echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
   sudo apt update
-  sudo apt install -y mongocli
-
+  sudo apt-get install -y mongodb-mongosh
 fi
 
 if [[ ${ADD_NEW_TEXT_FILE_TEMPLATE} -eq 1 ]]; then
@@ -673,14 +673,12 @@ if [[ "$INSTALL_MYSQL_DOCKER" -eq 1 ]]; then
   echo ---------- Installing MySQL Docker
   docker run -d \
     --name mysql-container \
-    --character-set-server=utf8 \
-    --collation-server=utf8_general_ci \
     -e MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" \
     -e MYSQL_ROOT_HOST=172.17.0.1 \
     -p 3306:3306 \
     -v /home/${USER}/mysql:/var/lib/mysql \
     --restart=unless-stopped \
-    mysql/mysql-server:5.7
+    mysql/mysql-server:5.7 --collation-server=utf8_general_ci --character-set-server=utf8
 fi
 
 if [[ "$INSTALL_POSTGRES_DOCKER" -eq 1 ]]; then
