@@ -595,11 +595,11 @@ if [[ "$INSTALL_SAMBA" -eq 1 ]]; then
     read only = ${SAMBA_SHARE_READONLY}
     browsable = yes
 " sudo tee /etc/samba/smb.conf
-  service smbd restart
+  sudo service smbd restart
   (
     echo "${SAMBA_SHARE_PASSWORD}"
     echo "${SAMBA_SHARE_PASSWORD}"
-  ) | smbpasswd -s -a ${USER}
+  ) | sudo smbpasswd -s -a ${USER}
 fi
 
 if [[ "$INSTALL_FREECAD" -eq 1 ]]; then
@@ -613,7 +613,7 @@ if [[ "$INSTALL_HYDROGEN" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_CALIBRE" -eq 1 ]]; then
-  echo "---------- Installing Calibre (ebook manager)"
+  echo "---------- Installing Calibre (ebook manager)"  
   sudo apt install -y calibre
 fi
 
@@ -629,10 +629,14 @@ fi
 
 if [[ "$INSTALL_MYSQL_WORKBENCH" -eq 1 ]]; then
   echo ---------- Installing MySQL Workbench
-  wget https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community_8.0.30-1ubuntu22.04_amd64.deb
-  sudo dpkg -i mysql-workbench-community_8.0.30-1ubuntu22.04_amd64.deb
-  sudo apt install -y -f
-  rm mysql-workbench-community_8.0.30-1ubuntu22.04_amd64.deb
+  if [[ "$OS" = "Debian" ]]; then
+    sudo snap install mysql-workbench-community
+  else
+    wget https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community_8.0.30-1ubuntu22.04_amd64.deb
+    sudo dpkg -i mysql-workbench-community_8.0.30-1ubuntu22.04_amd64.deb
+    sudo apt install -y -f
+    rm mysql-workbench-community_8.0.30-1ubuntu22.04_amd64.deb
+  fi
 fi
 
 if [[ "$INSTALL_MYSQL_PGADMIN" -eq 1 ]]; then
