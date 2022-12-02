@@ -433,11 +433,11 @@ fi
 
 if [[ "$INSTALL_PYCHARM" -eq 1 ]]; then
   echo ---------- Installing PyCharm
-  wget https://download-cdn.jetbrains.com/python/pycharm-community-2022.2.3.tar.gz
-  tar -xzf pycharm-community-2022.2.3.tar.gz
-  sudo mv pycharm-community-2022.2.3 /opt/pycharm
+  wget https://download-cdn.jetbrains.com/python/pycharm-community-2022.3.tar.gz
+  tar -xzf pycharm-community-2022.3.tar.gz
+  sudo mv  pycharm-community-2022.3/opt/pycharm
   sudo chown -R ${USER}:${USER} /opt/pycharm
-  rm pycharm-community-2022.2.3.tar.gz
+  rm pycharm-community-2022.3.tar.gz
 fi
 
 if [[ "$INSTALL_PYCHARM_PRO" -eq 1 ]]; then
