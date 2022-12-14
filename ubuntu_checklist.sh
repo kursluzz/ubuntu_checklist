@@ -49,7 +49,7 @@ INSTALL_OPENVPN=1
 INSTALL_DOCKER=1
 INSTALL_DOCKER_COMPOSE=1
 INSTALL_MYSQL_WORKBENCH=1
-INSTALL_MYSQL_PGADMIN=1
+INSTALL_PGADMIN=1
 INSTALL_MONGODB_COMPASS=1
 INSTALL_MONGOSH=1
 INSTALL_DROPBOX=1
@@ -639,7 +639,7 @@ if [[ "$INSTALL_MYSQL_WORKBENCH" -eq 1 ]]; then
   fi
 fi
 
-if [[ "$INSTALL_MYSQL_PGADMIN" -eq 1 ]]; then
+if [[ "$INSTALL_PGADMIN" -eq 1 ]]; then
   echo ---------- Installing MySQL Workbench
   curl -fsSL https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/pgadmin.gpg
   sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list'
