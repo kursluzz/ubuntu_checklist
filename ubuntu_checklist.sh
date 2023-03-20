@@ -358,9 +358,17 @@ if [[ "$INSTALL_HELM" -eq 1 ]]; then
   echo ---------- Installing helm
   # https://helm.sh/docs/intro/install/
   cd ~/Downloads
-  wget https://get.helm.sh/helm-v3.10.1-linux-amd64.tar.gz
-  tar -zxvf helm-v3.10.1-linux-amd64.tar.gz
+#  wget https://get.helm.sh/helm-v3.10.1-linux-amd64.tar.gz
+#  tar -zxvf helm-v3.10.1-linux-amd64.tar.gz
+#  sudo mv linux-amd64/helm /usr/local/bin/helm
+#  rm linux-amd64/ -rf
+# or
+# curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+# or
+  wget https://get.helm.sh/helm-v3.8.0-linux-amd64.tar.gz
+  tar -zxvf helm-v3.8.0-linux-amd64.tar.gz
   sudo mv linux-amd64/helm /usr/local/bin/helm
+  rm linux-amd64/ -rf
 fi
 
 if [[ "$INSTALL_NODEJS_NPM" -eq 1 ]]; then
