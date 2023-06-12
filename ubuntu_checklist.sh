@@ -575,8 +575,11 @@ fi
 
 if [[ "$INSTALL_YOUTUBE_DL" -eq 1 ]]; then
   echo ---------- Installing youtube-dl
+  # https://stackoverflow.com/questions/75495800/error-unable-to-extract-uploader-id-youtube-discord-py
+  # yt-dlp URL
   sudo apt install -y ffmpeg
-  pip3 install youtube-dl
+  python3 -m pip install --force-reinstall https://github.com/yt-dlp/yt-dlp/archive/master.tar.gz
+
 fi
 
 if [[ "$INSTALL_VLC" -eq 1 ]]; then
