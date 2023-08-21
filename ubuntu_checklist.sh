@@ -694,7 +694,7 @@ if [[ "$INSTALL_MYSQL_DOCKER" -eq 1 ]]; then
     -p 3306:3306 \
     -v /home/${USER}/mysql:/var/lib/mysql \
     --restart=unless-stopped \
-    mysql/mysql-server:5.7 --collation-server=utf8_general_ci --character-set-server=utf8
+    mysql/mysql-server:8.0.32 --collation-server=utf8_general_ci --character-set-server=utf8
 fi
 
 if [[ "$INSTALL_POSTGRES_DOCKER" -eq 1 ]]; then
