@@ -276,6 +276,25 @@ if [[ "$INSTALL_PYTHON39" -eq 1 ]]; then
   fi
 fi
 
+if [[ "$INSTALL_PYTHON311" -eq 1 ]]; then
+  if [[ ! "$OS" = "Debian" ]]; then
+    echo ---------- Installing python 3.11
+    # https://www.linuxcapable.com/how-to-install-python-3-11-on-ubuntu-linux/
+    sudo apt update && sudo apt upgrade
+    sudo add-apt-repository ppa:deadsnakes/ppa -y
+    sudo apt update
+    sudo apt install python3.11 -y
+    sudo apt install python3.11-dbg -y
+    sudo apt install python3.11-dev -y
+    sudo apt install python3.11-venv -y
+    sudo apt install python3.11-distutils -y
+    sudo apt install python3.11-lib2to3 -y
+    sudo apt install python3.11-gdbm -y
+    sudo apt install python3.11-tk -y
+    # sudo apt install python3.11-full
+  fi
+fi
+
 if [[ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]]; then
   echo ---------- Installing mysql dev dependencies
   if [[ "$OS" = "Debian" ]]; then
