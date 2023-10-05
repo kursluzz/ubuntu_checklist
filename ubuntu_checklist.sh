@@ -380,6 +380,7 @@ if [[ "$INSTALL_NODEJS_NPM" -eq 1 ]]; then
   echo ---------- Installing nodejs npm
   # https://github.com/nodesource/distributions
   curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+  sudo apt -y update
   sudo apt-get install -y nodejs
 fi
 f
