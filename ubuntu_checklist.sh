@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ $USER = "root" ]; then
+  echo "No no no. Do not run this script as sudo"
+  exit 1
+fi
+
 # 1. Set what you want to install 1 for yes, 0 for no
 INSTALL_SNAP=1
 INSTALL_CURL=1
