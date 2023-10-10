@@ -416,6 +416,7 @@ if [[ "$INSTALL_KAFKA_CLI" -eq 1 ]]; then
   wget https://downloads.apache.org/kafka/3.5.1/kafka-3.5.1-src.tgz
   tar -xzf kafka-3.5.1-src.tgz
   mv kafka-3.5.1-src ~/kafka
+  rm kafka-3.5.1-src.tgz
 fi
 
 if [[ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]]; then
