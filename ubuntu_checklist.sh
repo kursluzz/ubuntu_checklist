@@ -34,6 +34,7 @@ INSTALL_TERRAFORM=1
 INSTALL_HELM=1
 INSTALL_NODEJS_NPM=1
 INSTALL_ANGULAR_CLI=1
+INSTALL_DEFAULT_JRE=1
 INSTALL_KAFKA_CLI=1
 ADD_SSH_KEY_FOR_GIT=1
 ADD_ADDITIONAL_SSH_KEY_FOR_GIT=1
@@ -410,13 +411,18 @@ if [[ "$INSTALL_ANGULAR_CLI" -eq 1 ]]; then
   sudo npm install -g @angular/cli
 fi
 
+if [[ "$INSTALL_DEFAULT_JRE" -eq 1 ]]; then
+  echo ---------- Installing Default JRE
+  sudo apt install default-jre
+fi
+
 if [[ "$INSTALL_KAFKA_CLI" -eq 1 ]]; then
   echo ---------- Installing Kafka CLI
   cd ~/Downloads/
-  wget https://downloads.apache.org/kafka/3.5.1/kafka-3.5.1-src.tgz
-  tar -xzf kafka-3.5.1-src.tgz
-  mv kafka-3.5.1-src ~/kafka
-  rm kafka-3.5.1-src.tgz
+  wget https://downloads.apache.org/kafka/3.5.1/kafka_2.12-3.5.1.tgz
+  tar -xzf kafka_2.12-3.5.1.tgz
+  mv kafka_2.12-3.5.1 ~/kafka
+  rm kafka_2.12-3.5.1.tgz
 fi
 
 if [[ "$ADD_SSH_KEY_FOR_GIT" -eq 1 ]]; then
