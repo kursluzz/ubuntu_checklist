@@ -662,8 +662,23 @@ fi
 
 if [[ "$INSTALL_FREECAD" -eq 1 ]]; then
   echo ---------- Installing FreeCAD
-  sudo apt install -y freecad
+  # sudo apt install -y freecad
+
+  # https://github.com/FreeCAD/FreeCAD/releases
+  cd ~/Downloads
+  wget https://yer.dl.sourceforge.net/project/free-cad/0.21.1/FreeCAD_0.21.1-Linux-x86_64.AppImage
+  mkdir /opt/freecad/
+  sudo mv FreeCAD_0.21.1-Linux-x86_64.AppImage /opt/freecad/
+  echo '[Desktop Entry]
+Type=Application
+Terminal=false
+Exec="/opt/freecad/FreeCAD_0.21.1-Linux-x86_64.AppImage"
+Name="Freecad"
+Comment=Freecad
+Icon=/usr/share/icons/Adwaita/256x256/legacy/input-tablet.png' > ~/.local/share/applications/Freecad.desktop
+  sudo apt install libfuse2
 fi
+
 
 if [[ "$INSTALL_HYDROGEN" -eq 1 ]]; then
   echo ---------- Installing Hydrogen
