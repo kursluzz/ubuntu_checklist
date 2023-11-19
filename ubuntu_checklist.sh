@@ -493,11 +493,11 @@ fi
 if [[ "$INSTALL_PYCHARM_PRO" -eq 1 ]]; then
   echo ---------- Installing PyCharm Pro
   # https://www.jetbrains.com/pycharm/download/other.html
-  wget https://download-cdn.jetbrains.com/python/pycharm-professional-2023.2.2.tar.gz
-  tar -xzf pycharm-professional-2023.2.2.tar.gz
-  sudo mv pycharm-2023.2.2 /opt/pycharm-pro
+  wget https://download-cdn.jetbrains.com/python/pycharm-professional-2023.2.5.tar.gz
+  tar -xzf pycharm-professional-2023.2.5.tar.gz
+  sudo mv pycharm-2023.2.5 /opt/pycharm-pro
   sudo chown -R ${USER}:${USER} /opt/pycharm-pro
-  rm pycharm-professional-2023.2.2.tar.gz
+  rm pycharm-professional-2023.2.5.tar.gz
 fi
 
 if [[ "$INSTALL_VSCODE" -eq 1 ]]; then
