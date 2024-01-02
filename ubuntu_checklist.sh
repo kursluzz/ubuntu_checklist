@@ -769,7 +769,6 @@ fi
 
 if [[ "$INSTALL_MONGODB_DOCKER" -eq 1 ]]; then
   # https://hub.docker.com/_/mongo
-  # mongo:3.6-xenial
   echo ---------- Installing MongoDB
   docker run -d --name mongodb-container \
      -e MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER \
@@ -777,7 +776,7 @@ if [[ "$INSTALL_MONGODB_DOCKER" -eq 1 ]]; then
      -v /home/${USER}/mongodb:/data/db \
      -p 27017:27017 \
      --restart=unless-stopped \
-     mongo:3.6
+     mongo:3.6-xenial
 fi
 
 # final prompts and notices
