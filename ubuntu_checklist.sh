@@ -262,7 +262,6 @@ if [[ "$INSTALL_PYTHON38" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_PYTHON39" -eq 1 ]]; then
-  if [[ ! "$OS" = "Debian" ]]; then
     echo ---------- Installing python 3.9
     # https://www.linuxcapable.com/how-to-install-python-3-9-on-ubuntu-22-04-lts/
     sudo apt update && sudo apt upgrade
@@ -276,11 +275,9 @@ if [[ "$INSTALL_PYTHON39" -eq 1 ]]; then
     sudo apt install python3.9-lib2to3 -y
     sudo apt install python3.9-gdbm -y
     sudo apt install python3.9-tk -y
-  fi
 fi
 
 if [[ "$INSTALL_PYTHON311" -eq 1 ]]; then
-  if [[ ! "$OS" = "Debian" ]]; then
     echo ---------- Installing python 3.11
     # https://www.linuxcapable.com/how-to-install-python-3-11-on-ubuntu-linux/
     sudo apt update && sudo apt upgrade
@@ -295,7 +292,6 @@ if [[ "$INSTALL_PYTHON311" -eq 1 ]]; then
     sudo apt install python3.11-gdbm -y
     sudo apt install python3.11-tk -y
     # sudo apt install python3.11-full
-  fi
 fi
 
 if [[ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]]; then
