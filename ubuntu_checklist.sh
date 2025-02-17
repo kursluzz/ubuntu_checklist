@@ -565,8 +565,9 @@ if [[ "$INSTALL_OPENVPN" -eq 1 ]]; then
   echo ---------- Installing Open-VPN
   # https://community.openvpn.net/openvpn/wiki/OpenVPN3Linux?_gl=1*1rz24vi*_ga*NDk4Nzc2MjU1LjE2NjU1NTk1NzE.*_ga_SPGM8Y8Y79*MTY2NjE3NTMyMi4yLjEuMTY2NjE3NTMzMy4wLjAuMA..&_ga=2.125064526.555942045.1666175322-498776255.1665559571
   sudo apt install -y apt-transport-https
-  curl -fsSL https://swupdate.openvpn.net/repos/openvpn-repo-pkg-key.pub | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/openvpn-repo-pkg-keyring.gpg
-  curl -fsSL https://swupdate.openvpn.net/community/openvpn3/repos/openvpn3-$(lsb_release -sc).list | sudo tee /etc/apt/sources.list.d/openvpn3.list
+  mkdir -p /etc/apt/keyrings
+  curl -sSfL https://packages.openvpn.net/packages-repo.gpg | sudo tee /etc/apt/keyrings/openvpn.asc
+  echo "deb [signed-by=/etc/apt/keyrings/openvpn.asc] https://packages.openvpn.net/openvpn3/debian noble main" sudo tee -a /etc/apt/sources.list.d/openvpn3.list
   sudo apt update
   sudo apt install -y openvpn3
 fi
