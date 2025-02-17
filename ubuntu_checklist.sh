@@ -229,58 +229,38 @@ if [[ "$INSTALL_PYTHON37" -eq 1 ]]; then
 fi
 
 if [[ "$INSTALL_PYTHON38" -eq 1 ]]; then
-
   echo ---------- Installing python 3.8
-  # https://www.linuxcapable.com/how-to-install-python-3-8-on-debian-11-bullseye/
-  if [[ "$OS" = "Debian" ]]; then
-    sudo apt update && sudo apt upgrade
-    wget https://www.python.org/ftp/python/3.8.12/Python-3.8.12.tar.xz
-    tar -xf Python-3.8.12.tar.xz
-    sudo mv Python-3.8.12 /opt/
-    sudo apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libsqlite3-dev libreadline-dev libffi-dev curl libbz2-dev -y
-    cd /opt/Python-3.8.12/
-    ./configure --enable-optimizations --enable-shared
-    make
-    make -j 6
-    sudo make altinstall
-    sudo ldconfig /opt/Python3.8.12
-    cd ~/Downloads
-  else  
-    # https://www.linuxcapable.com/how-to-install-python-3-8-on-ubuntu-22-04-lts/
-    sudo apt update && sudo apt upgrade
-    sudo apt install software-properties-common -y
-    sudo add-apt-repository ppa:deadsnakes/ppa -y
-    sudo apt update
-    sudo apt install python3.8 -y
-    sudo apt install python3.8-dev -y
-    sudo apt install python3.8-venv -y
-    sudo apt install python3.8-distutils -y
-    sudo apt install python3.8-lib2to3 -y
-    sudo apt install python3.8-gdbm -y
-    sudo apt install python3.8-tk -y
-  fi
+  # https://www.linuxcapable.com/how-to-install-python-3-8-on-ubuntu-22-04-lts/
+  sudo apt update && sudo apt upgrade
+  sudo apt install software-properties-common -y
+  sudo add-apt-repository ppa:deadsnakes/ppa -y
+  sudo apt update
+  sudo apt install python3.8 -y
+  sudo apt install python3.8-dev -y
+  sudo apt install python3.8-venv -y
+  sudo apt install python3.8-distutils -y
+  sudo apt install python3.8-lib2to3 -y
+  sudo apt install python3.8-gdbm -y
+  sudo apt install python3.8-tk -y
 fi
 
 if [[ "$INSTALL_PYTHON39" -eq 1 ]]; then
-  if [[ ! "$OS" = "Debian" ]]; then
-    echo ---------- Installing python 3.9
-    # https://www.linuxcapable.com/how-to-install-python-3-9-on-ubuntu-22-04-lts/
-    sudo apt update && sudo apt upgrade
-    sudo apt install software-properties-common -y
-    sudo add-apt-repository ppa:deadsnakes/ppa -y
-    sudo apt update
-    sudo apt install python3.9 -y
-    sudo apt install python3.9-dev -y
-    sudo apt install python3.9-venv -y
-    sudo apt install python3.9-distutils -y
-    sudo apt install python3.9-lib2to3 -y
-    sudo apt install python3.9-gdbm -y
-    sudo apt install python3.9-tk -y
-  fi
+  echo ---------- Installing python 3.9
+  # https://www.linuxcapable.com/how-to-install-python-3-9-on-ubuntu-22-04-lts/
+  sudo apt update && sudo apt upgrade
+  sudo apt install software-properties-common -y
+  sudo add-apt-repository ppa:deadsnakes/ppa -y
+  sudo apt update
+  sudo apt install python3.9 -y
+  sudo apt install python3.9-dev -y
+  sudo apt install python3.9-venv -y
+  sudo apt install python3.9-distutils -y
+  sudo apt install python3.9-lib2to3 -y
+  sudo apt install python3.9-gdbm -y
+  sudo apt install python3.9-tk -y
 fi
 
 if [[ "$INSTALL_PYTHON311" -eq 1 ]]; then
-  if [[ ! "$OS" = "Debian" ]]; then
     echo ---------- Installing python 3.11
     # https://www.linuxcapable.com/how-to-install-python-3-11-on-ubuntu-linux/
     sudo apt update && sudo apt upgrade
@@ -295,7 +275,6 @@ if [[ "$INSTALL_PYTHON311" -eq 1 ]]; then
     sudo apt install python3.11-gdbm -y
     sudo apt install python3.11-tk -y
     # sudo apt install python3.11-full
-  fi
 fi
 
 if [[ "$INSTALL_MYSQL_PYTHON_DEPENDENCIES" -eq 1 ]]; then
